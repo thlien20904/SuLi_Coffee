@@ -1,0 +1,93 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Banner Section with Bootstrap Carousel -->
+<section class="banner">
+    <div id="carouselBanner" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Slide 1: Video -->
+            <div class="carousel-item active">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd3.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <!-- Slide 2: Video -->
+            <div class="carousel-item">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <!-- Slide 3: Video -->
+            <div class="carousel-item">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd1.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <!-- Slide 4: Video -->
+            <div class="carousel-item">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd2.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselBanner" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselBanner" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    </div>
+</section>
+
+<!-- Products Section -->
+<!-- Products Section -->
+<section class="products">
+    <h2>CÁC DÒNG SẢN PHẨM NỔI BẬT</h2>
+    <div class="product-list">
+        <div class="product-card">
+            <img src="@Url.Content("~/images/cafe1.png")" alt="Cà phê đen nóng" />
+            <h3>CÀ PHÊ ĐEN NÓNG</h3>
+            <p class="price">39.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+        <div class="product-card">
+            <img src="@Url.Content("~/images/noibat2.png")" alt="Capuchino" />
+            <h3>CAPUCHINO</h3>
+            <p class="price">40.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+        <div class="product-card">
+            <img src="@Url.Content("~/images/cafe3.png")" alt="Ca cao nóng" />
+            <h3>CA CAO NÓNG</h3>
+            <p class="price">40.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+        <div class="product-card">
+            <img src="@Url.Content("~/images/noibat.png")" alt="Lụa đào" />
+            <h3>Ô LONG ĐÀO SỮA TƯƠI</h3>
+            <p class="price">60.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+        <div class="product-card">
+            <img src="@Url.Content("~/images/noibat1.png")" alt="Matcha coco" />
+            <h3>MATCHA COCO LATTE</h3>
+            <p class="price">108.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+    </div>
+</section>
+

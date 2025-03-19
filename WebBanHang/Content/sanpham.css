@@ -1,0 +1,82 @@
+﻿/* Container chính */
+.product-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    padding: 20px;
+}
+
+/* Tiêu đề trang */
+h2 {
+    color: #000;
+    margin-bottom: 40px;
+    font-size: 2rem;
+    margin-top: 30px;
+    text-align: center;
+}
+
+/* Card của mỗi món ăn */
+.product-card {
+    background-color: #fff;
+    border: 1px solid #eee;
+    padding: 20px;
+    width: 250px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hình ảnh */
+    .product-card img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+
+    /* Tên món */
+    .product-card .product-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #3a3a3a;
+        margin: 10px 0 0;
+        text-align: left;
+    }
+
+    /* Giá tiền */
+    .product-card .price {
+        color: #d8804b;
+        font-weight: bold;
+        margin: 0;
+        font-size: 16px;
+        text-align: left;
+    }
+
+    /* Nút bấm */
+    .product-card button {
+        background: #e5d1c0;
+        color: #3a3a3a;
+        border: none;
+        padding: 8px 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s;
+        border-radius: 4px;
+        font-size: 13px;
+        text-transform: uppercase;
+        text-align: center;
+        margin-top: auto;
+    }
+
+        .product-card button:hover {
+            background: #d3b49e;
+        }

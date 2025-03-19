@@ -1,0 +1,20 @@
+﻿@model IEnumerable<WebBanHang.Models.Food>
+@{
+    ViewBag.Title = "Danh sách món ăn";
+}
+<link rel="stylesheet" href="~/Content/SanPham.css" />
+
+<h2 style="margin: 20px 0;">Danh sách món ăn</h2>
+
+<div class="product-container">
+    @foreach (var item in Model)
+    {
+        <div class="product-card">
+            <img src="@Url.Content("~/" + item.ImageURL)" alt="@item.FoodName" />
+            <h4 class="product-title">@item.FoodName</h4>
+            <p class="price">
+                @String.Format("{0:N0} ₫", item.Price)
+            </p>
+        </div>
+    }
+</div>

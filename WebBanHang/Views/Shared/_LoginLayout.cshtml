@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - MyBeauty</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fce4ec;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #d81b60;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+            .input-group i.fa-lock,
+            .input-group i.fa-user {
+                position: absolute;
+                left: 15px;
+                top: 12px;
+                color: #777;
+            }
+
+
+
+            .input-group input {
+                width: 100%;
+                padding: 12px 40px;
+                border: 1px solid #ccc;
+                border-radius: 30px;
+                outline: none;
+                box-sizing: border-box;
+            }
+
+            /* Icon con mắt */
+            .input-group .toggle-password {
+                position: absolute;
+                right: 15px;
+                top: 12px;
+                cursor: pointer;
+                color: #777;
+            }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+            .options label {
+                display: flex;
+                align-items: center;
+            }
+
+            .options input[type="checkbox"] {
+                margin-right: 8px;
+            }
+
+            .options a {
+                color: #d81b60;
+                text-decoration: none;
+            }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: #d81b60;
+            border: none;
+            color: white;
+            border-radius: 30px;
+            margin: 20px 0;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .signup {
+            text-align: center;
+            font-size: 14px;
+        }
+
+            .signup a {
+                color: #d81b60;
+                text-decoration: none;
+            }
+
+        .or-divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+
+            .or-divider::before, .or-divider::after {
+                content: "";
+                width: 45%;
+                height: 1px;
+                background-color: #ccc;
+                position: absolute;
+                top: 50%;
+            }
+
+            .or-divider::before {
+                left: 0;
+            }
+
+            .or-divider::after {
+                right: 0;
+            }
+
+        .social-btn {
+            width: 100%;
+            padding: 12px;
+            border-radius: 30px;
+            border: none;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .facebook {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        .google {
+            background-color: #db4437;
+            color: white;
+        }
+
+        .social-btn i {
+            margin-right: 10px;
+        }
+
+        p.error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <script>
+        function togglePassword() {
+            var pwd = document.getElementById("password");
+            var icon = document.querySelector(".toggle-password");
+            if (pwd.type === "password") {
+                pwd.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                pwd.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        }
+    </script>
+</body>
+</html>
+

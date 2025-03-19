@@ -1,0 +1,20 @@
+﻿@model WebBanHang.Models.SanPham
+
+@{
+    ViewBag.Title = "Xác nhận xóa sản phẩm";
+}
+
+<h2>Xác nhận xóa sản phẩm</h2>
+
+<div>
+    <h3>@Model.TenSanPham</h3>
+    <p>Giá: $@Model.Gia</p>
+    <p>Mô tả: @Model.MoTa</p>
+</div>
+
+@using (Html.BeginForm("Delete", "SanPham", new { id = Model.SanPhamID }, FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <input type="submit" value="Xác nhận xóa" class="btn btn-danger" />
+    <a href="@Url.Action("Info", "SanPham")" class="btn btn-secondary">Hủy</a>
+}

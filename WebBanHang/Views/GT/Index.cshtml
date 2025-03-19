@@ -1,0 +1,180 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Banner Section with Bootstrap Carousel -->
+<section class="banner">
+    <div id="carouselBanner" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Slide 3: Image -->
+            @*<div class="carousel-item">
+                    <img src="@Url.Content("~/images/gt4.png")" class="d-block w-100 banner-image" />
+                </div>*@
+            <!-- Slide 2: Video -->
+            <div class="carousel-item">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd7.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- Slide 2: Video -->
+            <div class="carousel-item">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd9.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- Slide 1: Video -->
+            <div class="carousel-item active">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd6.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+            <!-- Slide 2: Video -->
+            <div class="carousel-item">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd10.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselBanner" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselBanner" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+    </div>
+</section>
+<section class="about";text-align: center;>
+    <h2>SULI VÀ NHỮNG ĐIỀU KHÁC BIỆT</h2>
+    <div class="about-content">
+        <!-- Phần Câu chuyện thương hiệu -->
+        <div class="about-text">
+            <h3>CÂU CHUYỆN THƯƠNG HIỆU</h3>
+            <p>
+                Nốt Hương Đặc Sản -
+                SuLi luôn trân quý, nâng niu những giá trị Nguyên Bản ở mỗi vùng đất mà chúng tôi đi qua, nơi tâm hồn được đồng điệu với thiên nhiên, với nỗi vất vả nhọc nhằn của người nông dân; cảm nhận được hết thảy những tầng hương ẩn sâu trong từng nguyên liệu.<br><br>
+                Một chặng đường dài đang chờ phía trước, SuLi đã sẵn sàng viết tiếp câu chuyện Nốt Hương Đặc Sản – Nguyên Bản – Thủ Công đầy cảm hứng và càng tự hào hơn khi được mang sứ mệnh: “Đánh thức những nốt hương đặc sản của nông sản Việt Nam”.
+            </p>
+        </div>
+
+        <!-- Phần Nguyên liệu đặc sản + ảnh -->
+        <div class="about-image">
+            <img src="@Url.Content("~/images/cafe1.png")" alt="About Image" />
+        </div>
+        <div class="about-text">
+            <h3>NGUYÊN LIỆU ĐẶC SẢN</h3>
+            <p>
+                Trà Ô Long đặc sản tại SuLi còn được ươm trồng với phương pháp chăm bón hữu cơ, hoàn toàn với trứng gà, đậu nành và thu hái thủ công để có được những búp trà tươi và non nhất, tạo nên điểm khác biệt mạnh mẽ so với các thương hiệu khác.<br><br>
+                Có thể nói, dòng trà đặc sản của SuLi luôn giữ được hương vị thơm ngon nguyên bản nhất và được nhiều người biết đến như một nguồn nguyên liệu tinh hoa của Đà Lạt.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Thành tựu nổi bật -->
+<section class="achievements";text-align: center;>
+    <h2>Thành tựu nổi bật và đáng tự hào</h2>
+    <div class="achievements-container">
+        <div class="achievement-item">
+            <i class="fas fa-eye"></i>
+            <h3>210.000+</h3>
+            <p>Sản phẩm được bán ra trên thị trường trong vòng 5 tháng kinh doanh trong tình hình dịch bệnh căng thẳng</p>
+        </div>
+        <div class="achievement-item">
+            <i class="fas fa-store"></i>
+            <h3>5836</h3>
+            <p>Lần được nhắc đến trên Facebook và Instagram trong vòng 4 tháng (từ 15/03/2021 đến 15/07/2021) (theo Sprout Social)</p>
+        </div>
+        <div class="achievement-item">
+            <i class="fas fa-gem"></i>
+            <h3>98%</h3>
+            <p>Khách hàng hài lòng về chất lượng sản phẩm và dịch vụ của SuLi (theo đánh giá trên Baemin và Shopee Fresh)</p>
+        </div>
+    </div>
+</section>
+
+<!-- Dấu ấn hành trình -->
+<section class="timeline">
+    <h2 class="text-center">Những dấu ấn trong hành trình của chúng tôi</h2>
+    <div class="timeline-container">
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <span class="date">8/2020</span>
+                <img src="@Url.Content("~/images/gt.png")" alt="Milestone 1">
+                <h3>SuLi và những bước đi đầu tiên</h3>
+                <p>Thương hiệu SuLi được đăng ký bảo hộ độc quyền tại Việt Nam</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <span class="date">8/3/2021</span>
+                <img src="@Url.Content("~/images/gt2.png")" alt="Milestone 2">
+                <h3>Ra mắt thị trường</h3>
+                <p>SuLi chính thức xuất hiện trên thị trường với cửa hàng đầu tiên tại Phạm Ngọc Thạch</p>
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <span class="date">16/3/2021</span>
+                <img src="@Url.Content("~/images/gt3.png")" alt="Milestone 3">
+                <h3>Phủ sóng các kênh bán hàng online</h3>
+                <p>Lần lượt xuất hiện trên các ứng dụng giao hàng hàng đầu là Baemin và Shopee Fresh</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Products Section -->
+<!-- Products Section -->
+<section class="products">
+    <h2>CÁC DÒNG SẢN PHẨM NỔI BẬT</h2>
+    <div class="product-list">
+        <div class="product-card">
+            <img src="@Url.Content("~/images/cafe1.png")" alt="Cà phê đen nóng" />
+            <h3>CÀ PHÊ ĐEN NÓNG</h3>
+            <p class="price">39.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+        <div class="product-card">
+            <img src="@Url.Content("~/images/noibat2.png")" alt="Capuchino" />
+            <h3>CAPUCHINO</h3>
+            <p class="price">40.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+        <div class="product-card">
+            <img src="@Url.Content("~/images/cafe3.png")" alt="Ca cao nóng" />
+            <h3>CA CAO NÓNG</h3>
+            <p class="price">40.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+        <div class="product-card">
+            <img src="@Url.Content("~/images/noibat.png")" alt="Lụa đào" />
+            <h3>Ô LONG ĐÀO SỮA TƯƠI</h3>
+            <p class="price">60.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+        <div class="product-card">
+            <img src="@Url.Content("~/images/noibat1.png")" alt="Matcha coco" />
+            <h3>MATCHA COCO LATTE</h3>
+            <p class="price">108.000₫</p>
+            <button>CHI TIẾT</button>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Footer Section -->

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="e57e11bf503b4d7894138e0224ab72ed" Name="Diagram1" ZoomLevel="71">
+        <EntityTypeShape EntityType="WebAppDBModel.SanPham" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.Account" Width="1.5" PointX="10.375" PointY="1.375" />
+        <EntityTypeShape EntityType="WebAppDBModel.AccRole" Width="1.5" PointX="10.375" PointY="5.625" />
+        <EntityTypeShape EntityType="WebAppDBModel.Category" Width="1.5" PointX="3.375" PointY="4.375" />
+        <EntityTypeShape EntityType="WebAppDBModel.Food" Width="1.5" PointX="5.625" PointY="6.75" />
+        <EntityTypeShape EntityType="WebAppDBModel.FoodIngredient" Width="1.5" PointX="7.875" PointY="7.125" />
+        <EntityTypeShape EntityType="WebAppDBModel.Ingredient" Width="1.5" PointX="3.375" PointY="6.875" />
+        <EntityTypeShape EntityType="WebAppDBModel.Invoice" Width="1.5" PointX="5.625" PointY="14" />
+        <EntityTypeShape EntityType="WebAppDBModel.InvoiceDetail" Width="1.5" PointX="7.875" PointY="4" />
+        <EntityTypeShape EntityType="WebAppDBModel.Staff" Width="1.5" PointX="12.625" PointY="1" />
+        <EntityTypeShape EntityType="WebAppDBModel.TableFood" Width="1.5" PointX="3.375" PointY="14.375" />
+        <EntityTypeShape EntityType="WebAppDBModel.Warehouse" Width="1.5" PointX="5.625" PointY="10.875" />
+        <AssociationConnector Association="WebAppDBModel.FK__Staff__AccountId__32AB8735" />
+        <AssociationConnector Association="WebAppDBModel.FK__Staff__RoleId__339FAB6E" />
+        <AssociationConnector Association="WebAppDBModel.FK__Food__CategoryId__2645B050" />
+        <AssociationConnector Association="WebAppDBModel.FK__Food__Ingredient__2739D489" />
+        <AssociationConnector Association="WebAppDBModel.FK__FoodIngre__FoodI__3B40CD36" />
+        <AssociationConnector Association="WebAppDBModel.FK__InvoiceDe__FoodI__2FCF1A8A" />
+        <AssociationConnector Association="WebAppDBModel.FK__FoodIngre__Ingre__3C34F16F" />
+        <AssociationConnector Association="WebAppDBModel.FK__Warehouse__Ingre__3864608B" />
+        <AssociationConnector Association="WebAppDBModel.FK__Invoice__TableId__2B0A656D" />
+        <AssociationConnector Association="WebAppDBModel.FK__InvoiceDe__Invoi__2EDAF651" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

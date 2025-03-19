@@ -1,0 +1,808 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="WebAppDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DisplayName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PassWord" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Food">
+          <Key>
+            <PropertyRef Name="FoodId" />
+          </Key>
+          <Property Name="FoodId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FoodName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CategoryId" Type="int" />
+          <Property Name="IngredientId" Type="int" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="ImageURL" Type="varchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="FoodIngredient">
+          <Key>
+            <PropertyRef Name="FoodIngredientId" />
+          </Key>
+          <Property Name="FoodIngredientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FoodId" Type="int" />
+          <Property Name="IngredientId" Type="int" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ingredient">
+          <Key>
+            <PropertyRef Name="IngredientId" />
+          </Key>
+          <Property Name="IngredientId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IngredientName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="SoLuong" Type="int" Nullable="false" />
+          <Property Name="PhanLoai" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ImageURL" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="LastUpdated" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="InvoiceId" />
+          </Key>
+          <Property Name="InvoiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TableId" Type="int" />
+          <Property Name="DateCheckIn" Type="date" Nullable="false" />
+          <Property Name="DateCheckOut" Type="date" />
+          <Property Name="TrangThai" Type="int" />
+        </EntityType>
+        <EntityType Name="InvoiceDetail">
+          <Key>
+            <PropertyRef Name="InvoiceDetailId" />
+          </Key>
+          <Property Name="InvoiceDetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="InvoiceId" Type="int" />
+          <Property Name="FoodId" Type="int" />
+          <Property Name="SoLuong" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SanPham">
+          <Key>
+            <PropertyRef Name="SanPhamID" />
+          </Key>
+          <Property Name="SanPhamID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenSanPham" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Gia" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="GiaGiam" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="MoTa" Type="nvarchar(max)" />
+          <Property Name="HinhAnh" Type="nvarchar" MaxLength="255" />
+          <Property Name="Loai" Type="nvarchar" MaxLength="50" />
+          <Property Name="GiamGia" Type="int" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffId" />
+          </Key>
+          <Property Name="StaffId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="15" />
+          <Property Name="DateOfBirth" Type="date" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" />
+          <Property Name="Gender" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountId" Type="int" />
+          <Property Name="RoleId" Type="int" />
+        </EntityType>
+        <EntityType Name="TableFood">
+          <Key>
+            <PropertyRef Name="TableId" />
+          </Key>
+          <Property Name="TableId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TableName" Type="nvarchar" MaxLength="100" />
+          <Property Name="TrangThai" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Warehouse">
+          <Key>
+            <PropertyRef Name="WarehouseId" />
+          </Key>
+          <Property Name="WarehouseId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IngredientId" Type="int" />
+          <Property Name="SoLuong" Type="int" Nullable="false" />
+          <Property Name="DateUpdate" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Food__CategoryId__2645B050">
+          <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
+          <End Role="Food" Type="Self.Food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Food">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Food__Ingredient__2739D489">
+          <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="0..1" />
+          <End Role="Food" Type="Self.Food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="IngredientId" />
+            </Principal>
+            <Dependent Role="Food">
+              <PropertyRef Name="IngredientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodIngre__FoodI__3B40CD36">
+          <End Role="Food" Type="Self.Food" Multiplicity="0..1" />
+          <End Role="FoodIngredient" Type="Self.FoodIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodId" />
+            </Principal>
+            <Dependent Role="FoodIngredient">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodIngre__Ingre__3C34F16F">
+          <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="0..1" />
+          <End Role="FoodIngredient" Type="Self.FoodIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="IngredientId" />
+            </Principal>
+            <Dependent Role="FoodIngredient">
+              <PropertyRef Name="IngredientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Invoice__TableId__2B0A656D">
+          <End Role="TableFood" Type="Self.TableFood" Multiplicity="0..1" />
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TableFood">
+              <PropertyRef Name="TableId" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="TableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InvoiceDe__FoodI__2FCF1A8A">
+          <End Role="Food" Type="Self.Food" Multiplicity="0..1" />
+          <End Role="InvoiceDetail" Type="Self.InvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodId" />
+            </Principal>
+            <Dependent Role="InvoiceDetail">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InvoiceDe__Invoi__2EDAF651">
+          <End Role="Invoice" Type="Self.Invoice" Multiplicity="0..1" />
+          <End Role="InvoiceDetail" Type="Self.InvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoice">
+              <PropertyRef Name="InvoiceId" />
+            </Principal>
+            <Dependent Role="InvoiceDetail">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Staff__AccountId__32AB8735">
+          <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
+          <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Staff__RoleId__339FAB6E">
+          <End Role="AccRole" Type="Self.AccRole" Multiplicity="0..1" />
+          <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccRole">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Warehouse__Ingre__3864608B">
+          <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="0..1" />
+          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="IngredientId" />
+            </Principal>
+            <Dependent Role="Warehouse">
+              <PropertyRef Name="IngredientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WebAppDBModelStoreContainer">
+          <EntitySet Name="Account" EntityType="Self.Account" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AccRole" EntityType="Self.AccRole" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Food" EntityType="Self.Food" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="FoodIngredient" EntityType="Self.FoodIngredient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="InvoiceDetail" EntityType="Self.InvoiceDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SanPham" EntityType="Self.SanPham" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TableFood" EntityType="Self.TableFood" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Food__CategoryId__2645B050" Association="Self.FK__Food__CategoryId__2645B050">
+            <End Role="Category" EntitySet="Category" />
+            <End Role="Food" EntitySet="Food" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Food__Ingredient__2739D489" Association="Self.FK__Food__Ingredient__2739D489">
+            <End Role="Ingredient" EntitySet="Ingredient" />
+            <End Role="Food" EntitySet="Food" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodIngre__FoodI__3B40CD36" Association="Self.FK__FoodIngre__FoodI__3B40CD36">
+            <End Role="Food" EntitySet="Food" />
+            <End Role="FoodIngredient" EntitySet="FoodIngredient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodIngre__Ingre__3C34F16F" Association="Self.FK__FoodIngre__Ingre__3C34F16F">
+            <End Role="Ingredient" EntitySet="Ingredient" />
+            <End Role="FoodIngredient" EntitySet="FoodIngredient" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Invoice__TableId__2B0A656D" Association="Self.FK__Invoice__TableId__2B0A656D">
+            <End Role="TableFood" EntitySet="TableFood" />
+            <End Role="Invoice" EntitySet="Invoice" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InvoiceDe__FoodI__2FCF1A8A" Association="Self.FK__InvoiceDe__FoodI__2FCF1A8A">
+            <End Role="Food" EntitySet="Food" />
+            <End Role="InvoiceDetail" EntitySet="InvoiceDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InvoiceDe__Invoi__2EDAF651" Association="Self.FK__InvoiceDe__Invoi__2EDAF651">
+            <End Role="Invoice" EntitySet="Invoice" />
+            <End Role="InvoiceDetail" EntitySet="InvoiceDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Staff__AccountId__32AB8735" Association="Self.FK__Staff__AccountId__32AB8735">
+            <End Role="Account" EntitySet="Account" />
+            <End Role="Staff" EntitySet="Staff" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Staff__RoleId__339FAB6E" Association="Self.FK__Staff__RoleId__339FAB6E">
+            <End Role="AccRole" EntitySet="AccRole" />
+            <End Role="Staff" EntitySet="Staff" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Warehouse__Ingre__3864608B" Association="Self.FK__Warehouse__Ingre__3864608B">
+            <End Role="Ingredient" EntitySet="Ingredient" />
+            <End Role="Warehouse" EntitySet="Warehouse" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="WebAppDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="SanPham">
+          <Key>
+            <PropertyRef Name="SanPhamID" />
+          </Key>
+          <Property Name="SanPhamID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenSanPham" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Gia" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
+          <Property Name="GiaGiam" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="MoTa" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="HinhAnh" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Loai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="GiamGia" Type="Int32" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="WebAppDBEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="SanPhams" EntityType="Self.SanPham" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <EntitySet Name="Accounts" EntityType="WebAppDBModel.Account" />
+          <EntitySet Name="AccRoles" EntityType="WebAppDBModel.AccRole" />
+          <EntitySet Name="Categories" EntityType="WebAppDBModel.Category" />
+          <EntitySet Name="Foods" EntityType="WebAppDBModel.Food" />
+          <EntitySet Name="FoodIngredients" EntityType="WebAppDBModel.FoodIngredient" />
+          <EntitySet Name="Ingredients" EntityType="WebAppDBModel.Ingredient" />
+          <EntitySet Name="Invoices" EntityType="WebAppDBModel.Invoice" />
+          <EntitySet Name="InvoiceDetails" EntityType="WebAppDBModel.InvoiceDetail" />
+          <EntitySet Name="Staffs" EntityType="WebAppDBModel.Staff" />
+          <EntitySet Name="TableFoods" EntityType="WebAppDBModel.TableFood" />
+          <EntitySet Name="Warehouses" EntityType="WebAppDBModel.Warehouse" />
+          <AssociationSet Name="FK__Staff__AccountId__32AB8735" Association="WebAppDBModel.FK__Staff__AccountId__32AB8735">
+            <End Role="Account" EntitySet="Accounts" />
+            <End Role="Staff" EntitySet="Staffs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Staff__RoleId__339FAB6E" Association="WebAppDBModel.FK__Staff__RoleId__339FAB6E">
+            <End Role="AccRole" EntitySet="AccRoles" />
+            <End Role="Staff" EntitySet="Staffs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Food__CategoryId__2645B050" Association="WebAppDBModel.FK__Food__CategoryId__2645B050">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Food" EntitySet="Foods" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Food__Ingredient__2739D489" Association="WebAppDBModel.FK__Food__Ingredient__2739D489">
+            <End Role="Ingredient" EntitySet="Ingredients" />
+            <End Role="Food" EntitySet="Foods" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodIngre__FoodI__3B40CD36" Association="WebAppDBModel.FK__FoodIngre__FoodI__3B40CD36">
+            <End Role="Food" EntitySet="Foods" />
+            <End Role="FoodIngredient" EntitySet="FoodIngredients" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InvoiceDe__FoodI__2FCF1A8A" Association="WebAppDBModel.FK__InvoiceDe__FoodI__2FCF1A8A">
+            <End Role="Food" EntitySet="Foods" />
+            <End Role="InvoiceDetail" EntitySet="InvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodIngre__Ingre__3C34F16F" Association="WebAppDBModel.FK__FoodIngre__Ingre__3C34F16F">
+            <End Role="Ingredient" EntitySet="Ingredients" />
+            <End Role="FoodIngredient" EntitySet="FoodIngredients" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Warehouse__Ingre__3864608B" Association="WebAppDBModel.FK__Warehouse__Ingre__3864608B">
+            <End Role="Ingredient" EntitySet="Ingredients" />
+            <End Role="Warehouse" EntitySet="Warehouses" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Invoice__TableId__2B0A656D" Association="WebAppDBModel.FK__Invoice__TableId__2B0A656D">
+            <End Role="TableFood" EntitySet="TableFoods" />
+            <End Role="Invoice" EntitySet="Invoices" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InvoiceDe__Invoi__2EDAF651" Association="WebAppDBModel.FK__InvoiceDe__Invoi__2EDAF651">
+            <End Role="Invoice" EntitySet="Invoices" />
+            <End Role="InvoiceDetail" EntitySet="InvoiceDetails" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Account">
+          <Key>
+            <PropertyRef Name="AccountId" />
+          </Key>
+          <Property Name="AccountId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DisplayName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PassWord" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Staffs" Relationship="WebAppDBModel.FK__Staff__AccountId__32AB8735" FromRole="Account" ToRole="Staff" />
+        </EntityType>
+        <EntityType Name="AccRole">
+          <Key>
+            <PropertyRef Name="RoleId" />
+          </Key>
+          <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RoleName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Staffs" Relationship="WebAppDBModel.FK__Staff__RoleId__339FAB6E" FromRole="AccRole" ToRole="Staff" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="CategoryId" />
+          </Key>
+          <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Foods" Relationship="WebAppDBModel.FK__Food__CategoryId__2645B050" FromRole="Category" ToRole="Food" />
+        </EntityType>
+        <EntityType Name="Food">
+          <Key>
+            <PropertyRef Name="FoodId" />
+          </Key>
+          <Property Name="FoodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FoodName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryId" Type="Int32" />
+          <Property Name="IngredientId" Type="Int32" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
+          <Property Name="ImageURL" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Category" Relationship="WebAppDBModel.FK__Food__CategoryId__2645B050" FromRole="Food" ToRole="Category" />
+          <NavigationProperty Name="Ingredient" Relationship="WebAppDBModel.FK__Food__Ingredient__2739D489" FromRole="Food" ToRole="Ingredient" />
+          <NavigationProperty Name="FoodIngredients" Relationship="WebAppDBModel.FK__FoodIngre__FoodI__3B40CD36" FromRole="Food" ToRole="FoodIngredient" />
+          <NavigationProperty Name="InvoiceDetails" Relationship="WebAppDBModel.FK__InvoiceDe__FoodI__2FCF1A8A" FromRole="Food" ToRole="InvoiceDetail" />
+        </EntityType>
+        <EntityType Name="FoodIngredient">
+          <Key>
+            <PropertyRef Name="FoodIngredientId" />
+          </Key>
+          <Property Name="FoodIngredientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FoodId" Type="Int32" />
+          <Property Name="IngredientId" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Food" Relationship="WebAppDBModel.FK__FoodIngre__FoodI__3B40CD36" FromRole="FoodIngredient" ToRole="Food" />
+          <NavigationProperty Name="Ingredient" Relationship="WebAppDBModel.FK__FoodIngre__Ingre__3C34F16F" FromRole="FoodIngredient" ToRole="Ingredient" />
+        </EntityType>
+        <EntityType Name="Ingredient">
+          <Key>
+            <PropertyRef Name="IngredientId" />
+          </Key>
+          <Property Name="IngredientId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IngredientName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="SoLuong" Type="Int32" Nullable="false" />
+          <Property Name="PhanLoai" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ImageURL" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Foods" Relationship="WebAppDBModel.FK__Food__Ingredient__2739D489" FromRole="Ingredient" ToRole="Food" />
+          <NavigationProperty Name="FoodIngredients" Relationship="WebAppDBModel.FK__FoodIngre__Ingre__3C34F16F" FromRole="Ingredient" ToRole="FoodIngredient" />
+          <NavigationProperty Name="Warehouses" Relationship="WebAppDBModel.FK__Warehouse__Ingre__3864608B" FromRole="Ingredient" ToRole="Warehouse" />
+        </EntityType>
+        <EntityType Name="Invoice">
+          <Key>
+            <PropertyRef Name="InvoiceId" />
+          </Key>
+          <Property Name="InvoiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TableId" Type="Int32" />
+          <Property Name="DateCheckIn" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="DateCheckOut" Type="DateTime" Precision="0" />
+          <Property Name="TrangThai" Type="Int32" />
+          <NavigationProperty Name="TableFood" Relationship="WebAppDBModel.FK__Invoice__TableId__2B0A656D" FromRole="Invoice" ToRole="TableFood" />
+          <NavigationProperty Name="InvoiceDetails" Relationship="WebAppDBModel.FK__InvoiceDe__Invoi__2EDAF651" FromRole="Invoice" ToRole="InvoiceDetail" />
+        </EntityType>
+        <EntityType Name="InvoiceDetail">
+          <Key>
+            <PropertyRef Name="InvoiceDetailId" />
+          </Key>
+          <Property Name="InvoiceDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="InvoiceId" Type="Int32" />
+          <Property Name="FoodId" Type="Int32" />
+          <Property Name="SoLuong" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
+          <NavigationProperty Name="Food" Relationship="WebAppDBModel.FK__InvoiceDe__FoodI__2FCF1A8A" FromRole="InvoiceDetail" ToRole="Food" />
+          <NavigationProperty Name="Invoice" Relationship="WebAppDBModel.FK__InvoiceDe__Invoi__2EDAF651" FromRole="InvoiceDetail" ToRole="Invoice" />
+        </EntityType>
+        <EntityType Name="Staff">
+          <Key>
+            <PropertyRef Name="StaffId" />
+          </Key>
+          <Property Name="StaffId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="DateOfBirth" Type="DateTime" Precision="0" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountId" Type="Int32" />
+          <Property Name="RoleId" Type="Int32" />
+          <NavigationProperty Name="Account" Relationship="WebAppDBModel.FK__Staff__AccountId__32AB8735" FromRole="Staff" ToRole="Account" />
+          <NavigationProperty Name="AccRole" Relationship="WebAppDBModel.FK__Staff__RoleId__339FAB6E" FromRole="Staff" ToRole="AccRole" />
+        </EntityType>
+        <EntityType Name="TableFood">
+          <Key>
+            <PropertyRef Name="TableId" />
+          </Key>
+          <Property Name="TableId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TableName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="TrangThai" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Invoices" Relationship="WebAppDBModel.FK__Invoice__TableId__2B0A656D" FromRole="TableFood" ToRole="Invoice" />
+        </EntityType>
+        <EntityType Name="Warehouse">
+          <Key>
+            <PropertyRef Name="WarehouseId" />
+          </Key>
+          <Property Name="WarehouseId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IngredientId" Type="Int32" />
+          <Property Name="SoLuong" Type="Int32" Nullable="false" />
+          <Property Name="DateUpdate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Ingredient" Relationship="WebAppDBModel.FK__Warehouse__Ingre__3864608B" FromRole="Warehouse" ToRole="Ingredient" />
+        </EntityType>
+        <Association Name="FK__Staff__AccountId__32AB8735">
+          <End Type="WebAppDBModel.Account" Role="Account" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.Staff" Role="Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Account">
+              <PropertyRef Name="AccountId" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="AccountId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Staff__RoleId__339FAB6E">
+          <End Type="WebAppDBModel.AccRole" Role="AccRole" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.Staff" Role="Staff" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AccRole">
+              <PropertyRef Name="RoleId" />
+            </Principal>
+            <Dependent Role="Staff">
+              <PropertyRef Name="RoleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Food__CategoryId__2645B050">
+          <End Type="WebAppDBModel.Category" Role="Category" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.Food" Role="Food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="CategoryId" />
+            </Principal>
+            <Dependent Role="Food">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Food__Ingredient__2739D489">
+          <End Type="WebAppDBModel.Ingredient" Role="Ingredient" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.Food" Role="Food" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="IngredientId" />
+            </Principal>
+            <Dependent Role="Food">
+              <PropertyRef Name="IngredientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodIngre__FoodI__3B40CD36">
+          <End Type="WebAppDBModel.Food" Role="Food" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.FoodIngredient" Role="FoodIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodId" />
+            </Principal>
+            <Dependent Role="FoodIngredient">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InvoiceDe__FoodI__2FCF1A8A">
+          <End Type="WebAppDBModel.Food" Role="Food" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.InvoiceDetail" Role="InvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodId" />
+            </Principal>
+            <Dependent Role="InvoiceDetail">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodIngre__Ingre__3C34F16F">
+          <End Type="WebAppDBModel.Ingredient" Role="Ingredient" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.FoodIngredient" Role="FoodIngredient" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="IngredientId" />
+            </Principal>
+            <Dependent Role="FoodIngredient">
+              <PropertyRef Name="IngredientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Warehouse__Ingre__3864608B">
+          <End Type="WebAppDBModel.Ingredient" Role="Ingredient" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.Warehouse" Role="Warehouse" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ingredient">
+              <PropertyRef Name="IngredientId" />
+            </Principal>
+            <Dependent Role="Warehouse">
+              <PropertyRef Name="IngredientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Invoice__TableId__2B0A656D">
+          <End Type="WebAppDBModel.TableFood" Role="TableFood" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.Invoice" Role="Invoice" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TableFood">
+              <PropertyRef Name="TableId" />
+            </Principal>
+            <Dependent Role="Invoice">
+              <PropertyRef Name="TableId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InvoiceDe__Invoi__2EDAF651">
+          <End Type="WebAppDBModel.Invoice" Role="Invoice" Multiplicity="0..1" />
+          <End Type="WebAppDBModel.InvoiceDetail" Role="InvoiceDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Invoice">
+              <PropertyRef Name="InvoiceId" />
+            </Principal>
+            <Dependent Role="InvoiceDetail">
+              <PropertyRef Name="InvoiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="WebAppDBModelStoreContainer" CdmEntityContainer="WebAppDBEntities2">
+          <EntitySetMapping Name="SanPhams">
+            <EntityTypeMapping TypeName="WebAppDBModel.SanPham">
+              <MappingFragment StoreEntitySet="SanPham">
+                <ScalarProperty Name="SanPhamID" ColumnName="SanPhamID" />
+                <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
+                <ScalarProperty Name="Gia" ColumnName="Gia" />
+                <ScalarProperty Name="GiaGiam" ColumnName="GiaGiam" />
+                <ScalarProperty Name="MoTa" ColumnName="MoTa" />
+                <ScalarProperty Name="HinhAnh" ColumnName="HinhAnh" />
+                <ScalarProperty Name="Loai" ColumnName="Loai" />
+                <ScalarProperty Name="GiamGia" ColumnName="GiamGia" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="WebAppDBModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Accounts">
+            <EntityTypeMapping TypeName="WebAppDBModel.Account">
+              <MappingFragment StoreEntitySet="Account">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="PassWord" ColumnName="PassWord" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccRoles">
+            <EntityTypeMapping TypeName="WebAppDBModel.AccRole">
+              <MappingFragment StoreEntitySet="AccRole">
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Categories">
+            <EntityTypeMapping TypeName="WebAppDBModel.Category">
+              <MappingFragment StoreEntitySet="Category">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Foods">
+            <EntityTypeMapping TypeName="WebAppDBModel.Food">
+              <MappingFragment StoreEntitySet="Food">
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+                <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+                <ScalarProperty Name="FoodName" ColumnName="FoodName" />
+                <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="FoodIngredients">
+            <EntityTypeMapping TypeName="WebAppDBModel.FoodIngredient">
+              <MappingFragment StoreEntitySet="FoodIngredient">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+                <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+                <ScalarProperty Name="FoodIngredientId" ColumnName="FoodIngredientId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ingredients">
+            <EntityTypeMapping TypeName="WebAppDBModel.Ingredient">
+              <MappingFragment StoreEntitySet="Ingredient">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="PhanLoai" ColumnName="PhanLoai" />
+                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+                <ScalarProperty Name="IngredientName" ColumnName="IngredientName" />
+                <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Invoices">
+            <EntityTypeMapping TypeName="WebAppDBModel.Invoice">
+              <MappingFragment StoreEntitySet="Invoice">
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="DateCheckOut" ColumnName="DateCheckOut" />
+                <ScalarProperty Name="DateCheckIn" ColumnName="DateCheckIn" />
+                <ScalarProperty Name="TableId" ColumnName="TableId" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="InvoiceDetails">
+            <EntityTypeMapping TypeName="WebAppDBModel.InvoiceDetail">
+              <MappingFragment StoreEntitySet="InvoiceDetail">
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+                <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+                <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+                <ScalarProperty Name="InvoiceDetailId" ColumnName="InvoiceDetailId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Staffs">
+            <EntityTypeMapping TypeName="WebAppDBModel.Staff">
+              <MappingFragment StoreEntitySet="Staff">
+                <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+                <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+                <ScalarProperty Name="Gender" ColumnName="Gender" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TableFoods">
+            <EntityTypeMapping TypeName="WebAppDBModel.TableFood">
+              <MappingFragment StoreEntitySet="TableFood">
+                <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="TableId" ColumnName="TableId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Warehouses">
+            <EntityTypeMapping TypeName="WebAppDBModel.Warehouse">
+              <MappingFragment StoreEntitySet="Warehouse">
+                <ScalarProperty Name="DateUpdate" ColumnName="DateUpdate" />
+                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+                <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+                <ScalarProperty Name="WarehouseId" ColumnName="WarehouseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,76 @@
+﻿@model WebBanHang.Models.SanPham
+
+<h2>Thêm sản phẩm mới</h2>
+<hr />
+
+<div class="container">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="TenSanPham">Tên Sản Phẩm:</label>
+                    @Html.TextBoxFor(model => model.TenSanPham, new { @class = "form-control", id = "TenSanPham" })
+                </div>
+
+                <div class="form-group">
+                    <label for="Gia">Giá:</label>
+                    @Html.TextBoxFor(model => model.Gia, new { @class = "form-control", id = "Gia" })
+                </div>
+
+                <div class="form-group">
+                    <label for="GiaGiam">Giá Giảm:</label>
+                    @Html.TextBoxFor(model => model.GiaGiam, new { @class = "form-control", id = "GiaGiam", @readonly = "readonly" })
+                </div>
+
+                <div class="form-group">
+                    <label for="GiamGia">Giảm Giá (%):</label>
+                    @Html.TextBoxFor(model => model.GiamGia, new { @class = "form-control", id = "GiamGia" })
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="MoTa">Mô Tả:</label>
+                    @Html.TextAreaFor(model => model.MoTa, new { @class = "form-control", rows = 3, id = "MoTa" })
+                </div>
+
+                <div class="form-group">
+                    <label for="HinhAnh">Hình Ảnh:</label>
+                    @Html.TextBoxFor(model => model.HinhAnh, new { @class = "form-control", id = "HinhAnh" })
+                </div>
+
+                <div class="form-group">
+                    <label for="Loai">Loại:</label>
+                    @Html.TextBoxFor(model => model.Loai, new { @class = "form-control", id = "Loai" })
+                </div>
+
+                <button type="submit" class="btn btn-success mt-3">Thêm sản phẩm</button>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateGiaGiam() {
+            var gia = parseFloat($("#Gia").val()) || 0;
+            var giamGia = parseFloat($("#GiamGia").val()) || 0;
+            var giaGiam = gia - (gia * giamGia / 100);
+            $("#GiaGiam").val(giaGiam.toFixed(2)); // giữ 2 số thập phân
+        }
+
+        // Khi thay đổi Giá hoặc Giảm Giá %, tự tính lại
+        $("#Gia, #GiamGia").on("input", function () {
+            updateGiaGiam();
+        });
+
+        // Khi load trang, tính sẵn
+        $(document).ready(function () {
+            updateGiaGiam();
+        });
+    </script>
+}

@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Suli Coffee - Trang chủ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="@Url.Content("~/Content/GT.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Lienhe.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Thethanhvien.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" />
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <header class="header d-flex align-items-center">
+        <!-- Logo tách riêng -->
+        <div class="logo" style="padding-left: 20px;">
+            <a href="@Url.Action("Home", "Home")" class="logo-link text-decoration-none d-block">
+                <div class="logo-middle" style="font-family: 'Great Vibes', cursive; font-size: 32px;">SuLi Coffee</div>
+                @*<div class="logo-bottom" style="font-size: 14px; text-align: center;">House</div>*@
+            </a>
+        </div>
+
+        <!-- Phần còn lại -->
+        <div class="container d-flex align-items-center justify-content-between flex-grow-1">
+            <!-- Thanh tìm kiếm -->
+            <div class="search-bar mx-4" style="flex: 1; max-width: 300px;">
+                <form action="@Url.Action("Search", "SanPham")" method="get" class="d-flex">
+                    <input type="text" name="query" class="form-control" placeholder="Tìm kiếm sản phẩm...">
+                    <button type="submit" class="btn btn-dark ms-2"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+
+            <!-- Menu -->
+            <nav class="nav">
+                <ul class="d-flex list-unstyled mb-0">
+                    <li><a href="@Url.Action("Home", "Home")">Trang chủ</a></li>
+                    @*@if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
+                    {
+                        <li><a href="@Url.Action("Index", "SanPhamAdmin", new { area = "Admin" })">Sản phẩm (Admin)</a></li>
+                    }
+                    else
+                    {
+                        <li><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></li>
+                    }*@
+                    <li><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></li>
+                    <li><a href="@Url.Action("Index", "GT")">Giới thiệu</a></li>
+                    <li><a href="@Url.Action("Index", "Lienhe")">Liên hệ</a></li>
+                    <li><a href="@Url.Action("Thethanhvien", "Thethanhvien")">Thẻ thành viên</a></li>
+                    @if (Session["Username"] == null)
+                    {
+                        <li><a href="@Url.Action("Login", "Login")">Đăng nhập</a></li>
+                    }
+                    else
+                    {
+                        <li class="user-info">Xin chào, @Session["Username"]</li>
+                        <li><a href="@Url.Action("Logout", "Login")">Đăng xuất</a></li>
+                    }
+                </ul>
+            </nav>
+        </div>
+      
+    </header>
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+    <footer class="footer" style="background-color: black; color: white; padding: 20px 0;">
+        <div class="container">
+            <div class="row" style="text-align: left;">
+                <!-- Logo -->
+                <div class="col-md-3" style="text-align: left;">
+                    <img src="@Url.Content("~/images/logo1.png")" alt="SuLi" style="width: 1000px; height:170px;">
+
+                </div>
+
+                <!-- Về Chúng Tôi -->
+                <div class="col-md-3" style="text-align: left;">
+                    <h5>VỀ CHÚNG TÔI</h5>
+                    <ul style="list-style: none; padding: 0;">
+                        <li><a href="#" style="color: white; text-decoration: none;">Cửa hàng</a></li>
+                        <li><a href="#" style="color: white; text-decoration: none;">Về SuLi</a></li>
+                        <li><a href="#" style="color: white; text-decoration: none;">Hệ thống cửa hàng</a></li>
+                    </ul>
+                </div>
+
+                <!-- Địa chỉ công ty -->
+                <div class="col-md-3" style="text-align: left;">
+                    <h5>ĐỊA CHỈ CÔNG TY</h5>
+                    <p>Trụ sở chính: 273 Trần Đăng Nibnh, Phường Dịch Vọng Hậu, Quận Cầu Giấy, TP Hà Nội</p>
+                    <p>Chi nhánh Đà Lạt: 7 Nguyễn Chí Thanh, phường 1, thành phố Đà Lạt, tỉnh Lâm Đồng</p>
+                    <p>Chi nhánh Hà Nội: Lô 04-9A Khu công nghiệp Vĩnh Hoàng, phường Hoàng Văn Thụ, quận Hoàng Mai, Hà Nội</p>
+                    <p><strong>EMAIL HỖ TRỢ KHÁCH HÀNG:</strong> cskh@SuLi.vn</p>
+                    <p><strong>HOTLINE HỖ TRỢ KHÁCH HÀNG:</strong> 1900 3013 (8h30 - 22h)</p>
+                </div>
+
+                <!-- Nhận thông tin -->
+                <div class="col-md-3" style="text-align: left;">
+                    <h5>NHẬN THÔNG TIN TỪ SuLi</h5>
+                    <div class="social-icons" style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <a href="https://www.facebook.com/thlien20904" target="_blank" style="color: white; font-size: 24px;">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="https://www.instagram.com/thlien20904/" target="_blank" style="color: white; font-size: 24px;">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://www.youtube.com/phela" target="_blank" style="color: white; font-size: 24px;">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/liencute209" target="_blank" style="color: white; font-size: 24px;">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
+                    </div>
+                    <p>Xin vui lòng để lại địa chỉ email, chúng tôi sẽ cập nhật những tin tức mới nhất của SuLi</p>
+                    <form>
+                        <div style="display: flex; align-items: center; background: white; border-radius: 30px; overflow: hidden;">
+                            <input type="email" placeholder="Nhập email của bạn..." style="padding: 10px; width: 70%; border: none; outline: none; flex: 1;">
+                            <button type="submit" style="padding: 10px 15px; border: none; background-color: black; color: white; border-radius: 30px;">Gửi</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Bản quyền -->
+        <div class="text-center" style="border-top: 1px solid white; padding-top: 40px; margin-top: 5px;">
+            <p>©2025 Bản quyền này thuộc về Công Ty Cổ Phần SuLi</p>
+        </div>
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

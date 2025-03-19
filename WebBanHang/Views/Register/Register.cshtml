@@ -1,0 +1,66 @@
+﻿@{
+    Layout = "~/Views/Shared/_RegisterLayout.cshtml";
+    ViewBag.Title = "Register";
+}
+
+<h2>Sign Up</h2>
+<p class="subtitle">Create your account to continue</p>
+
+@using (Html.BeginForm("Register", "Register", FormMethod.Post))
+{
+    @Html.AntiForgeryToken() 
+
+    @* Username *@
+    <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" name="Username" placeholder="Username" required />
+    </div>
+
+    @* Email *@
+    <div class="input-group">
+        <i class="fas fa-envelope"></i>
+        <input type="email" name="Email" placeholder="Email" required />
+    </div>
+
+    @* Password with toggle *@
+    <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" name="Password" placeholder="Password" required />
+        <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+    </div>
+
+    <input type="submit" class="btn-register" value="Sign Up" />
+}
+
+<div class="divider"><span>OR</span></div>
+
+@* Social Buttons *@
+<button type="button" class="social-btn facebook">
+    <i class="fab fa-facebook-f"></i> Connect with Facebook
+</button>
+
+<button type="button" class="social-btn google">
+    <i class="fab fa-google"></i> Connect with Google
+</button>
+
+<div class="signin">
+    Already have an account? <a href="@Url.Action("Login", "Login")">Sign In</a>
+</div>
+
+@section Scripts {
+    <script>
+        function togglePassword() {
+            var pwd = document.getElementById("password");
+            var eye = document.querySelector(".toggle-password");
+            if (pwd.type === "password") {
+                pwd.type = "text";
+                eye.classList.remove("fa-eye");
+                eye.classList.add("fa-eye-slash");
+            } else {
+                pwd.type = "password";
+                eye.classList.remove("fa-eye-slash");
+                eye.classList.add("fa-eye");
+            }
+        }
+    </script>
+}

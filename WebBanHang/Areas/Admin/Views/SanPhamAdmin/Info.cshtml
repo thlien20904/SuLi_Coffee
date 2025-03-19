@@ -1,0 +1,39 @@
+﻿@model IEnumerable<WebBanHang.Models.SanPham>
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+}
+<link rel="stylesheet" href="~/Content/SanPhamAdmin.css" />
+
+<h2 style="margin: 20px 0;">Danh sách sản phẩm</h2>
+
+<div style="margin-bottom: 30px;">
+    <a href="@Url.Action("Add", "SanPham")" class="btn-add">➕ Thêm sản phẩm mới</a>
+</div>
+
+<div class="product-container">
+    @foreach (var item in Model)
+    {
+        <div class="product-card">
+            @if (item.GiamGia != null)
+            {
+                <div class="discount">-@item.GiamGia%</div>
+            }
+            <img src="@Url.Content("~/" + item.HinhAnh)" alt="@item.TenSanPham" />
+            <h4 class="product-title">@item.TenSanPham</h4>
+            <p class="price">
+                $@item.Gia
+                @if (item.GiaGiam != null)
+                {
+                    <span class="old-price">$@item.GiaGiam</span>
+                }
+            </p>
+            <p class="product-desc">@item.MoTa</p>
+
+            <div class="button-group">
+                <a href="@Url.Action("Edit", "SanPham", new { id = item.SanPhamID })" class="btn-edit">Edit</a>
+                <a href="@Url.Action("Delete", "SanPham", new { id = item.SanPhamID })" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">Delete</a>
+            </div>
+        </div>
+    }
+</div>
+

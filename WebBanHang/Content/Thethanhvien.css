@@ -1,0 +1,115 @@
+﻿/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #fdf6f8;
+    color: #333;
+}
+
+/* Header */
+.header {
+    background-color: transparent;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 50px;
+    height: 80px;
+}
+
+.container {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 120px 20px 20px 20px;
+    box-sizing: border-box;
+}
+
+/* Typography */
+/* Text cho p, ul, li, span */
+p, ul, li, span {
+    color: #3a3a3a;
+    text-align: left;
+    font-size: 20px;
+}
+.text-center p {
+    text-align: center;
+}
+
+/* div chỉ nên reset margin/padding */
+div {
+    color: #3a3a3a;
+    font-size: 20px;
+    /* Không nên ép text-align cho div */
+}
+
+
+/* Riêng h1 - h6 không ép text-align */
+h1, h2, h3, h4, h5, h6 {
+    color: #3a3a3a;
+    line-height: 1.6;
+    margin-bottom: 10px;
+    font-size: 18px;
+    /* KHÔNG để text-align ở đây */
+}
+
+span {
+    display: block; /* giúp span xuống dòng và nhận margin */
+    margin-bottom: 20px;
+}
+
+p, ul li {
+    line-height: 1.7;
+    font-size: 1rem;
+}
+
+p {
+    margin-bottom: 10px;
+}
+
+ul {
+    list-style: inside;
+    padding-left: 0;
+}
+
+    ul li {
+        margin-bottom: 5px;
+    }
+
+/* Link */
+a {
+    color: #000; /* đổi thành màu đen */
+    text-decoration: none;
+    font-weight: 600;
+}
+
+    a:hover {
+        text-decoration: underline;
+        color: #e83e8c; /* hover là đen nhạt hoặc giữ nguyên màu đen */
+    }
+
+
+/* Lưu ý */
+.luu-y {
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #e83e8c;
+}
+
+/* Optional: Card-like block cho các section */
+.block {
+    background: #000;
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
