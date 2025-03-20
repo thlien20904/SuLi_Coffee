@@ -1,53 +1,81 @@
-﻿@model WebBanHang.Models.SanPham
+﻿@model WebBanHang.Models.FoodAddViewModel
 
-<h2>Thêm sản phẩm mới</h2>
+<h2>Thêm món ăn mới</h2>
 <hr />
 
 <div class="container">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Add", "SanPhamAdmin", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
 
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="TenSanPham">Tên Sản Phẩm:</label>
-                    @Html.TextBoxFor(model => model.TenSanPham, new { @class = "form-control", id = "TenSanPham" })
+                    <label for="FoodName">Tên Món Ăn:</label>
+                    @Html.TextBoxFor(model => model.Food.FoodName, new { @class = "form-control", id = "FoodName" })
                 </div>
 
                 <div class="form-group">
-                    <label for="Gia">Giá:</label>
-                    @Html.TextBoxFor(model => model.Gia, new { @class = "form-control", id = "Gia" })
+                    <label for="CategoryId">Loại:</label>
+                    @Html.DropDownListFor(model => model.Food.CategoryId,
+                        ViewBag.Categories != null
+                            ? new SelectList(ViewBag.Categories, "CategoryId", "CategoryName")
+                            : new SelectList(new List<SelectListItem>()),
+                        "Chọn loại", new { @class = "form-control", id = "CategoryId" })
+                </div>
+
+                <!-- NGUYÊN LIỆU dạng MULTI-SELECT -->
+                <div class="form-group">
+                    <label for="SelectedIngredientIds">Chọn nguyên liệu:</label>
+                    @Html.ListBoxFor(model => model.SelectedIngredientIds,
+                        new MultiSelectList(ViewBag.Ingredients, "IngredientId", "IngredientName", Model.SelectedIngredientIds),
+                        new { @class = "form-control select2", id = "SelectedIngredientIds" })
                 </div>
 
                 <div class="form-group">
-                    <label for="GiaGiam">Giá Giảm:</label>
-                    @Html.TextBoxFor(model => model.GiaGiam, new { @class = "form-control", id = "GiaGiam", @readonly = "readonly" })
+                    <label for="Price">Giá:</label>
+                    @Html.TextBoxFor(model => model.Food.Price, new { @class = "form-control", id = "Price" })
                 </div>
 
                 <div class="form-group">
-                    <label for="GiamGia">Giảm Giá (%):</label>
-                    @Html.TextBoxFor(model => model.GiamGia, new { @class = "form-control", id = "GiamGia" })
+                    <label for="Discount">Giảm Giá (%):</label>
+                    @Html.TextBoxFor(model => model.Food.Discount, new { @class = "form-control", id = "Discount" })
+                </div>
+
+                <div class="form-group">
+                    <label for="DiscountPrice">Giá Giảm:</label>
+                    <input type="text" id="DiscountPrice" class="form-control" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label for="Stock">Số lượng tồn:</label>
+                    @Html.TextBoxFor(model => model.Food.Stock, new { @class = "form-control", id = "Stock" })
                 </div>
             </div>
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="MoTa">Mô Tả:</label>
-                    @Html.TextAreaFor(model => model.MoTa, new { @class = "form-control", rows = 3, id = "MoTa" })
+                    <label for="Description">Mô Tả:</label>
+                    @Html.TextAreaFor(model => model.Food.Description, new { @class = "form-control", rows = 3, id = "Description" })
                 </div>
 
                 <div class="form-group">
-                    <label for="HinhAnh">Hình Ảnh:</label>
-                    @Html.TextBoxFor(model => model.HinhAnh, new { @class = "form-control", id = "HinhAnh" })
+                    <label for="ImageURL">Hình Ảnh:</label>
+                    @Html.TextBoxFor(model => model.Food.ImageURL, new { @class = "form-control", id = "ImageURL" })
+                    <img id="ImagePreview" src="@Model.Food.ImageURL" style="max-width: 100px; margin-top: 10px;" />
                 </div>
 
                 <div class="form-group">
-                    <label for="Loai">Loại:</label>
-                    @Html.TextBoxFor(model => model.Loai, new { @class = "form-control", id = "Loai" })
+                    <label for="Status">Trạng thái:</label>
+                    @Html.DropDownListFor(model => model.Food.Status,
+                        new SelectList(new[] {
+                            new { Value = true, Text = "Còn bán" },
+                            new { Value = false, Text = "Ngừng bán" }
+                        }, "Value", "Text", Model.Food.Status),
+                        new { @class = "form-control", id = "Status" })
                 </div>
 
-                <button type="submit" class="btn btn-success mt-3">Thêm sản phẩm</button>
+                <button type="submit" class="btn btn-success mt-3">Thêm món ăn</button>
             </div>
         </div>
     }
@@ -55,22 +83,29 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
-        function updateGiaGiam() {
-            var gia = parseFloat($("#Gia").val()) || 0;
-            var giamGia = parseFloat($("#GiamGia").val()) || 0;
-            var giaGiam = gia - (gia * giamGia / 100);
-            $("#GiaGiam").val(giaGiam.toFixed(2)); // giữ 2 số thập phân
+        function updateDiscountPrice() {
+            var price = parseFloat($("#Price").val()) || 0;
+            var discount = parseFloat($("#Discount").val()) || 0;
+            var discountPrice = price - (price * discount / 100);
+            $("#DiscountPrice").val(discountPrice.toLocaleString('vi-VN') + " đ");
         }
 
-        // Khi thay đổi Giá hoặc Giảm Giá %, tự tính lại
-        $("#Gia, #GiamGia").on("input", function () {
-            updateGiaGiam();
+        $("#Price, #Discount").on("input", function () {
+            updateDiscountPrice();
         });
 
-        // Khi load trang, tính sẵn
+        $("#ImageURL").on("input", function () {
+            $("#ImagePreview").attr("src", $(this).val());
+        });
+
         $(document).ready(function () {
-            updateGiaGiam();
+            updateDiscountPrice();
+            $('.select2').select2({
+                placeholder: "Chọn nguyên liệu"
+            });
         });
     </script>
 }

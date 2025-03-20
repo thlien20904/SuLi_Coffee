@@ -1,20 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="WebAppDBModelStoreContainer" CdmEntityContainer="WebAppDBEntities2">
-    <EntitySetMapping Name="SanPhams">
-      <EntityTypeMapping TypeName="WebAppDBModel.SanPham">
-        <MappingFragment StoreEntitySet="SanPham">
-          <ScalarProperty Name="SanPhamID" ColumnName="SanPhamID" />
-          <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
-          <ScalarProperty Name="Gia" ColumnName="Gia" />
-          <ScalarProperty Name="GiaGiam" ColumnName="GiaGiam" />
-          <ScalarProperty Name="MoTa" ColumnName="MoTa" />
-          <ScalarProperty Name="HinhAnh" ColumnName="HinhAnh" />
-          <ScalarProperty Name="Loai" ColumnName="Loai" />
-          <ScalarProperty Name="GiamGia" ColumnName="GiamGia" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="WebAppDBModel.User">
         <MappingFragment StoreEntitySet="Users">
@@ -56,6 +42,13 @@
     <EntitySetMapping Name="Foods">
       <EntityTypeMapping TypeName="WebAppDBModel.Food">
         <MappingFragment StoreEntitySet="Food">
+          <ScalarProperty Name="Status" ColumnName="Status" />
+          <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Stock" ColumnName="Stock" />
+          <ScalarProperty Name="DiscountPrice" ColumnName="DiscountPrice" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
           <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
           <ScalarProperty Name="Price" ColumnName="Price" />
           <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
@@ -142,5 +135,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <AssociationSetMapping Name="Food_Ingredient" TypeName="WebAppDBModel.Food_Ingredient" StoreEntitySet="Food_Ingredient">
+      <EndProperty Name="Ingredient">
+        <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+      </EndProperty>
+      <EndProperty Name="Food">
+        <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping>

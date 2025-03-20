@@ -1,4 +1,6 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -10,96 +12,177 @@ namespace WebBanHang.Controllers
     {
         private WebAppDBEntities2 db = new WebAppDBEntities2();
 
-        // Info
+        // Info - Danh sách món ăn
         public ActionResult Info()
         {
-            var list = db.SanPhams.ToList();
+            TempData["ErrorMessage"] = null;
+            var list = db.Foods.ToList();
             return View(list);
         }
 
         // Add (GET)
         public ActionResult Add()
         {
-            return View();
+            ViewBag.Categories = db.Categories.ToList();
+            ViewBag.Ingredients = db.Ingredients.ToList();
+
+            // Trả về View với model rỗng
+            var model = new FoodAddViewModel
+            {
+                Food = new Food()
+            };
+            return View(model);
         }
 
         // Add (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(SanPham sp)
+        public ActionResult Add(FoodAddViewModel model)
         {
             if (ModelState.IsValid)
             {
-                db.SanPhams.Add(sp);
+                // Set ngày tạo
+                model.Food.UpdatedDate = DateTime.Now;
+
+                db.Foods.Add(model.Food);
                 db.SaveChanges();
+
+                // Lưu vào bảng trung gian
+                if (model.SelectedIngredientIds != null)
+                {
+                    foreach (var ingredientId in model.SelectedIngredientIds)
+                    {
+                        db.FoodIngredients.Add(new FoodIngredient
+                        {
+                            FoodId = model.Food.FoodId,
+                            IngredientId = ingredientId,
+                            Quantity = 1 // Có thể custom số lượng ở đây
+                        });
+                    }
+                    db.SaveChanges();
+                }
+
+                TempData["SuccessMessage"] = "Thêm món ăn mới thành công!";
                 return RedirectToAction("Info");
             }
-            return View(sp);
+
+            // Load lại dữ liệu nếu có lỗi
+            ViewBag.Categories = db.Categories.ToList();
+            ViewBag.Ingredients = db.Ingredients.ToList();
+            return View(model);
         }
 
         // Edit (GET)
         public ActionResult Edit(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            SanPham sp = db.SanPhams.Find(id);
-            if (sp == null) return HttpNotFound();
-            return View(sp);
+            var food = db.Foods.Find(id);
+            if (food == null) return HttpNotFound();
+
+            var model = new FoodEditViewModel
+            {
+                Food = food,
+                SelectedIngredientIds = food.FoodIngredients.Select(fi => fi.IngredientId.Value).ToList()
+            };
+
+            ViewBag.Categories = db.Categories.ToList();
+            ViewBag.Ingredients = db.Ingredients.ToList();
+            return View(model);
         }
 
         // Edit (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SanPham sp)
+        public ActionResult Edit(FoodEditViewModel model)
         {
             if (ModelState.IsValid)
             {
-                var existing = db.SanPhams.Find(sp.SanPhamID);
-                if (existing == null)
+                var food = db.Foods.Find(model.Food.FoodId);
+                if (food == null)
                 {
-                    return HttpNotFound();
+                    TempData["ErrorMessage"] = "Không tìm thấy món ăn.";
+                    return RedirectToAction("Info", "SanPhamAdmin");
                 }
 
-                // Cập nhật từng trường (an toàn hơn)
-                existing.TenSanPham = sp.TenSanPham;
-                existing.Gia = sp.Gia;
-                existing.GiaGiam = sp.GiaGiam;
-                existing.MoTa = sp.MoTa;
-                existing.HinhAnh = sp.HinhAnh;
-                existing.Loai = sp.Loai;
-                existing.GiamGia = sp.GiamGia;
+                // Cập nhật thông tin món ăn
+                food.FoodName = model.Food.FoodName;
+                food.CategoryId = model.Food.CategoryId;
+                food.Price = model.Food.Price;
+                food.Discount = model.Food.Discount;
+                food.Stock = model.Food.Stock;
+                food.Description = model.Food.Description;
+                food.ImageURL = model.Food.ImageURL;
+                food.UpdatedDate = DateTime.Now;
+                food.Status = model.Food.Status;
+
+                // Cập nhật nguyên liệu (xóa cũ thêm mới)
+                db.FoodIngredients.RemoveRange(db.FoodIngredients.Where(fi => fi.FoodId == food.FoodId));
+                if (model.SelectedIngredientIds != null)
+                {
+                    foreach (var ingId in model.SelectedIngredientIds)
+                    {
+                        db.FoodIngredients.Add(new FoodIngredient
+                        {
+                            FoodId = food.FoodId,
+                            IngredientId = ingId,
+                            Quantity = 1
+                        });
+                    }
+                }
 
                 db.SaveChanges();
-                return RedirectToAction("Info");
+                TempData["SuccessMessage"] = "Cập nhật món ăn thành công!";
+                return RedirectToAction("Info", "SanPhamAdmin");
             }
-            return View(sp);
+
+            // Load lại dữ liệu dropdown nếu có lỗi
+            ViewBag.Categories = db.Categories.ToList();
+            ViewBag.Ingredients = db.Ingredients.ToList();
+            return View(model);
         }
 
-        // Delete (GET) - Xác nhận trước khi xóa
+
+
+        // Delete (GET)
         public ActionResult Delete(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            SanPham sp = db.SanPhams.Find(id);
-            if (sp == null) return HttpNotFound();
-            return View(sp); // View Confirm Delete
+
+            var food = db.Foods
+                .Include(f => f.Category)
+                .Include(f => f.FoodIngredients.Select(fi => fi.Ingredient))
+                .FirstOrDefault(f => f.FoodId == id);
+
+            if (food == null) return HttpNotFound();
+            return View(food);
         }
 
-        // Delete (POST) - Xác nhận Xóa
+        // Delete (POST)
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            SanPham sp = db.SanPhams.Find(id);
-            if (sp == null) return HttpNotFound();
+            var food = db.Foods
+                .Include(f => f.FoodIngredients) // Load các dòng liên quan trong bảng trung gian
+                .FirstOrDefault(f => f.FoodId == id);
 
-            db.SanPhams.Remove(sp);
+            if (food == null) return HttpNotFound();
+
+            // Xóa dữ liệu bảng trung gian trước
+            if (food.FoodIngredients != null && food.FoodIngredients.Any())
+            {
+                db.FoodIngredients.RemoveRange(food.FoodIngredients);
+            }
+
+            db.Foods.Remove(food);
             db.SaveChanges();
             return RedirectToAction("Info");
         }
 
-        // Giải phóng tài nguyên DbContext
+
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
+            if (disposing && db != null)
             {
                 db.Dispose();
             }

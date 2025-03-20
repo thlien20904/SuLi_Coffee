@@ -130,8 +130,14 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\BaoCaoController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DanhMucSPController.cs" />
+    <Compile Include="Areas\Admin\Controllers\DonHangController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\KhoAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\SanPhamAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ThanhToanController.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Controllers\GTController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LienheController.cs" />
@@ -154,6 +160,8 @@
     <Compile Include="Models\Food.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\FoodAddViewModel.cs" />
+    <Compile Include="Models\FoodEditViewModel.cs" />
     <Compile Include="Models\FoodIngredient.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -180,9 +188,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SanPham.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Staff.cs">
       <DependentUpon>Model1.tt</DependentUpon>
@@ -282,6 +287,12 @@
     <Content Include="Models\Model1.edmx.diagram">
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\Admin\Views\Thanhtoan\ThanhToan.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Users.cshtml" />
+    <Content Include="Areas\Admin\Views\DanhMucSP\DanhMucSP.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoAdmin\KhoAdmin.cshtml" />
+    <Content Include="Areas\Admin\Views\DonHang\DonHang.cshtml" />
+    <Content Include="Areas\Admin\Views\BaoCao\BaoCao.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />

@@ -25,7 +25,6 @@ namespace WebBanHang.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<SanPham> SanPhams { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AccRole> AccRoles { get; set; }

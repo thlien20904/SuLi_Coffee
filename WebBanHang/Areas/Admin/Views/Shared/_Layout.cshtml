@@ -1,39 +1,221 @@
-﻿@{
-    Layout = null;
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin Area - SuLi Coffee</title>
+    <title>SuLi Coffee - Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" />
     <link href="@Url.Content("~/Content/Admin.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/SanPhamAdmin.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/HomeAdmin.css")" rel="stylesheet" />
     @RenderSection("Styles", required: false)
+    <style>
+        /* Hover cho nav */
+        .nav ul li a {
+            transition: all 0.3s ease;
+        }
+
+            .nav ul li a:hover {
+                color: #c4a48c !important;
+                transform: translateY(-2px);
+            }
+
+        /* Footer icons */
+        footer a {
+            color: white;
+            margin: 0 10px;
+            font-size: 20px;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+            footer a:hover {
+                color: #c4a48c;
+                transform: scale(1.2);
+            }
+
+        footer:hover {
+            background: #222;
+        }
+
+        header.header {
+            border-bottom: 2px solid #c4a48c;
+        }
+
+        /* Menu */
+        .nav ul {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            align-items: center;
+            justify-content: center;
+            text-shadow: none;
+        }
+
+        .nav .menu-item {
+            position: relative;
+            padding: 0 10px;
+            line-height: 40px; /* nhỏ hơn */
+            text-shadow: none;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none; /* giữ */
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            text-shadow: none; /* XÓA BÓNG CHỮ */
+        }
+
+        .submenu-column p a {
+            color: #555;
+            text-decoration: none; /* giữ */
+            text-shadow: none; /* XÓA BÓNG CHỮ */
+        }
+
+
+        .nav a:hover {
+            color: #ff6600;
+            /* Bỏ underline khi hover */
+            text-decoration: none;
+            text-shadow: none;
+        }
+
+        .nav .menu-item:hover .submenu {
+            display: block;
+        }
+
+        .submenu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            padding: 10px 15px;
+            box-shadow: none;
+            border-radius: 4px;
+            width: 250px;
+            z-index: 1000;
+            text-shadow: none;
+        }
+
+        .submenu-column {
+            width: 100%;
+            text-shadow: none;
+        }
+
+            .submenu-column h4 {
+                font-weight: bold;
+                margin-bottom: 6px;
+                padding-bottom: 4px;
+                border-bottom: 1px solid #333;
+                color: #333;
+                font-size: 14px;
+            }
+
+            .submenu-column p {
+                margin: 4px 0;
+                color: #555;
+                cursor: pointer;
+                transition: color 0.2s;
+                font-size: 13px;
+            }
+
+                .submenu-column p a {
+                    color: #555;
+                    text-decoration: none; /* giữ */
+                }
+
+                    .submenu-column p a:hover {
+                        color: #ff6600;
+                        text-decoration: none; /* bỏ underline khi hover luôn */
+                    }
+
+        .menu-item:hover > a {
+            /* bỏ underline */
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
+    <!-- Header -->
     <header class="header d-flex align-items-center bg-dark text-white py-3">
         <div class="container d-flex align-items-center justify-content-between">
-            <div class="logo">
-                <a href="@Url.Action("HomeAdmin", "HomeAdmin", new { area = "Admin" })" class="text-white text-decoration-none fs-4">SuLi Admin</a>
+            <!-- Logo -->
+            <div class="logo" style="padding-left: 20px;">
+                <a href="@Url.Action("HomeAdmin", "HomeAdmin")" class="logo-link text-decoration-none d-block">
+                    <div class="logo-middle" style="font-family: 'Great Vibes', cursive; font-size: 28px;">SuLi Coffee</div>
+                </a>
             </div>
+
+            <!-- Menu -->
             <nav class="nav">
-                <ul class="d-flex list-unstyled mb-0 gap-4">
-                    <li><a class="text-white text-decoration-none" href="@Url.Action("Info", "SanPhamAdmin", new { area = "Admin" })">Quản lý sản phẩm</a></li>
-                    <li><a class="text-white text-decoration-none" href="@Url.Action("Index", "UserAdmin", new { area = "Admin" })">Quản lý người dùng</a></li>
-                    <li><a class="text-white text-decoration-none" href="@Url.Action("Logout", "Login", new { area = "" })">Đăng xuất</a></li>
+                <ul class="d-flex list-unstyled mb-0 gap-3">
+                    <!-- Sản phẩm -->
+                    <li class="menu-item">
+                        <a href="#">Sản phẩm</a>
+                        <div class="submenu">
+                            <div class="submenu-column">
+                                <h4>Quản lý sản phẩm</h4>
+                                <p><a href="@Url.Action("DanhMucSP", "DanhMucSP", new { area = "Admin" })">Danh mục sản phẩm</a></p>
+                                <p><a href="@Url.Action("Info", "SanPhamAdmin", new { area = "Admin" })">Sản phẩm</a></p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Kho nguyên liệu -->
+                    <li class="menu-item">
+                        <a href="#">Kho nguyên liệu</a>
+                        <div class="submenu">
+                            <div class="submenu-column">
+                                <h4>Quản lý kho</h4>
+                                <p><a href="@Url.Action("Index", "TheoDoiKhoAdmin", new { area = "Admin" })">Theo dõi kho nguyên liệu</a></p>
+                                <p><a href="@Url.Action("KhoAdmin", "KhoAdmin", new { area = "Admin" })">Cập nhật lượng nguyên liệu</a></p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Báo cáo -->
+                    <li class="menu-item">
+                        <a href="#">Báo cáo</a>
+                        <div class="submenu">
+                            <div class="submenu-column">
+                                <h4>Thống kê</h4>
+                                <p><a href="@Url.Action("BaoCao", "BaoCao", new { area = "Admin" })">Thống kê</a></p>
+                                <p><a href="@Url.Action("DoanhThuTheoThoiGian", "BaoCao", new { area = "Admin" })">Doanh thu theo thời gian</a></p>
+                                <p><a href="@Url.Action("SanPhamBanChay", "BaoCao", new { area = "Admin" })">Sản phẩm bán chạy nhất</a></p>
+                            </div>
+                        </div>
+                    </li>
+
+                    <!-- Không có submenu -->
+                    <li><a href="@Url.Action("Users", "Users", new { area = "Admin" })">Người dùng</a></li>
+                    <li><a href="@Url.Action("DonHang", "DonHang", new { area = "Admin" })">Đơn hàng</a></li>
+                    <li><a href="@Url.Action("ThanhToan", "ThanhToan", new { area = "Admin" })">Thanh toán</a></li>
+                    <li><a href="@Url.Action("Logout", "Login")">Đăng xuất</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
-    <main class="container mt-4">
+    <!-- Main -->
+    <main class="container py-4">
         @RenderBody()
     </main>
 
-    <footer class="footer bg-dark text-white text-center py-3 mt-5">
-        <p>©2025 Bản quyền Admin SuLi Coffee</p>
+    <!-- Footer -->
+    <footer>
+        <div class="text-center">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+        </div>
+        <div class="text-center">
+            <p>©2025 Bản quyền Admin SuLi Coffee - Chỉ dành cho quản trị viên</p>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

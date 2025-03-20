@@ -20,6 +20,7 @@ namespace WebBanHang.Models
             this.Foods = new HashSet<Food>();
             this.FoodIngredients = new HashSet<FoodIngredient>();
             this.Warehouses = new HashSet<Warehouse>();
+            this.Foods1 = new HashSet<Food>();
         }
     
         public int IngredientId { get; set; }
@@ -35,5 +36,7 @@ namespace WebBanHang.Models
         public virtual ICollection<FoodIngredient> FoodIngredients { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Warehouse> Warehouses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Food> Foods1 { get; set; }
     }
 }

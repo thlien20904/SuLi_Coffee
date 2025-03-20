@@ -1,39 +1,60 @@
-﻿@model IEnumerable<WebBanHang.Models.SanPham>
+﻿@model IEnumerable<WebBanHang.Models.Food>
+
 @{
-    ViewBag.Title = "Danh sách sản phẩm";
+    Layout = "../Shared/_Layout.cshtml";
 }
-<link rel="stylesheet" href="~/Content/SanPhamAdmin.css" />
+<link href="~/Content/SanPhamAdmin.css" rel="stylesheet" />
 
-<h2 style="margin: 20px 0;">Danh sách sản phẩm</h2>
+<div class="page-container">
+    <div class="header-container">
+        <h2>Danh sách món ăn</h2>
+        <a href="@Url.Action("Add", "SanPhamAdmin")" class="btn-add">➕ Thêm món ăn mới</a>
+    </div>
 
-<div style="margin-bottom: 30px;">
-    <a href="@Url.Action("Add", "SanPham")" class="btn-add">➕ Thêm sản phẩm mới</a>
-</div>
-
-<div class="product-container">
-    @foreach (var item in Model)
+    @if (TempData["SuccessMessage"] != null)
     {
-        <div class="product-card">
-            @if (item.GiamGia != null)
-            {
-                <div class="discount">-@item.GiamGia%</div>
-            }
-            <img src="@Url.Content("~/" + item.HinhAnh)" alt="@item.TenSanPham" />
-            <h4 class="product-title">@item.TenSanPham</h4>
-            <p class="price">
-                $@item.Gia
-                @if (item.GiaGiam != null)
-                {
-                    <span class="old-price">$@item.GiaGiam</span>
-                }
-            </p>
-            <p class="product-desc">@item.MoTa</p>
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
 
-            <div class="button-group">
-                <a href="@Url.Action("Edit", "SanPham", new { id = item.SanPhamID })" class="btn-edit">Edit</a>
-                <a href="@Url.Action("Delete", "SanPham", new { id = item.SanPhamID })" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?');">Delete</a>
-            </div>
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <p class="alert alert-warning">Không có món ăn nào để hiển thị.</p>
+    }
+    else
+    {
+        <div class="product-container">
+            @foreach (var item in Model)
+            {
+                <div class="product-card">
+                    @if (item.Discount > 0)
+                    {
+                        <div class="discount">-@item.Discount%</div>
+                    }
+                    <img src="@(!string.IsNullOrEmpty(item.ImageURL) ? Url.Content(item.ImageURL) : "/Content/Images/no-image.png")" alt="@item.FoodName" />
+                    <h4 class="product-title">@item.FoodName</h4>
+                    <p class="price">
+                        @string.Format("{0:N0}", item.Price) đ
+                        @if (item.DiscountPrice > 0)
+                        {
+                            <span class="old-price">@string.Format("{0:N0}", item.DiscountPrice) đ</span>
+                        }
+                    </p>
+                    <p><strong>Trạng thái:</strong> @(item.Status == true ? "Còn bán" : "Ngừng bán")</p>
+                    <div class="button-group">
+                        <a href="@Url.Action("Edit", "SanPhamAdmin", new { id = item.FoodId })" class="btn-edit">Edit</a>
+                        <a href="@Url.Action("Delete", "SanPhamAdmin", new { id = item.FoodId })" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa món ăn này không?');">Delete</a>
+                    </div>
+                </div>
+            }
         </div>
     }
 </div>
-

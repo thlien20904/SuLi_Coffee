@@ -1,18 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="WebAppDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-  <EntityType Name="SanPham">
-    <Key>
-      <PropertyRef Name="SanPhamID" />
-    </Key>
-    <Property Name="SanPhamID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="TenSanPham" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Gia" Type="Decimal" Precision="18" Scale="2" Nullable="false" />
-    <Property Name="GiaGiam" Type="Decimal" Precision="18" Scale="2" />
-    <Property Name="MoTa" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="HinhAnh" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="Loai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="GiamGia" Type="Int32" />
-  </EntityType>
   <EntityType Name="User">
     <Key>
       <PropertyRef Name="Id" />
@@ -24,7 +11,6 @@
     <Property Name="Role" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
   </EntityType>
   <EntityContainer Name="WebAppDBEntities2" annotation:LazyLoadingEnabled="true">
-    <EntitySet Name="SanPhams" EntityType="Self.SanPham" />
     <EntitySet Name="Users" EntityType="Self.User" />
     <EntitySet Name="Accounts" EntityType="WebAppDBModel.Account" />
     <EntitySet Name="AccRoles" EntityType="WebAppDBModel.AccRole" />
@@ -77,6 +63,10 @@
       <End Role="Invoice" EntitySet="Invoices" />
       <End Role="InvoiceDetail" EntitySet="InvoiceDetails" />
     </AssociationSet>
+    <AssociationSet Name="Food_Ingredient" Association="WebAppDBModel.Food_Ingredient">
+      <End Role="Food" EntitySet="Foods" />
+      <End Role="Ingredient" EntitySet="Ingredients" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Account">
     <Key>
@@ -114,11 +104,19 @@
     <Property Name="CategoryId" Type="Int32" />
     <Property Name="IngredientId" Type="Int32" />
     <Property Name="Price" Type="Decimal" Nullable="false" Precision="18" Scale="3" />
-    <Property Name="ImageURL" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="ImageURL" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Category" Relationship="WebAppDBModel.FK__Food__CategoryId__2645B050" FromRole="Food" ToRole="Category" />
     <NavigationProperty Name="Ingredient" Relationship="WebAppDBModel.FK__Food__Ingredient__2739D489" FromRole="Food" ToRole="Ingredient" />
     <NavigationProperty Name="FoodIngredients" Relationship="WebAppDBModel.FK__FoodIngre__FoodI__3B40CD36" FromRole="Food" ToRole="FoodIngredient" />
     <NavigationProperty Name="InvoiceDetails" Relationship="WebAppDBModel.FK__InvoiceDe__FoodI__2FCF1A8A" FromRole="Food" ToRole="InvoiceDetail" />
+    <Property Name="Discount" Type="Decimal" Precision="5" Scale="2" />
+    <Property Name="DiscountPrice" Type="Decimal" Precision="29" Scale="9" annotation:StoreGeneratedPattern="Computed" />
+    <Property Name="Stock" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Boolean" />
+    <NavigationProperty Name="Ingredients" Relationship="WebAppDBModel.Food_Ingredient" FromRole="Food" ToRole="Ingredient" />
   </EntityType>
   <EntityType Name="FoodIngredient">
     <Key>
@@ -144,6 +142,7 @@
     <NavigationProperty Name="Foods" Relationship="WebAppDBModel.FK__Food__Ingredient__2739D489" FromRole="Ingredient" ToRole="Food" />
     <NavigationProperty Name="FoodIngredients" Relationship="WebAppDBModel.FK__FoodIngre__Ingre__3C34F16F" FromRole="Ingredient" ToRole="FoodIngredient" />
     <NavigationProperty Name="Warehouses" Relationship="WebAppDBModel.FK__Warehouse__Ingre__3864608B" FromRole="Ingredient" ToRole="Warehouse" />
+    <NavigationProperty Name="Foods1" Relationship="WebAppDBModel.Food_Ingredient" FromRole="Ingredient" ToRole="Food" />
   </EntityType>
   <EntityType Name="Invoice">
     <Key>
@@ -322,5 +321,9 @@
         <PropertyRef Name="InvoiceId" />
       </Dependent>
     </ReferentialConstraint>
+  </Association>
+  <Association Name="Food_Ingredient">
+    <End Type="WebAppDBModel.Food" Role="Food" Multiplicity="*" />
+    <End Type="WebAppDBModel.Ingredient" Role="Ingredient" Multiplicity="*" />
   </Association>
 </Schema>
