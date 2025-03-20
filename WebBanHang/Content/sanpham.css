@@ -7,6 +7,27 @@
     padding: 20px;
 }
 
+/* Container tìm kiếm */
+.search-container {
+    text-align: center;
+    margin: 20px 0;
+}
+
+    /* Ô tìm kiếm */
+    .search-container input[type="text"] {
+        width: 50%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        outline: none;
+        transition: border-color 0.3s;
+    }
+
+        .search-container input[type="text"]:focus {
+            border-color: #d8804b;
+        }
+
 /* Tiêu đề trang */
 h2 {
     color: #000;

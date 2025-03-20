@@ -17,7 +17,7 @@ namespace WebBanHang.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Invoice()
         {
-            this.InvoiceDetails = new HashSet<InvoiceDetail>();
+            this.InvoiceDetail = new HashSet<InvoiceDetail>();
         }
     
         public int InvoiceId { get; set; }
@@ -28,6 +28,6 @@ namespace WebBanHang.Models
     
         public virtual TableFood TableFood { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; }
+        public virtual ICollection<InvoiceDetail> InvoiceDetail { get; set; }
     }
 }

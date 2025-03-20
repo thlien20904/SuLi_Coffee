@@ -13,10 +13,10 @@ namespace WebBanHang.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class WebAppDBEntities2 : DbContext
+    public partial class WebAppDBEntities4 : DbContext
     {
-        public WebAppDBEntities2()
-            : base("name=WebAppDBEntities2")
+        public WebAppDBEntities4()
+            : base("name=WebAppDBEntities4")
         {
         }
     
@@ -25,18 +25,17 @@ namespace WebBanHang.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<SanPham> SanPhams { get; set; }
-        public virtual DbSet<User> Users { get; set; }
-        public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<AccRole> AccRoles { get; set; }
-        public virtual DbSet<Category> Categories { get; set; }
-        public virtual DbSet<Food> Foods { get; set; }
-        public virtual DbSet<FoodIngredient> FoodIngredients { get; set; }
-        public virtual DbSet<Ingredient> Ingredients { get; set; }
-        public virtual DbSet<Invoice> Invoices { get; set; }
-        public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; }
-        public virtual DbSet<Staff> Staffs { get; set; }
-        public virtual DbSet<TableFood> TableFoods { get; set; }
-        public virtual DbSet<Warehouse> Warehouses { get; set; }
+        public virtual DbSet<Account> Account { get; set; }
+        public virtual DbSet<AccRole> AccRole { get; set; }
+        public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<Food> Food { get; set; }
+        public virtual DbSet<FoodIngredient> FoodIngredient { get; set; }
+        public virtual DbSet<Invoice> Invoice { get; set; }
+        public virtual DbSet<InvoiceDetail> InvoiceDetail { get; set; }
+        public virtual DbSet<Ingredient> Ingredient { get; set; }
+        public virtual DbSet<Staff> Staff { get; set; }
+        public virtual DbSet<TableFood> TableFood { get; set; }
+        public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Warehouse> Warehouse { get; set; }
     }
 }

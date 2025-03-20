@@ -17,9 +17,9 @@ namespace WebBanHang.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Ingredient()
         {
-            this.Foods = new HashSet<Food>();
-            this.FoodIngredients = new HashSet<FoodIngredient>();
-            this.Warehouses = new HashSet<Warehouse>();
+            this.Food = new HashSet<Food>();
+            this.FoodIngredient = new HashSet<FoodIngredient>();
+            this.Warehouse = new HashSet<Warehouse>();
         }
     
         public int IngredientId { get; set; }
@@ -30,10 +30,10 @@ namespace WebBanHang.Models
         public System.DateTime LastUpdated { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Food> Foods { get; set; }
+        public virtual ICollection<Food> Food { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FoodIngredient> FoodIngredients { get; set; }
+        public virtual ICollection<FoodIngredient> FoodIngredient { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Warehouse> Warehouses { get; set; }
+        public virtual ICollection<Warehouse> Warehouse { get; set; }
     }
 }

@@ -1,22 +1,121 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="WebAppDBModelStoreContainer" CdmEntityContainer="WebAppDBEntities2">
-    <EntitySetMapping Name="SanPhams">
-      <EntityTypeMapping TypeName="WebAppDBModel.SanPham">
-        <MappingFragment StoreEntitySet="SanPham">
-          <ScalarProperty Name="SanPhamID" ColumnName="SanPhamID" />
-          <ScalarProperty Name="TenSanPham" ColumnName="TenSanPham" />
-          <ScalarProperty Name="Gia" ColumnName="Gia" />
-          <ScalarProperty Name="GiaGiam" ColumnName="GiaGiam" />
-          <ScalarProperty Name="MoTa" ColumnName="MoTa" />
-          <ScalarProperty Name="HinhAnh" ColumnName="HinhAnh" />
-          <ScalarProperty Name="Loai" ColumnName="Loai" />
-          <ScalarProperty Name="GiamGia" ColumnName="GiamGia" />
+  <EntityContainerMapping StorageEntityContainer="WebAppDBModelStoreContainer" CdmEntityContainer="WebAppDBEntities4">
+    <EntitySetMapping Name="Account">
+      <EntityTypeMapping TypeName="WebAppDBModel.Account">
+        <MappingFragment StoreEntitySet="Account">
+          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+          <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="PassWord" ColumnName="PassWord" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AccRole">
+      <EntityTypeMapping TypeName="WebAppDBModel.AccRole">
+        <MappingFragment StoreEntitySet="AccRole">
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Category">
+      <EntityTypeMapping TypeName="WebAppDBModel.Category">
+        <MappingFragment StoreEntitySet="Category">
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Food">
+      <EntityTypeMapping TypeName="WebAppDBModel.Food">
+        <MappingFragment StoreEntitySet="Food">
+          <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+          <ScalarProperty Name="FoodName" ColumnName="FoodName" />
+          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
+          <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="DiscountPrice" ColumnName="DiscountPrice" />
+          <ScalarProperty Name="Stock" ColumnName="Stock" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FoodIngredient">
+      <EntityTypeMapping TypeName="WebAppDBModel.FoodIngredient">
+        <MappingFragment StoreEntitySet="FoodIngredient">
+          <ScalarProperty Name="FoodIngredientId" ColumnName="FoodIngredientId" />
+          <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+          <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Invoice">
+      <EntityTypeMapping TypeName="WebAppDBModel.Invoice">
+        <MappingFragment StoreEntitySet="Invoice">
+          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+          <ScalarProperty Name="TableId" ColumnName="TableId" />
+          <ScalarProperty Name="DateCheckIn" ColumnName="DateCheckIn" />
+          <ScalarProperty Name="DateCheckOut" ColumnName="DateCheckOut" />
+          <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InvoiceDetail">
+      <EntityTypeMapping TypeName="WebAppDBModel.InvoiceDetail">
+        <MappingFragment StoreEntitySet="InvoiceDetail">
+          <ScalarProperty Name="InvoiceDetailId" ColumnName="InvoiceDetailId" />
+          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
+          <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ingredient">
+      <EntityTypeMapping TypeName="WebAppDBModel.Ingredient">
+        <MappingFragment StoreEntitySet="Ingredient">
+          <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+          <ScalarProperty Name="IngredientName" ColumnName="IngredientName" />
+          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+          <ScalarProperty Name="PhanLoai" ColumnName="PhanLoai" />
+          <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Staff">
+      <EntityTypeMapping TypeName="WebAppDBModel.Staff">
+        <MappingFragment StoreEntitySet="Staff">
+          <ScalarProperty Name="StaffId" ColumnName="StaffId" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="TableFood">
+      <EntityTypeMapping TypeName="WebAppDBModel.TableFood">
+        <MappingFragment StoreEntitySet="TableFood">
+          <ScalarProperty Name="TableId" ColumnName="TableId" />
+          <ScalarProperty Name="TableName" ColumnName="TableName" />
+          <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Users">
-      <EntityTypeMapping TypeName="WebAppDBModel.User">
+      <EntityTypeMapping TypeName="WebAppDBModel.Users">
         <MappingFragment StoreEntitySet="Users">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Username" ColumnName="Username" />
@@ -26,119 +125,13 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Accounts">
-      <EntityTypeMapping TypeName="WebAppDBModel.Account">
-        <MappingFragment StoreEntitySet="Account">
-          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
-          <ScalarProperty Name="PassWord" ColumnName="PassWord" />
-          <ScalarProperty Name="UserName" ColumnName="UserName" />
-          <ScalarProperty Name="DisplayName" ColumnName="DisplayName" />
-          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="AccRoles">
-      <EntityTypeMapping TypeName="WebAppDBModel.AccRole">
-        <MappingFragment StoreEntitySet="AccRole">
-          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
-          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Categories">
-      <EntityTypeMapping TypeName="WebAppDBModel.Category">
-        <MappingFragment StoreEntitySet="Category">
-          <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Foods">
-      <EntityTypeMapping TypeName="WebAppDBModel.Food">
-        <MappingFragment StoreEntitySet="Food">
-          <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
-          <ScalarProperty Name="CategoryId" ColumnName="CategoryId" />
-          <ScalarProperty Name="FoodName" ColumnName="FoodName" />
-          <ScalarProperty Name="FoodId" ColumnName="FoodId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="FoodIngredients">
-      <EntityTypeMapping TypeName="WebAppDBModel.FoodIngredient">
-        <MappingFragment StoreEntitySet="FoodIngredient">
-          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-          <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
-          <ScalarProperty Name="FoodId" ColumnName="FoodId" />
-          <ScalarProperty Name="FoodIngredientId" ColumnName="FoodIngredientId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Ingredients">
-      <EntityTypeMapping TypeName="WebAppDBModel.Ingredient">
-        <MappingFragment StoreEntitySet="Ingredient">
-          <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
-          <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
-          <ScalarProperty Name="PhanLoai" ColumnName="PhanLoai" />
-          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-          <ScalarProperty Name="IngredientName" ColumnName="IngredientName" />
-          <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Invoices">
-      <EntityTypeMapping TypeName="WebAppDBModel.Invoice">
-        <MappingFragment StoreEntitySet="Invoice">
-          <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
-          <ScalarProperty Name="DateCheckOut" ColumnName="DateCheckOut" />
-          <ScalarProperty Name="DateCheckIn" ColumnName="DateCheckIn" />
-          <ScalarProperty Name="TableId" ColumnName="TableId" />
-          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="InvoiceDetails">
-      <EntityTypeMapping TypeName="WebAppDBModel.InvoiceDetail">
-        <MappingFragment StoreEntitySet="InvoiceDetail">
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-          <ScalarProperty Name="FoodId" ColumnName="FoodId" />
-          <ScalarProperty Name="InvoiceId" ColumnName="InvoiceId" />
-          <ScalarProperty Name="InvoiceDetailId" ColumnName="InvoiceDetailId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Staffs">
-      <EntityTypeMapping TypeName="WebAppDBModel.Staff">
-        <MappingFragment StoreEntitySet="Staff">
-          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
-          <ScalarProperty Name="AccountId" ColumnName="AccountId" />
-          <ScalarProperty Name="Gender" ColumnName="Gender" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
-          <ScalarProperty Name="Phone" ColumnName="Phone" />
-          <ScalarProperty Name="FullName" ColumnName="FullName" />
-          <ScalarProperty Name="StaffId" ColumnName="StaffId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TableFoods">
-      <EntityTypeMapping TypeName="WebAppDBModel.TableFood">
-        <MappingFragment StoreEntitySet="TableFood">
-          <ScalarProperty Name="TrangThai" ColumnName="TrangThai" />
-          <ScalarProperty Name="TableName" ColumnName="TableName" />
-          <ScalarProperty Name="TableId" ColumnName="TableId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Warehouses">
+    <EntitySetMapping Name="Warehouse">
       <EntityTypeMapping TypeName="WebAppDBModel.Warehouse">
         <MappingFragment StoreEntitySet="Warehouse">
-          <ScalarProperty Name="DateUpdate" ColumnName="DateUpdate" />
-          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
-          <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
           <ScalarProperty Name="WarehouseId" ColumnName="WarehouseId" />
+          <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
+          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+          <ScalarProperty Name="DateUpdate" ColumnName="DateUpdate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

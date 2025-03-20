@@ -181,16 +181,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\SanPham.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Staff.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TableFood.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\User.cs">
+    <Compile Include="Models\Users.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Warehouse.cs">
@@ -225,19 +222,93 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\banh\banhgau.png" />
+    <Content Include="images\banh\banhmyvn.png" />
+    <Content Include="images\banh\bimbimngo.png" />
+    <Content Include="images\banh\bimbimsuadua.png" />
+    <Content Include="images\banh\Butter_croissant.png" />
+    <Content Include="images\banh\mochi_kemchocolate.png" />
+    <Content Include="images\banh\mochi_phucbt.png" />
+    <Content Include="images\banh\mochi_vietquat.png" />
+    <Content Include="images\banh\mousse_gauchoco.png" />
+    <Content Include="images\baocao.png" />
     <Content Include="images\cafe.png" />
     <Content Include="images\cafe1.png" />
     <Content Include="images\cafe2.png.png" />
     <Content Include="images\cafe3.png" />
     <Content Include="images\cafe4.png" />
+    <Content Include="images\Cafe\bacxiu.png" />
+    <Content Include="images\Cafe\bacxiulachanhnhan.png" />
+    <Content Include="images\Cafe\bacxiulacmuoi.png" />
+    <Content Include="images\Cafe\bacxiulacsua.png" />
+    <Content Include="images\Cafe\bacxiulsyenmach.png" />
+    <Content Include="images\Cafe\bac_xiu.png" />
+    <Content Include="images\Cafe\bo_arabica.png" />
+    <Content Include="images\Cafe\cafeden.png" />
+    <Content Include="images\Cafe\cafesuada.png" />
+    <Content Include="images\Cafe\cafesuanong.png" />
+    <Content Include="images\Cafe\duongdensuada.png" />
+    <Content Include="images\Cafe\loi_img.png" />
+    <Content Include="images\Cafe\traxanhespresso.png" />
+    <Content Include="images\Cafe\tst.png" />
+    <Content Include="images\close.png" />
+    <Content Include="images\donhang.png" />
+    <Content Include="images\donhangicon.png" />
     <Content Include="images\gt.png" />
     <Content Include="images\gt2.png" />
     <Content Include="images\gt3.png" />
     <Content Include="images\gt4.png" />
     <Content Include="images\gt5.png" />
     <Content Include="images\gt6png.jpg" />
+    <Content Include="images\history.png" />
+    <Content Include="images\home.png" />
+    <Content Include="images\icon\basil_add-solid.png" />
+    <Content Include="images\icon\câập nhật.png" />
+    <Content Include="images\icon\f7_lessthan-square-fill %282%29.png" />
+    <Content Include="images\icon\logo 1.png" />
+    <Content Include="images\icon\material-symbols_change-circle.png" />
+    <Content Include="images\icon\mdi_search.png" />
+    <Content Include="images\icon\previous.png" />
+    <Content Include="images\icon\typcn_delete %281%29.png" />
+    <Content Include="images\icon\typcn_delete.png" />
+    <Content Include="images\intronew.png" />
+    <Content Include="images\khohang.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\logo1.png" />
+    <Content Include="images\lucide_x.png" />
+    <Content Include="images\menu.png" />
+    <Content Include="images\nguyenlieu\banhgau.png" />
+    <Content Include="images\nguyenlieu\banhmy.png" />
+    <Content Include="images\nguyenlieu\bimbimngo.png" />
+    <Content Include="images\nguyenlieu\bimbimsuadua.png" />
+    <Content Include="images\nguyenlieu\bo.png" />
+    <Content Include="images\nguyenlieu\cam.png" />
+    <Content Include="images\nguyenlieu\caramel.png" />
+    <Content Include="images\nguyenlieu\choco_chip.png" />
+    <Content Include="images\nguyenlieu\coffee.png" />
+    <Content Include="images\nguyenlieu\dao.png" />
+    <Content Include="images\nguyenlieu\dau.png" />
+    <Content Include="images\nguyenlieu\duong.png" />
+    <Content Include="images\nguyenlieu\hanhnhan.png" />
+    <Content Include="images\nguyenlieu\hatsen.png" />
+    <Content Include="images\nguyenlieu\kem.png" />
+    <Content Include="images\nguyenlieu\matcha.png" />
+    <Content Include="images\nguyenlieu\mochi_kemchoco.png" />
+    <Content Include="images\nguyenlieu\mochi_kpbt.png" />
+    <Content Include="images\nguyenlieu\mochi_kvq.png" />
+    <Content Include="images\nguyenlieu\mousse_gau.png" />
+    <Content Include="images\nguyenlieu\muoi.png" />
+    <Content Include="images\nguyenlieu\sa.png" />
+    <Content Include="images\nguyenlieu\sua.png" />
+    <Content Include="images\nguyenlieu\suadac.png" />
+    <Content Include="images\nguyenlieu\suongsao.png" />
+    <Content Include="images\nguyenlieu\tao.png" />
+    <Content Include="images\nguyenlieu\tra.png" />
+    <Content Include="images\nguyenlieu\tranchau.png" />
+    <Content Include="images\nguyenlieu\vai.png" />
+    <Content Include="images\nguyenlieu\yenmach.png" />
+    <Content Include="images\nguyenlieu\yuzu.png" />
+    <Content Include="images\nhanvien.png" />
     <Content Include="images\noibat.png" />
     <Content Include="images\noibat1.png" />
     <Content Include="images\noibat2.png" />
@@ -250,7 +321,29 @@
     <Content Include="images\product6.png" />
     <Content Include="images\product7.png" />
     <Content Include="images\product8.png" />
+    <Content Include="images\Resources\basil_add-solid.png" />
+    <Content Include="images\Resources\material-symbols_change-circle.png" />
+    <Content Include="images\Resources\typcn_delete %281%29.png" />
     <Content Include="images\Screenshot 2025-03-18 205158.png" />
+    <Content Include="images\setting.png" />
+    <Content Include="images\trangchu-active.png" />
+    <Content Include="images\trangchu.png" />
+    <Content Include="images\trasua\hongtrasua.png" />
+    <Content Include="images\trasua\tradenmacchiato.png" />
+    <Content Include="images\trasua\tstcduongden.png" />
+    <Content Include="images\trasua\ts_olong.png" />
+    <Content Include="images\trasua\ts_olongss.png" />
+    <Content Include="images\trasua\ts_olongtqbo.png" />
+    <Content Include="images\ttc\dao_kombucha.png" />
+    <Content Include="images\ttc\olongtuquysen.png" />
+    <Content Include="images\ttc\tradaocamsa.png" />
+    <Content Include="images\ttc\travai.png" />
+    <Content Include="images\ttc\yuzu_kombucha.png" />
+    <Content Include="images\tudx\frosty_banhkemdau.png" />
+    <Content Include="images\tudx\frosty_caramel.png" />
+    <Content Include="images\tudx\frosty_cfduongden.png" />
+    <Content Include="images\tudx\frosty_choco.png" />
+    <Content Include="images\tudx\frosty_phin.png" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -293,6 +386,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\search.js" />
     <Content Include="video\coffee.mp4" />
     <Content Include="video\vd.mp4" />
     <Content Include="video\vd1.mp4" />

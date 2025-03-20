@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -8,12 +9,12 @@ namespace WebBanHang.Controllers
 {
     public class SanPhamAdminController : Controller
     {
-        private WebAppDBEntities2 db = new WebAppDBEntities2();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // Info
         public ActionResult Info()
         {
-            var list = db.SanPhams.ToList();
+            var list = db.Food.ToList();
             return View(list);
         }
 
@@ -26,11 +27,11 @@ namespace WebBanHang.Controllers
         // Add (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Add(SanPham sp)
+        public ActionResult Add(Food sp)
         {
             if (ModelState.IsValid)
             {
-                db.SanPhams.Add(sp);
+                db.Food.Add(sp);
                 db.SaveChanges();
                 return RedirectToAction("Info");
             }
@@ -41,7 +42,7 @@ namespace WebBanHang.Controllers
         public ActionResult Edit(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            SanPham sp = db.SanPhams.Find(id);
+            Food sp = db.Food.Find(id);
             if (sp == null) return HttpNotFound();
             return View(sp);
         }
@@ -49,25 +50,27 @@ namespace WebBanHang.Controllers
         // Edit (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(SanPham sp)
+        public ActionResult Edit(Food sp)
         {
             if (ModelState.IsValid)
             {
-                var existing = db.SanPhams.Find(sp.SanPhamID);
+                var existing = db.Food.Find(sp.FoodId);
                 if (existing == null)
                 {
                     return HttpNotFound();
                 }
-
-                // Cập nhật từng trường (an toàn hơn)
-                existing.TenSanPham = sp.TenSanPham;
-                existing.Gia = sp.Gia;
-                existing.GiaGiam = sp.GiaGiam;
-                existing.MoTa = sp.MoTa;
-                existing.HinhAnh = sp.HinhAnh;
-                existing.Loai = sp.Loai;
-                existing.GiamGia = sp.GiamGia;
-
+                // Cập nhật các thuộc tính
+                existing.FoodName = sp.FoodName;
+                existing.CategoryId = sp.CategoryId;
+                existing.IngredientId = sp.IngredientId;
+                existing.Price = sp.Price;
+                existing.Discount = sp.Discount;
+                existing.DiscountPrice = sp.DiscountPrice;
+                existing.Stock = sp.Stock;
+                existing.Description = sp.Description;
+                existing.ImageURL = sp.ImageURL;
+                existing.Status = sp.Status;
+                existing.UpdatedDate = DateTime.Now;
                 db.SaveChanges();
                 return RedirectToAction("Info");
             }
@@ -78,7 +81,7 @@ namespace WebBanHang.Controllers
         public ActionResult Delete(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            SanPham sp = db.SanPhams.Find(id);
+            Food sp = db.Food.Find(id);
             if (sp == null) return HttpNotFound();
             return View(sp); // View Confirm Delete
         }
@@ -88,10 +91,10 @@ namespace WebBanHang.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            SanPham sp = db.SanPhams.Find(id);
+            Food sp = db.Food.Find(id);
             if (sp == null) return HttpNotFound();
 
-            db.SanPhams.Remove(sp);
+            db.Food.Remove(sp);
             db.SaveChanges();
             return RedirectToAction("Info");
         }

@@ -10,7 +10,7 @@ namespace WebBanHang.Controllers
 {
     public class RegisterController : Controller
     {
-        private WebAppDBEntities2 db = new WebAppDBEntities2();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // GET: Register
         public ActionResult Register()
@@ -25,7 +25,7 @@ namespace WebBanHang.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = new User()
+                Users user = new Users()
                 {
                     Username = Username,
                     Email = Email,

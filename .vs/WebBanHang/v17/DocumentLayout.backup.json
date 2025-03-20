@@ -1,34 +1,54 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\",
+  "WorkspaceRootPath": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\views\\home\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\views\\home\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\webbanhang\\areas\\admin\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\webbanhang\\areas\\admin\\views\\sanphamadmin\\info.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\sanphamadmin\\info.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\views\\sanpham\\sanpham.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\views\\sanpham\\sanpham.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\webbanhang\\models\\model1.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\models\\model1.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
       "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\models\\model1.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\webbanhang\\areas\\admin\\controllers\\sanphamadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\controllers\\sanphamadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\views\\home\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\views\\home\\home.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\webbanhang\\areas\\admin\\controllers\\homeadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\controllers\\homeadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\views\\login\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\app_start\\routeconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\models\\model1.context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\models\\model1.context.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\content\\sanpham.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\content\\sanpham.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\webbanhang\\views\\sanpham\\sanpham.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\views\\sanpham\\sanpham.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\controllers\\sanphamcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\controllers\\sanphamcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\controllers\\registercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\controllers\\registercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|c:\\hoc_ky_6\\webnangcao\\webbh\\suli_coffee\\webbanhang\\scripts\\search.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\scripts\\search.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,106 +58,204 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 12,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
             },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{eefa5220-e298-11d0-8f78-00a0c9110057}"
             },
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{b1e99781-ab81-11d0-b683-00aa00a3ee26}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e1b7d1f8-9b3c-49b1-8f4f-bfc63a88835d}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{40ea2e6b-2121-4bb8-a43e-c83c04b51041}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Home.cshtml",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Views\\Home\\Home.cshtml",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Views\\Home\\Home.cshtml",
               "RelativeDocumentMoniker": "WebBanHang\\Views\\Home\\Home.cshtml",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Views\\Home\\Home.cshtml",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Views\\Home\\Home.cshtml",
               "RelativeToolTip": "WebBanHang\\Views\\Home\\Home.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-19T11:09:11.528Z",
+              "WhenOpened": "2025-03-20T08:02:39.096Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "WebBanHang\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "WebBanHang\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAAB4AAAAiAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-20T07:51:16.64Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "Model1.Context.cs",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Models\\Model1.Context.cs",
+              "RelativeDocumentMoniker": "WebBanHang\\Models\\Model1.Context.cs",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Models\\Model1.Context.cs",
+              "RelativeToolTip": "WebBanHang\\Models\\Model1.Context.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T07:15:40.668Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "RegisterController.cs",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Controllers\\RegisterController.cs",
+              "RelativeDocumentMoniker": "WebBanHang\\Controllers\\RegisterController.cs",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Controllers\\RegisterController.cs",
+              "RelativeToolTip": "WebBanHang\\Controllers\\RegisterController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAowBsAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T07:13:45.515Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "LoginController.cs",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Controllers\\LoginController.cs",
+              "RelativeDocumentMoniker": "WebBanHang\\Controllers\\LoginController.cs",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Controllers\\LoginController.cs",
+              "RelativeToolTip": "WebBanHang\\Controllers\\LoginController.cs",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAQwAMAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T07:13:33.548Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Model1.edmx [Diagram1]",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Models\\Model1.edmx",
+              "RelativeDocumentMoniker": "WebBanHang\\Models\\Model1.edmx",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Models\\Model1.edmx [Diagram1]",
+              "RelativeToolTip": "WebBanHang\\Models\\Model1.edmx [Diagram1]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
+              "WhenOpened": "2025-03-20T07:12:16.462Z",
+              "EditorCaption": " [Diagram1]"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 3,
+              "Title": "RouteConfig.cs",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\App_Start\\RouteConfig.cs",
+              "RelativeDocumentMoniker": "WebBanHang\\App_Start\\RouteConfig.cs",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\App_Start\\RouteConfig.cs",
+              "RelativeToolTip": "WebBanHang\\App_Start\\RouteConfig.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-20T06:37:16.966Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Views\\Login\\Login.cshtml",
+              "RelativeDocumentMoniker": "WebBanHang\\Views\\Login\\Login.cshtml",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Views\\Login\\Login.cshtml",
+              "RelativeToolTip": "WebBanHang\\Views\\Login\\Login.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-20T04:05:20.483Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "SanPham.cshtml",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Views\\SanPham\\SanPham.cshtml",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Views\\SanPham\\SanPham.cshtml",
               "RelativeDocumentMoniker": "WebBanHang\\Views\\SanPham\\SanPham.cshtml",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Views\\SanPham\\SanPham.cshtml",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Views\\SanPham\\SanPham.cshtml",
               "RelativeToolTip": "WebBanHang\\Views\\SanPham\\SanPham.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-03-19T09:32:36.807Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Model1.edmx [Diagram1]",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Models\\Model1.edmx",
-              "RelativeDocumentMoniker": "WebBanHang\\Models\\Model1.edmx",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Models\\Model1.edmx [Diagram1]",
-              "RelativeToolTip": "WebBanHang\\Models\\Model1.edmx [Diagram1]",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
-              "WhenOpened": "2025-03-19T09:31:04.033Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Info.cshtml",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Info.cshtml",
-              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Info.cshtml",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Info.cshtml",
-              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Info.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAGAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-19T09:29:06.464Z",
+              "DocumentIndex": 11,
+              "Title": "search.js",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Scripts\\search.js",
+              "RelativeDocumentMoniker": "WebBanHang\\Scripts\\search.js",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Scripts\\search.js",
+              "RelativeToolTip": "WebBanHang\\Scripts\\search.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2025-03-19T16:32:27.461Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "SanPhamAdminController.cs",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Controllers\\SanPhamAdminController.cs",
-              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Controllers\\SanPhamAdminController.cs",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Controllers\\SanPhamAdminController.cs",
-              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Controllers\\SanPhamAdminController.cs",
-              "ViewState": "AgIAAFEAAAAAAAAAAAAuwG0AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-19T08:38:51.876Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "_Layout.cshtml",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
-              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
-              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABYAAAB6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-19T08:30:09.045Z",
+              "Title": "SanPham.css",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Content\\sanpham.css",
+              "RelativeDocumentMoniker": "WebBanHang\\Content\\sanpham.css",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Content\\sanpham.css",
+              "RelativeToolTip": "WebBanHang\\Content\\sanpham.css",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAGcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2025-03-19T16:29:43.755Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "HomeAdminController.cs",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Controllers\\HomeAdminController.cs",
-              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Controllers\\HomeAdminController.cs",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Controllers\\HomeAdminController.cs",
-              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Controllers\\HomeAdminController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAlAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "SanPhamController.cs",
+              "DocumentMoniker": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Controllers\\SanPhamController.cs",
+              "RelativeDocumentMoniker": "WebBanHang\\Controllers\\SanPhamController.cs",
+              "ToolTip": "C:\\HOC_KY_6\\Webnangcao\\Webbh\\SuLi_Coffee\\WebBanHang\\Controllers\\SanPhamController.cs",
+              "RelativeToolTip": "WebBanHang\\Controllers\\SanPhamController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-19T08:42:35.628Z"
+              "WhenOpened": "2025-03-19T15:58:30.571Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 181,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{a80febb4-e7e0-4147-b476-21aaf2453969}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
             }
           ]
         }

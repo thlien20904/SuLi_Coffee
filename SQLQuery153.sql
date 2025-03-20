@@ -1,4 +1,5 @@
-﻿-- Sử dụng database WebAppDB
+﻿create database WebAppDB
+-- Sử dụng database WebAppDB
 USE WebAppDB;
 GO
 
@@ -12,7 +13,7 @@ CREATE TABLE Users (
     Role NVARCHAR(20) NOT NULL DEFAULT 'User'
 );
 GO
-DROP TABLE Users;
+--DROP TABLE Users;
 -- 2. Thêm dữ liệu cho Users
 INSERT INTO Users (Username, Email, PasswordHash, Role)
 VALUES 
@@ -20,37 +21,37 @@ VALUES
 ('user1', 'lien@gmail.com','1', 'User');
 GO
 
--- 3. Tạo bảng SanPham
-CREATE TABLE SanPham (
-    SanPhamID INT IDENTITY(1,1) PRIMARY KEY,
-    TenSanPham NVARCHAR(100) NOT NULL,
-    Gia DECIMAL(18,2) NOT NULL,
-    GiaGiam DECIMAL(18,2) NULL,
-    MoTa NVARCHAR(MAX) NULL,
-    HinhAnh NVARCHAR(255) NULL,
-    Loai NVARCHAR(50) NULL,
-    GiamGia INT NULL
-);
-GO
+---- 3. Tạo bảng SanPham
+--CREATE TABLE SanPham (
+--    SanPhamID INT IDENTITY(1,1) PRIMARY KEY,
+--    TenSanPham NVARCHAR(100) NOT NULL,
+--    Gia DECIMAL(18,2) NOT NULL,
+--    GiaGiam DECIMAL(18,2) NULL,
+--    MoTa NVARCHAR(MAX) NULL,
+--    HinhAnh NVARCHAR(255) NULL,
+--    Loai NVARCHAR(50) NULL,
+--    GiamGia INT NULL
+--);
+--GO
 
--- 4. Thêm dữ liệu mẫu vào bảng SanPham
-INSERT INTO SanPham (TenSanPham, Gia, GiaGiam, MoTa, HinhAnh, Loai, GiamGia)
-VALUES
-(N'Sweatshirt 2018 Off Shoulder', 110.00, 130.00, N'Sản phẩm áo sơ mi thời trang', 'images/product1.png', N'Áo', 15),
-(N'Simple product', 50.00, NULL, N'Sản phẩm camera đơn giản', 'images/product2.png', N'Camera', NULL),
-(N'Super stereo earbuds', 110.00, 130.00, N'Tai nghe stereo cao cấp', 'images/product3.png', N'Tai nghe', 15),
-(N'Headset stereo headphones', 39.00, NULL, N'Tai nghe chụp tai stereo', 'images/product4.png', N'Tai nghe', NULL),
-(N'New badger product', 80.00, NULL, N'Mũ lưỡi trai thời trang', 'images/product5.png', N'Mũ', NULL),
-(N'Affiliate Product', 29.00, NULL, N'Áo khoác thể thao', 'images/product6.png', N'Áo khoác', NULL),
-(N'Engagement rings for women', 110.00, 130.00, N'Nhẫn đính hôn cho nữ', 'images/product7.png', N'Trang sức', 15),
-(N'Man concise classical', 80.00, NULL, N'Dây chuyền nam phong cách', 'images/product8.png', N'Trang sức', NULL);
-GO
+---- 4. Thêm dữ liệu mẫu vào bảng SanPham
+--INSERT INTO SanPham (TenSanPham, Gia, GiaGiam, MoTa, HinhAnh, Loai, GiamGia)
+--VALUES
+--(N'Sweatshirt 2018 Off Shoulder', 110.00, 130.00, N'Sản phẩm áo sơ mi thời trang', 'images/product1.png', N'Áo', 15),
+--(N'Simple product', 50.00, NULL, N'Sản phẩm camera đơn giản', 'images/product2.png', N'Camera', NULL),
+--(N'Super stereo earbuds', 110.00, 130.00, N'Tai nghe stereo cao cấp', 'images/product3.png', N'Tai nghe', 15),
+--(N'Headset stereo headphones', 39.00, NULL, N'Tai nghe chụp tai stereo', 'images/product4.png', N'Tai nghe', NULL),
+--(N'New badger product', 80.00, NULL, N'Mũ lưỡi trai thời trang', 'images/product5.png', N'Mũ', NULL),
+--(N'Affiliate Product', 29.00, NULL, N'Áo khoác thể thao', 'images/product6.png', N'Áo khoác', NULL),
+--(N'Engagement rings for women', 110.00, 130.00, N'Nhẫn đính hôn cho nữ', 'images/product7.png', N'Trang sức', 15),
+--(N'Man concise classical', 80.00, NULL, N'Dây chuyền nam phong cách', 'images/product8.png', N'Trang sức', NULL);
+--GO
 
 
 
 -- 7. Kiểm tra dữ liệu
-SELECT * FROM Users;
-SELECT * FROM SanPham;
+--SELECT * FROM Users;
+--SELECT * FROM SanPham;
 GO
 
 
@@ -86,6 +87,8 @@ CREATE TABLE Category (
     CategoryName NVARCHAR(100) NOT NULL
 );
 GO
+SELECT * FROM Category;
+SELECT * FROM Ingredient;
 
 -- Table: Ingredient
 CREATE TABLE Ingredient (
@@ -97,20 +100,46 @@ CREATE TABLE Ingredient (
     LastUpdated DATE NOT NULL DEFAULT GETDATE()
 );
 GO
+--DECLARE @sql NVARCHAR(MAX) = '';
+--SELECT @sql += 'ALTER TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(parent_object_id)) + '.' +
+--               QUOTENAME(OBJECT_NAME(parent_object_id)) + 
+--               ' DROP CONSTRAINT ' + QUOTENAME(name) + ';' + CHAR(13)
+--FROM sys.foreign_keys;
+--EXEC sp_executesql @sql;
 
--- Table: Food
-CREATE TABLE Food (
+--DECLARE @sql NVARCHAR(MAX) = '';
+--SELECT @sql += 'DROP TABLE ' + QUOTENAME(OBJECT_SCHEMA_NAME(object_id)) + '.' + 
+--               QUOTENAME(name) + ';' + CHAR(13)
+--FROM sys.tables;
+--EXEC sp_executesql @sql;
+
+-- Table: Food.........................................................................................................................
+CREATE TABLE Food ( 
     FoodId INT PRIMARY KEY IDENTITY,
     FoodName NVARCHAR(100) NOT NULL,
     CategoryId INT,
     IngredientId INT,
-    Price DECIMAL(18, 3) NOT NULL DEFAULT 0,
-	ImageURL VARCHAR(255) NOT NULL,
+    Price DECIMAL(18, 3) NOT NULL DEFAULT 0, -- Giá gốc
+    Discount DECIMAL(5, 2) DEFAULT 0, -- Phần trăm giảm giá (0-100)
+    DiscountPrice AS (Price - (Price * Discount / 100)), -- Giá sau khi giảm
+    Stock INT NOT NULL DEFAULT 0, -- Số lượng tồn kho
+    Description NVARCHAR(500) NULL, -- Mô tả món ăn
+    ImageURL NVARCHAR(255) NULL, -- Đường dẫn hình ảnh
+    CreatedDate DATETIME DEFAULT GETDATE(), -- Ngày thêm món ăn
+    UpdatedDate DATETIME NULL, -- Ngày cập nhật gần nhất
+    Status BIT DEFAULT 1, -- 1: Còn bán, 0: Ngừng bán
     FOREIGN KEY (CategoryId) REFERENCES Category(CategoryId),
     FOREIGN KEY (IngredientId) REFERENCES Ingredient(IngredientId)
 );
+
+SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'Food';
+
+select *from food;
+
 GO
-SELECT *FROM FOOD
+
 -- Table: Invoice
 CREATE TABLE Invoice (
     InvoiceId INT PRIMARY KEY IDENTITY,
@@ -224,84 +253,87 @@ VALUES
 INSERT INTO Ingredient (IngredientName,SoLuong,PhanLoai, ImageURl, LastUpdated)
 VALUES
 
-(N'Coffee', 100, N'gói', '/img/nguyenlieu/coffee.png', '2024-08-05'),
-(N'Sữa', 500, N'chai', '/img/nguyenlieu/sua.png', '2024-08-05'),
-(N'Đường', 200, N'gói', '/img/nguyenlieu/duong.png', '2024-08-05'),
-(N'Trà', 75, N'gói', '/img/nguyenlieu/tra.png', '2024-08-05'),
-(N'Táo', 50, N'quả', '/img/nguyenlieu/tao.png', '2024-08-05'),
-(N'Trân châu', 100, N'túi', '/img/nguyenlieu/tranchau.png', '2024-08-05'),
-(N'Matcha', 120, N'gói', '/img/nguyenlieu/matcha.png', '2024-08-05'),
-(N'Yến mạch', 130, N'gói', '/img/nguyenlieu/yenmach.png', '2024-08-05'),
-(N'Caramel', 140, N'lọ', '/img/nguyenlieu/caramel.png', '2024-08-05'),
-(N'Muối', 125, N'gói', '/img/nguyenlieu/muoi.png', '2024-08-05'),
-(N'Hạnh nhân', 115, N'lọ', '/img/nguyenlieu/hanhnhan.png', '2024-08-05'),
-(N'Bơ', 120, N'quả', '/img/nguyenlieu/bo.png', '2024-08-05'),
-(N'Kem', 150, N'hộp', '/img/nguyenlieu/kem.png', '2024-08-05'),
-(N'Choco Chip', 130, N'gói', '/img/nguyenlieu/choco_chip.png', '2024-08-05'),
-(N'Mochi kem phúc bồn tử', 120, N'cái', '/img/nguyenlieu/mochi_kpbt.png', '2024-08-05'),
-(N'Mochi kem việt quất', 120, N'cái', '/img/nguyenlieu/mochi_kvq.png', '2024-08-05'),
-(N'Mochi kem chocolate', 120, N'cái', '/img/nguyenlieu/mochi_kemchoco.png', '2024-08-05'),
-(N'Mousse gấu chocolate', 110, N'cái', '/img/nguyenlieu/mousse_gau.png', '2024-08-05'),
-(N'Bánh mỳ', 150, N'ổ', '/img/nguyenlieu/banhmy.png', '2024-08-05'),
-(N'Sữa đặc', 160, N'hộp', '/img/nguyenlieu/suadac.png', '2024-08-05'),
-(N'Cam', 135, N'quả', '/img/nguyenlieu/cam.png', '2024-08-05'),
-(N'Sả', 125, N'cây', '/img/nguyenlieu/sa.png', '2024-08-05'),
-(N'Hạt sen', 115, N'túi', '/img/nguyenlieu/hatsen.png', '2024-08-05'),
-(N'Vải', 140, N'quả', '/img/nguyenlieu/vai.png', '2024-08-05'),
-(N'Mứt Yuzu', 120, N'lọ', '/img/nguyenlieu/yuzu.png', '2024-08-05'),
-(N'Đào', 120, N'hộp', '/img/nguyenlieu/dao.png', '2024-08-05'),
-(N'Bánh Gấu', 120, N'gói', '/img/nguyenlieu/banhgau.png', '2024-08-05'),
-(N'Sương Sáo', 120, N'cốc', '/img/nguyenlieu/suongsao.png', '2024-08-05'),
-(N'Dâu', 120, N'quả', '/img/nguyenlieu/dau.png', '2024-08-05'),
-(N'Bim Bim Ngô', 120, N'gói', '/img/nguyenlieu/bimbimngo.png', '2024-08-05'),
-(N'Bim Bim Sữa Dừa', 120, N'gói', '/img/nguyenlieu/bimbimsuadua.png', '2024-08-05');
+(N'Coffee', 100, N'gói', '/images/nguyenlieu/coffee.png', '2024-08-05'),
+(N'Sữa', 500, N'chai', '/images/nguyenlieu/sua.png', '2024-08-05'),
+(N'Đường', 200, N'gói', '/images/nguyenlieu/duong.png', '2024-08-05'),
+(N'Trà', 75, N'gói', '/images/nguyenlieu/tra.png', '2024-08-05'),
+(N'Táo', 50, N'quả', '/images/nguyenlieu/tao.png', '2024-08-05'),
+(N'Trân châu', 100, N'túi', '/images/nguyenlieu/tranchau.png', '2024-08-05'),
+(N'Matcha', 120, N'gói', '/images/nguyenlieu/matcha.png', '2024-08-05'),
+(N'Yến mạch', 130, N'gói', '/images/nguyenlieu/yenmach.png', '2024-08-05'),
+(N'Caramel', 140, N'lọ', '/images/nguyenlieu/caramel.png', '2024-08-05'),
+(N'Muối', 125, N'gói', '/images/nguyenlieu/muoi.png', '2024-08-05'),
+(N'Hạnh nhân', 115, N'lọ', '/images/nguyenlieu/hanhnhan.png', '2024-08-05'),
+(N'Bơ', 120, N'quả', '/images/nguyenlieu/bo.png', '2024-08-05'),
+(N'Kem', 150, N'hộp', '/images/nguyenlieu/kem.png', '2024-08-05'),
+(N'Choco Chip', 130, N'gói', '/images/nguyenlieu/choco_chip.png', '2024-08-05'),
+(N'Mochi kem phúc bồn tử', 120, N'cái', '/images/nguyenlieu/mochi_kpbt.png', '2024-08-05'),
+(N'Mochi kem việt quất', 120, N'cái', '/images/nguyenlieu/mochi_kvq.png', '2024-08-05'),
+(N'Mochi kem chocolate', 120, N'cái', '/images/nguyenlieu/mochi_kemchoco.png', '2024-08-05'),
+(N'Mousse gấu chocolate', 110, N'cái', '/images/nguyenlieu/mousse_gau.png', '2024-08-05'),
+(N'Bánh mỳ', 150, N'ổ', '/images/nguyenlieu/banhmy.png', '2024-08-05'),
+(N'Sữa đặc', 160, N'hộp', '/images/nguyenlieu/suadac.png', '2024-08-05'),
+(N'Cam', 135, N'quả', '/images/nguyenlieu/cam.png', '2024-08-05'),
+(N'Sả', 125, N'cây', '/images/nguyenlieu/sa.png', '2024-08-05'),
+(N'Hạt sen', 115, N'túi', '/images/nguyenlieu/hatsen.png', '2024-08-05'),
+(N'Vải', 140, N'quả', '/images/nguyenlieu/vai.png', '2024-08-05'),
+(N'Mứt Yuzu', 120, N'lọ', '/images/nguyenlieu/yuzu.png', '2024-08-05'),
+(N'Đào', 120, N'hộp', '/images/nguyenlieu/dao.png', '2024-08-05'),
+(N'Bánh Gấu', 120, N'gói', '/images/nguyenlieu/banhgau.png', '2024-08-05'),
+(N'Sương Sáo', 120, N'cốc', '/images/nguyenlieu/suongsao.png', '2024-08-05'),
+(N'Dâu', 120, N'quả', '/images/nguyenlieu/dau.png', '2024-08-05'),
+(N'Bim Bim Ngô', 120, N'gói', '/images/nguyenlieu/bimbimngo.png', '2024-08-05'),
+(N'Bim Bim Sữa Dừa', 120, N'gói', '/images/nguyenlieu/bimbimsuadua.png', '2024-08-05');
+--UPDATE Ingredient
+--SET ImageURL = REPLACE(ImageURL, '/img/', '/images/')
+--WHERE ImageURL LIKE '/img/%';
+SELECT * FROM food;
 
-
-INSERT INTO Food (FoodName, CategoryId, IngredientId, Price,ImageURL)
+INSERT INTO Food (FoodName, CategoryId, IngredientId, Price, Discount, Stock, Description, ImageURL, CreatedDate, UpdatedDate, Status)
 VALUES
-(N'Trà xanh espresso marble', 1, 1, 45000,'/img/Cafe/traxanhespresso.png'),
-(N'Bạc xỉu lắc sữa yến mạch', 1, 1, 50000,'/img/Cafe/bacxiulsyenmach.png'),
-(N'Bạc xỉu lắc caramel muối', 1, 1, 55000,'/img/Cafe/bacxiulacmuoi.png'),
-(N'Bạc xỉu lắc hạnh nhân nướng', 1, 1, 55000,'/img/Cafe/bacxiulachanhnhan.png'),
-(N'Bơ arabica', 1, 1, 60000,'/img/Cafe/bo_arabica.png'),
-(N'Đường đen sữa đá', 1, 1, 30000,'/img/Cafe/duongdensuada.png'),
-(N'Cà phê sữa đá', 1, 1, 25000,'/img/Cafe/cafesuada.png'),
-(N'Cà phê sữa nóng', 1, 1, 25000,'/img/Cafe/cafesuanong.png'),
-(N'Bạc xỉu', 1, 1, 30000,'/img/Cafe/bacxiu.png'),
-(N'Cà phê đen', 1, 1, 20000,'/img/Cafe/cafeden.png'),
+(N'Trà xanh espresso marble', 1, 1, 45000, 10, 50, N'Trà xanh kết hợp espresso thơm ngon', '/images/Cafe/traxanhespresso.png', GETDATE(), NULL, 1),
+(N'Bạc xỉu lắc sữa yến mạch', 1, 1, 50000, 5, 40, N'Cà phê sữa pha cùng sữa yến mạch', '/images/Cafe/bacxiulsyenmach.png', GETDATE(), NULL, 1),
+(N'Bạc xỉu lắc caramel muối', 1, 1, 55000, 7, 45, N'Cà phê sữa lắc cùng caramel muối', '/images/Cafe/bacxiulacmuoi.png', GETDATE(), NULL, 1),
+(N'Bạc xỉu lắc hạnh nhân nướng', 1, 1, 55000, 8, 35, N'Cà phê sữa kết hợp hạnh nhân nướng', '/images/Cafe/bacxiulachanhnhan.png', GETDATE(), NULL, 1),
+(N'Bơ arabica', 1, 1, 60000, 12, 25, N'Cà phê Arabica với vị béo của bơ', '/images/Cafe/bo_arabica.png', GETDATE(), NULL, 1),
+(N'Đường đen sữa đá', 1, 1, 30000, 0, 60, N'Cà phê sữa đá với đường đen', '/images/Cafe/duongdensuada.png', GETDATE(), NULL, 1),
+(N'Cà phê sữa đá', 1, 1, 25000, 0, 70, N'Cà phê pha sữa đặc', '/images/Cafe/cafesuada.png', GETDATE(), NULL, 1),
+(N'Cà phê sữa nóng', 1, 1, 25000, 0, 30, N'Cà phê sữa nóng thơm ngon', '/images/Cafe/cafesuanong.png', GETDATE(), NULL, 1),
+(N'Bạc xỉu', 1, 1, 30000, 5, 50, N'Bạc xỉu nguyên bản với nhiều sữa', '/images/Cafe/bacxiu.png', GETDATE(), NULL, 1),
+(N'Cà phê đen', 1, 1, 20000, 0, 80, N'Cà phê đen truyền thống', '/images/Cafe/cafeden.png', GETDATE(), NULL, 1),
 
+(N'Trà sữa trân châu đường đen', 2, 2, 35000, 10, 40, N'Trà sữa kết hợp trân châu đường đen', '/images/trasua/tstcduongden.png', GETDATE(), NULL, 1),
+(N'Trà sữa olong', 2, 2, 30000, 5, 50, N'Trà sữa vị Olong đặc biệt', '/images/trasua/ts_olong.png', GETDATE(), NULL, 1),
+(N'Trà sữa olong tứ quý bơ', 2, 2, 35000, 7, 30, N'Trà sữa Olong với bơ thơm béo', '/images/trasua/ts_olongtqbo.png', GETDATE(), NULL, 1),
+(N'Trà sữa olong nướng sương sáo', 2, 2, 35000, 5, 35, N'Trà sữa Olong kết hợp sương sáo', '/images/trasua/ts_olongss.png', GETDATE(), NULL, 1),
+(N'Trà đen macchiato', 2, 2, 30000, 5, 45, N'Trà đen phủ lớp macchiato béo mịn', '/images/trasua/tradenmacchiato.png', GETDATE(), NULL, 1),
+(N'Hồng trà sữa trân châu', 2, 2, 30000, 5, 50, N'Hồng trà sữa truyền thống với trân châu', '/images/trasua/hongtrasua.png', GETDATE(), NULL, 1),
 
-(N'Trà sữa trân châu đường đen', 2, 2, 35000,'/img/trasua/tstcduongden.png'),
-(N'Trà sữa olong', 2, 2, 30000,'/img/trasua/ts_olong.png'),
-(N'Trà sữa olong tứ quý bơ', 2, 2, 35000,'/img/trasua/ts_olongtqbo.png'),
-(N'Trà sữa olong nướng sương sáo', 2, 2, 35000,'/img/trasua/ts_olongss.png'),
-(N'Trà đen macchito', 2, 2, 30000,'/img/trasua/tradenmacchiato.png'),
-(N'Hồng trà sữa trân châu', 2, 2, 30000,'/img/trasua/hongtrasua.png'),
+(N'Frosty phin-gato', 3, 3, 40000, 10, 30, N'Phin cà phê kết hợp bánh gato', '/images/tudx/frosty_phin.png', GETDATE(), NULL, 1),
+(N'Frosty cà phê đường đen', 3, 3, 40000, 10, 30, N'Cà phê đá xay với đường đen', '/images/tudx/frosty_cfduongden.png', GETDATE(), NULL, 1),
+(N'Frosty bánh kem dâu', 3, 3, 45000, 8, 25, N'Bánh kem dâu đá xay mát lạnh', '/images/tudx/frosty_banhkemdau.png', GETDATE(), NULL, 1),
+(N'Frosty choco chip', 3, 3, 45000, 8, 25, N'Socola chip kết hợp đá xay', '/images/tudx/frosty_choco.png', GETDATE(), NULL, 1),
+(N'Frosty caramel', 3, 3, 45000, 8, 25, N'Caramel thơm béo cùng đá xay', '/images/tudx/frosty_caramel.png', GETDATE(), NULL, 1),
 
-(N'Frosty phin-gato', 3, 3, 40000,'/img/tudx/frosty_phin.png'),
-(N'Frosty cà phê đường đen', 3, 3, 40000,'/img/tudx/frosty_cfduongden.png'),
-(N'Frosty bánh kem dâu', 3, 3, 45000,'/img/tudx/frosty_banhkemdau.png'),
-(N'Frosty choco chip', 3, 3, 45000,'/img/tudx/frosty_choco.png'),
-(N'Frosty caramel', 3, 3, 45000,'/img/tudx/frosty_caramel.png'),
+-- Bánh ngọt & đồ ăn nhẹ
+(N'Butter croissant', 4, 4, 25000, 5, 20, N'Bánh sừng bò bơ thơm ngon', '/images/banh/Butter_croissant.png', GETDATE(), NULL, 1),
+(N'Mochi kem phúc bồn tử', 4, 4, 30000, 5, 15, N'Mochi nhân kem vị phúc bồn tử', '/images/banh/mochi_phucbt.png', GETDATE(), NULL, 1),
+(N'Mochi kem việt quất', 4, 4, 30000, 5, 15, N'Mochi nhân kem vị việt quất', '/images/banh/mochi_vietquat.png', GETDATE(), NULL, 1),
+(N'Mochi kem chocolate', 4, 4, 30000, 5, 15, N'Mochi nhân kem vị chocolate', '/images/banh/mochi_kemchocolate.png', GETDATE(), NULL, 1),
+(N'Mousse gấu chocolate', 4, 4, 35000, 5, 15, N'Mousse socola hình gấu dễ thương', '/images/banh/mousse_gauchoco.png', GETDATE(), NULL, 1),
+(N'Bánh mì Việt Nam', 4, 4, 15000, 0, 50, N'Bánh mì truyền thống Việt Nam', '/images/banh/banhmyvn.png', GETDATE(), NULL, 1),
+(N'Bim bim ngô', 4, 4, 10000, 0, 100, N'Snack vị ngô giòn tan', '/images/banh/bimbimngo.png', GETDATE(), NULL, 1),
+(N'Bim bim sữa dừa', 4, 4, 10000, 0, 100, N'Snack sữa dừa thơm ngon', '/images/banh/bimbimsuadua.png', GETDATE(), NULL, 1),
+(N'Bánh gấu', 4, 4, 15000, 0, 50, N'Bánh gấu nhân kem', '/images/banh/banhgau.png', GETDATE(), NULL, 1),
 
-(N'Butter croissant', 4, 4, 25000,'/img/banh/Butter_croissant.png'),
-(N'Mochi kem phúc bồn tử', 4, 4, 30000,'/img/banh/mochi_phucbt.png'),
-(N'Mochi kem việt quất', 4, 4, 30000,'/img/banh/mochi_vietquat.png'),
-(N'Mochi kem chocolate', 4, 4, 30000,'/img/banh/mochi_kemchocolate.png'),
-(N'Mousse gấu chocolate', 4, 4, 35000,'/img/banh/mousse_gauchoco.png'),
-(N'Bánh mì Việt Nam', 4, 4, 15000,'/img/banh/banhmyvn.png'),
-(N'Bim bim ngô', 4, 4, 10000,'/img/banh/bimbimngo.png'),
-(N'Bim bim sữa dừa', 4, 4, 10000,'/img/banh/bimbimsuadua.png'),
-(N'Bánh gấu', 4, 4, 15000,'/img/banh/banhgau.png'),
+-- Trà trái cây
+(N'Trà đào cam xả', 5, 5, 40000, 5, 30, N'Trà đào tươi kết hợp cam và xả', '/images/ttc/tradaocamsa.png', GETDATE(), NULL, 1),
+(N'Olong tứ quý sen', 5, 5, 35000, 5, 30, N'Trà Olong kết hợp hương sen', '/images/ttc/olongtuquysen.png', GETDATE(), NULL, 1),
+(N'Đào kombucha', 5, 5, 45000, 5, 25, N'Trà đào lên men Kombucha tốt cho sức khỏe', '/images/ttc/dao_kombucha.png', GETDATE(), NULL, 1),
+(N'Trà vải', 5, 5, 35000, 5, 30, N'Trà vải tươi mát', '/images/ttc/travai.png', GETDATE(), NULL, 1),
+(N'Trà yuzu kombucha', 5, 5, 50000, 5, 20, N'Trà Yuzu Nhật Bản kết hợp Kombucha', '/images/ttc/yuzu_kombucha.png', GETDATE(), NULL, 1);
 
-
-(N'Trà đào cam xả', 5, 5, 40000,'/img/ttc/tradaocamsa.png'),
-
-(N'Olong tứ quý sen', 5, 5, 35000,'/img/ttc/olongtuquysen.png'),
-(N'Đào kombucha', 5, 5, 45000,'/img/ttc/dao_kombucha.png'),
-(N'Trà vải', 5, 5, 35000,'/img/ttc/travai.png'),
-(N'Trà yuzu kombucha', 5, 5, 50000,'/img/ttc/yuzu_kombucha.png');
-
+select *from food;
 -- Ingredients for Trà xanh espresso marble
 INSERT INTO FoodIngredient (FoodId, IngredientId, Quantity)
 VALUES 

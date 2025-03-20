@@ -6,13 +6,26 @@ namespace WebBanHang.Controllers
 {
     public class SanPhamController : Controller
     {
-        private WebAppDBEntities2 db = new WebAppDBEntities2();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
-        // Lấy danh sách từ bảng Food
-        public ActionResult Info()
+        // Trang sản phẩm mặc định
+        public ActionResult SanPham(string searchString, int? categoryId)
         {
-            var list = db.Foods.ToList();
-            return View(list);
+            var list = db.Food.AsQueryable();
+
+            // Lọc theo tên món ăn
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                list = list.Where(f => f.FoodName.Contains(searchString));
+            }
+
+            // Lọc theo danh mục
+            if (categoryId.HasValue)
+            {
+                list = list.Where(f => f.CategoryId == categoryId);
+            }
+
+            return View(list.ToList());
         }
 
         protected override void Dispose(bool disposing)

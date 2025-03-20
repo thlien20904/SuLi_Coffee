@@ -17,8 +17,8 @@ namespace WebBanHang.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Food()
         {
-            this.FoodIngredients = new HashSet<FoodIngredient>();
-            this.InvoiceDetails = new HashSet<InvoiceDetail>();
+            this.FoodIngredient = new HashSet<FoodIngredient>();
+            this.InvoiceDetail = new HashSet<InvoiceDetail>();
         }
     
         public int FoodId { get; set; }
@@ -26,13 +26,20 @@ namespace WebBanHang.Models
         public Nullable<int> CategoryId { get; set; }
         public Nullable<int> IngredientId { get; set; }
         public decimal Price { get; set; }
+        public Nullable<decimal> Discount { get; set; }
+        public Nullable<decimal> DiscountPrice { get; set; }
+        public int Stock { get; set; }
+        public string Description { get; set; }
         public string ImageURL { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public Nullable<System.DateTime> UpdatedDate { get; set; }
+        public Nullable<bool> Status { get; set; }
     
         public virtual Category Category { get; set; }
         public virtual Ingredient Ingredient { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FoodIngredient> FoodIngredients { get; set; }
+        public virtual ICollection<FoodIngredient> FoodIngredient { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; }
+        public virtual ICollection<InvoiceDetail> InvoiceDetail { get; set; }
     }
 }

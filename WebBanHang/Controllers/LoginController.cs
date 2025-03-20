@@ -1,13 +1,12 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using WebBanHang.Models;
-using WebBanHang.Models; // đổi thành namespace project của bạn
 
 namespace WebBanHang.Controllers
 {
     public class LoginController : Controller
     {
-        private WebAppDBEntities2 db = new WebAppDBEntities2();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // GET: Login
         public ActionResult Login()
