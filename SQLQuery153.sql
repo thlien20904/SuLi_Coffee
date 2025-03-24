@@ -3,50 +3,32 @@ USE WebAppDB;
 GO
 
 -- 1. Tạo bảng Users
---Tạo bảng Users
 CREATE TABLE Users (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Username NVARCHAR(50) UNIQUE NOT NULL,
-	Email NVARCHAR(50) UNIQUE NOT NULL,
+    Email NVARCHAR(50) UNIQUE NOT NULL,
     PasswordHash NVARCHAR(255) NOT NULL,
-    Role NVARCHAR(20) NOT NULL DEFAULT 'User'
+    FullName NVARCHAR(100) NULL,
+    Phone NVARCHAR(15) NULL,
+    Address NVARCHAR(255) NULL,
+    Role NVARCHAR(20) NOT NULL DEFAULT 'User',
+    OTPCode NVARCHAR(10) NULL,
+    OTPExpiry DATETIME NULL,
+    ResetToken NVARCHAR(100) NULL,
+    ResetTokenExpiry DATETIME NULL
 );
 GO
---DROP TABLE Users;
--- 2. Thêm dữ liệu cho Users
-INSERT INTO Users (Username, Email, PasswordHash, Role)
+
+
+INSERT INTO Users (Username, Email, PasswordHash, FullName, Phone, Address, Role)
 VALUES 
-('admin', 'thuylien2k4@gmail.com','1', 'Admin'),
-('user1', 'lien@gmail.com','1', 'User');
+('admin', 'thuylien2k4@gmail.com', '1', N'Thùy Liên', '0366413924', N'Hà Nội', 'Admin'),
+('user1', 'lien@gmail.com', '1', N'Liên Nguyễn', '0987654321', N'Hồ Chí Minh', 'User'),
+('user2', 'example2@gmail.com', '1', N'Nguyễn Văn A', '0901122334', N'Đà Nẵng', 'User'),
+('user3', 'example3@gmail.com', '1', N'Lê Thị B', '0905678999', N'Cần Thơ', 'User');
 GO
-
----- 3. Tạo bảng SanPham
---CREATE TABLE SanPham (
---    SanPhamID INT IDENTITY(1,1) PRIMARY KEY,
---    TenSanPham NVARCHAR(100) NOT NULL,
---    Gia DECIMAL(18,2) NOT NULL,
---    GiaGiam DECIMAL(18,2) NULL,
---    MoTa NVARCHAR(MAX) NULL,
---    HinhAnh NVARCHAR(255) NULL,
---    Loai NVARCHAR(50) NULL,
---    GiamGia INT NULL
---);
---GO
-
----- 4. Thêm dữ liệu mẫu vào bảng SanPham
---INSERT INTO SanPham (TenSanPham, Gia, GiaGiam, MoTa, HinhAnh, Loai, GiamGia)
---VALUES
---(N'Sweatshirt 2018 Off Shoulder', 110.00, 130.00, N'Sản phẩm áo sơ mi thời trang', 'images/product1.png', N'Áo', 15),
---(N'Simple product', 50.00, NULL, N'Sản phẩm camera đơn giản', 'images/product2.png', N'Camera', NULL),
---(N'Super stereo earbuds', 110.00, 130.00, N'Tai nghe stereo cao cấp', 'images/product3.png', N'Tai nghe', 15),
---(N'Headset stereo headphones', 39.00, NULL, N'Tai nghe chụp tai stereo', 'images/product4.png', N'Tai nghe', NULL),
---(N'New badger product', 80.00, NULL, N'Mũ lưỡi trai thời trang', 'images/product5.png', N'Mũ', NULL),
---(N'Affiliate Product', 29.00, NULL, N'Áo khoác thể thao', 'images/product6.png', N'Áo khoác', NULL),
---(N'Engagement rings for women', 110.00, 130.00, N'Nhẫn đính hôn cho nữ', 'images/product7.png', N'Trang sức', 15),
---(N'Man concise classical', 80.00, NULL, N'Dây chuyền nam phong cách', 'images/product8.png', N'Trang sức', NULL);
---GO
-
-
+select *from users
+drop table users
 
 -- 7. Kiểm tra dữ liệu
 --SELECT * FROM Users;
@@ -61,7 +43,9 @@ CREATE TABLE TableFood(
     TrangThai NVARCHAR(100) -- Trống, có khách, đã được đặt
 );
 GO
-
+SELECT *FROM TableFood;
+SELECT *FROM Food;
+SELECT *FROM Oder;
 -- Table: AccRole
 CREATE TABLE AccRole(
     RoleId INT IDENTITY PRIMARY KEY,
@@ -86,9 +70,9 @@ CREATE TABLE Category (
     CategoryName NVARCHAR(100) NOT NULL
 );
 GO
+
 SELECT *FROM category;
-SELECT * FROM Category;
-SELECT * FROM Ingredient;
+SELECT * FROM Food;
 
 -- Table: Ingredient
 CREATE TABLE Ingredient (
@@ -145,7 +129,11 @@ SELECT COLUMN_NAME, IS_NULLABLE, DATA_TYPE
 FROM INFORMATION_SCHEMA.COLUMNS 
 WHERE TABLE_NAME = 'Food';
 
-select *from food;
+SELECT * FROM Food;
+WHERE DateCheckIn >= '2024-02-06' 
+AND (DateCheckOut IS NULL OR DateCheckOut <= '2024-08-20');
+
+
 
 GO
 
@@ -160,9 +148,8 @@ CREATE TABLE Invoice (
     FOREIGN KEY (TableId) REFERENCES TableFood(TableId)
 );
 GO
-
-
-
+-- Kiểm tra bảng hóa đơn có hóa đơn nào chưa thanh toán không
+thê
 -- Table: InvoiceDetail
 CREATE TABLE InvoiceDetail(
     InvoiceDetailId INT PRIMARY KEY IDENTITY,
@@ -174,7 +161,7 @@ CREATE TABLE InvoiceDetail(
     FOREIGN KEY (FoodId) REFERENCES Food(FoodId)
 );
 GO
-
+SELECT * FROM Invoice
 -- Table: Staff
 CREATE TABLE Staff (
     StaffId INT PRIMARY KEY IDENTITY,
@@ -196,6 +183,8 @@ SET Gender = CASE
 END
 
 
+SELECT * FROM Account 
+SELECT * FROM AccRole 
 
 
 
@@ -633,6 +622,102 @@ VALUES
 --VALUES
 --(1, N'Hoàn thành'),
 --(2, N'Chưa hoàn thành');
+
+
+--SELECT 
+--    CAST(DateCheckOut AS DATE) AS NgayThanhToan,
+--    SUM(InvoiceDetail.SoLuong * InvoiceDetail.Price) AS TongDoanhThu
+--FROM Invoice 
+--JOIN InvoiceDetail ON Invoice.InvoiceId = InvoiceDetail.InvoiceId
+--WHERE TrangThai = 1 -- Chỉ lấy hóa đơn đã thanh toán
+--GROUP BY CAST(DateCheckOut AS DATE)
+--ORDER BY NgayThanhToan;
+
+
+
+--SELECT 
+--    Food.FoodName,
+--    SUM(InvoiceDetail.SoLuong) AS TongSoLuongBan,
+--    SUM(InvoiceDetail.SoLuong * InvoiceDetail.Price) AS TongDoanhThu
+--FROM InvoiceDetail
+--JOIN Food ON InvoiceDetail.FoodId = Food.FoodId
+--JOIN Invoice ON InvoiceDetail.InvoiceId = Invoice.InvoiceId
+--WHERE Invoice.TrangThai = 1
+--GROUP BY Food.FoodName
+--ORDER BY TongDoanhThu DESC;
+
+
+--SELECT 
+--    TrangThai,
+--    COUNT(InvoiceId) AS SoHoaDon
+--FROM Invoice
+--GROUP BY TrangThai;
+select * from invoice 
+
+
+select * from invoice where TableId = 2 and TrangThai = 0
+select * from invoicedetail where InvoiceId = 2
+select * from InvoiceDetail where InvoiceId = 1
+
+
+SELECT f.FoodName, bi.SoLuong, f.Price, f.Price * bi.SoLuong AS TotalPrice
+FROM InvoiceDetail AS bi
+INNER JOIN Invoice AS b ON bi.InvoiceId = b.InvoiceId AND b.TrangThai =0
+INNER JOIN Food AS f ON bi.FoodId = f.FoodId
+WHERE b.TableId = 5
+
+
+CREATE PROC Proc_InsertBill
+@TableId int
+as
+begin
+	insert Invoice
+	(DateCheckIn, DateCheckOut, TableId, TrangThai)
+	Values (GETDATE(), null, @TableId, 0)
+end
+SELECT * FROM Food WHERE FoodId IN (SELECT FoodId FROM InvoiceDetail);
+
+
+CREATE PROCEDURE Proc_InsertBillDetail
+@InvoiceId int,  
+@FoodId int, 
+@SoLuong int,
+@Price decimal
+AS
+BEGIN
+    DECLARE @isExitsBillInfo int;
+    DECLARE @foodCount int = 0;
+    -- Kiểm tra nếu món ăn đã có trong hóa đơn
+    SELECT @isExitsBillInfo = Invoiceid, @foodCount = InvoiceDetail.SoLuong 
+    FROM InvoiceDetail 
+    WHERE InvoiceId = @InvoiceId AND FoodId = @FoodId;
+    
+    IF (@isExitsBillInfo > 0)
+    BEGIN
+        DECLARE @newCount int = @foodCount + @SoLuong;
+        IF (@newCount > 0)
+        BEGIN
+            UPDATE InvoiceDetail 
+            SET SoLuong = @newCount, Price = @Price
+            WHERE InvoiceId = @InvoiceId AND FoodId = @FoodId;
+        END
+        ELSE IF (@newCount <= 0)
+        BEGIN
+            DELETE FROM InvoiceDetail WHERE InvoiceId = @InvoiceId AND FoodId = @FoodId;
+        END
+    END
+    ELSE
+    BEGIN
+        IF @SoLuong > 0
+        BEGIN
+            INSERT INTO InvoiceDetail (InvoiceId, FoodId, SoLuong, Price)
+            VALUES (@InvoiceId, @FoodId, @SoLuong, @Price);
+        END
+    END
+    SELECT * FROM InvoiceDetail WHERE InvoiceId = @InvoiceId;
+END
+
+
 
 
 

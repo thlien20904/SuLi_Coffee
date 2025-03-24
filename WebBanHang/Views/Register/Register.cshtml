@@ -3,64 +3,165 @@
     ViewBag.Title = "Register";
 }
 
-<h2>Sign Up</h2>
-<p class="subtitle">Create your account to continue</p>
+<div class="register-wrapper">
+    <div class="form-section">
+        <div class="register-container">
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger">@ViewBag.Error</div>
+            }
 
-@using (Html.BeginForm("Register", "Register", FormMethod.Post))
-{
-    @Html.AntiForgeryToken() 
+            <h2>Sign Up</h2>
+            <p class="subtitle">Create your account to continue</p>
 
-    @* Username *@
-    <div class="input-group">
-        <i class="fas fa-user"></i>
-        <input type="text" name="Username" placeholder="Username" required />
+            @using (Html.BeginForm("Register", "Register", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="input-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" name="Username" placeholder="Username" value="@Request["Username"]" required />
+                </div>
+                <span id="username-error" class="error-message"></span>
+
+                <div class="input-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" name="Email" placeholder="Email" value="@Request["Email"]" required />
+                </div>
+                <span id="email-error" class="error-message"></span>
+
+                <div class="input-group">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" name="Password" placeholder="Password" required />
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+                </div>
+                <span id="password-error" class="error-message"></span>
+
+                <div class="input-group">
+                    <i class="fas fa-user-circle"></i>
+                    <input type="text" id="fullname" name="FullName" placeholder="Full Name" value="@Request["FullName"]" />
+                </div>
+                <span id="fullname-error" class="error-message"></span>
+
+                <div class="input-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" id="phone" name="PhoneNumber" placeholder="Phone" value="@Request["PhoneNumber"]" maxlength="10" />
+                </div>
+                <span id="phone-error" class="error-message"></span>
+
+                <div class="input-group">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <input type="text" id="address" name="Address" placeholder="Address" value="@Request["Address"]" />
+                </div>
+                <span id="address-error" class="error-message"></span>
+
+
+                <input type="submit" class="btn-register" value="Sign Up" />
+            }
+
+            <div class="or-divider">
+                <span>OR</span>
+            </div>
+
+            <button type="button" class="social-btn facebook">
+                <i class="fab fa-facebook-f"></i> Connect with Facebook
+            </button>
+
+            <button type="button" class="social-btn google">
+                <i class="fab fa-google"></i> Connect with Google
+            </button>
+
+            <div class="signin">
+                Already have an account? <a href="@Url.Action("Login", "Login")">Sign In</a>
+            </div>
+        </div>
     </div>
-
-    @* Email *@
-    <div class="input-group">
-        <i class="fas fa-envelope"></i>
-        <input type="email" name="Email" placeholder="Email" required />
-    </div>
-
-    @* Password with toggle *@
-    <div class="input-group">
-        <i class="fas fa-lock"></i>
-        <input type="password" id="password" name="Password" placeholder="Password" required />
-        <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
-    </div>
-
-    <input type="submit" class="btn-register" value="Sign Up" />
-}
-
-<div class="divider"><span>OR</span></div>
-
-@* Social Buttons *@
-<button type="button" class="social-btn facebook">
-    <i class="fab fa-facebook-f"></i> Connect with Facebook
-</button>
-
-<button type="button" class="social-btn google">
-    <i class="fab fa-google"></i> Connect with Google
-</button>
-
-<div class="signin">
-    Already have an account? <a href="@Url.Action("Login", "Login")">Sign In</a>
 </div>
 
 @section Scripts {
     <script>
+
         function togglePassword() {
             var pwd = document.getElementById("password");
-            var eye = document.querySelector(".toggle-password");
+            var icon = document.querySelector(".toggle-password");
             if (pwd.type === "password") {
                 pwd.type = "text";
-                eye.classList.remove("fa-eye");
-                eye.classList.add("fa-eye-slash");
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
             } else {
                 pwd.type = "password";
-                eye.classList.remove("fa-eye-slash");
-                eye.classList.add("fa-eye");
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
             }
         }
-    </script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Email validate
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('email-error');
+            emailInput.addEventListener('blur', function () {
+                const emailPattern = /^[a-zA-Z0-9._%+\-]+@@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/; 
+                if (!emailPattern.test(emailInput.value)) {
+                    emailError.textContent = "Email không hợp lệ.";
+                } else {
+                    emailError.textContent = "";
+                }
+            });
+
+            // Password validate
+            const passwordInput = document.getElementById('password');
+            const passwordError = document.getElementById('password-error');
+            passwordInput.addEventListener('blur', function () {
+                const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,40}$/;
+                if (!passwordPattern.test(passwordInput.value)) {
+                    passwordError.textContent = "Mật khẩu phải 8-40 ký tự, gồm chữ, số và ký tự đặc biệt.";
+                } else {
+                    passwordError.textContent = "";
+                }
+            });
+
+        // Username validate
+        const usernameInput = document.getElementById('username');
+        const usernameError = document.getElementById('username-error');
+        usernameInput.addEventListener('blur', function () {
+            if (usernameInput.value.length < 3 || usernameInput.value.length > 30) {
+                usernameError.textContent = "Username phải từ 3 đến 30 ký tự.";
+            } else {
+                usernameError.textContent = "";
+            }
+        });
+
+        // Full Name validate
+        const fullnameInput = document.getElementById('fullname');
+        const fullnameError = document.getElementById('fullname-error');
+        fullnameInput.addEventListener('blur', function () {
+            if (fullnameInput.value.trim() === "") {
+                fullnameError.textContent = "Vui lòng nhập họ tên.";
+            } else {
+                fullnameError.textContent = "";
+            }
+        });
+
+            phoneInput.addEventListener('blur', function () {
+                const phoneValue = phoneInput.value.trim(); // cắt khoảng trắng đầu/cuối
+                const phonePattern = /^(0[3|5|7|8|9])[0-9]{8}$/;
+                if (!phonePattern.test(phoneValue)) {
+                    phoneError.textContent = "Số điện thoại phải gồm 10 chữ số và bắt đầu bằng 03, 05, 07, 08, 09.";
+                } else {
+                    phoneError.textContent = "";
+                }
+            });
+
+        // Address validate
+        const addressInput = document.getElementById('address');
+        const addressError = document.getElementById('address-error');
+        addressInput.addEventListener('blur', function () {
+            if (addressInput.value.trim() === "") {
+                addressError.textContent = "Vui lòng nhập địa chỉ.";
+            } else {
+                addressError.textContent = "";
+            }
+        });
+    });    </script>
+
 }

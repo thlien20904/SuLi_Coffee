@@ -1,0 +1,100 @@
+﻿@model IEnumerable<WebBanHang.Models.Invoice>
+@{
+    Layout = "../Shared/_Layout.cshtml";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<h2>Hóa Đơn</h2>
+<div class="row">
+    <div class="col-md-4">
+        <label for="startDate"><b>Ngày bắt đầu</b></label>
+        <input type="date" id="startDate" class="form-control" title="Chọn ngày bắt đầu" />
+    </div>
+
+    <div class="col-md-4">
+        <label for="endDate"><b>Ngày kết thúc</b></label>
+        <input type="date" id="endDate" class="form-control" title="Chọn ngày kết thúc" />
+    </div>
+
+    <div class="col-md-4">
+        <br />
+        <button id="btnThongKe" class="btn btn-primary">📊 Thống Kê</button>
+    </div>
+</div>
+
+<hr />
+
+<h4>Danh sách hóa đơn đã thanh toán</h4>
+<table class="table table-bordered">
+    <thead class="thead-dark">
+        <tr>
+            <th>Mã Hóa Đơn</th>
+            <th>Mã Bàn</th>
+            <th>Ngày Check-in</th>
+            <th>Ngày Check-out</th>
+            <th>Trạng Thái</th>
+            <th>Chi Tiết</th>
+        </tr>
+    </thead>
+    <tbody id="hoaDonTable">
+        @Html.Partial("_HoaDonTable", Model) <!-- ✅ Load dữ liệu ban đầu -->
+    </tbody>
+</table>
+
+<script>
+// ✅ Hàm xử lý sự kiện khi click vào "Xem Chi Tiết"
+function registerChiTietEvent() {
+    $(".btnChiTiet").off("click").on("click", function () {
+        var invoiceId = $(this).data("id");
+        var detailRow = $("#chiTiet_" + invoiceId);
+        var detailTable = $("#chiTietTable_" + invoiceId);
+
+        if (detailRow.hasClass("d-none")) {
+            detailRow.removeClass("d-none");
+
+            $.ajax({
+                url: "@Url.Action("ChiTietHoaDon", "BaoCao")",
+                type: "GET",
+                data: { invoiceId: invoiceId },
+                success: function (data) {
+                    detailTable.html(data);
+                },
+                error: function () {
+                    detailTable.html("<tr><td colspan='3' style='color: red;'>⚠️ Lỗi khi tải dữ liệu!</td></tr>");
+                }
+            });
+        } else {
+            detailRow.addClass("d-none");
+        }
+    });
+}
+
+// ✅ Gọi khi trang load lần đầu
+$(document).ready(function () {
+    registerChiTietEvent();
+});
+
+// ✅ Xử lý khi click "Thống Kê"
+$("#btnThongKe").click(function () {
+    var start = $("#startDate").val();
+    var end = $("#endDate").val();
+
+    $("#hoaDonTable").html("<tr><td colspan='6'>⏳ Đang tải dữ liệu...</td></tr>");
+
+    $.ajax({
+        url: "@Url.Action("HoaDon", "BaoCao")",
+        type: "GET",
+        data: { startDate: start, endDate: end },
+        success: function (data) {
+            console.log("Dữ liệu nhận được:", data); // Kiểm tra dữ liệu nhận được
+            $("#hoaDonTable").html(data);
+
+            // ✅ Đăng ký lại sự kiện cho nút "Xem Chi Tiết"
+            registerChiTietEvent();
+        },
+        error: function () {
+            $("#hoaDonTable").html("<tr><td colspan='6' style='color: red;'>⚠️ Lỗi khi tải dữ liệu!</td></tr>");
+        }
+    });
+});
+</script>

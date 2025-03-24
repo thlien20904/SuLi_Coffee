@@ -1,0 +1,125 @@
+﻿@model WebBanHang.Models.Ingredient
+
+<h2>Chỉnh sửa nguyên liệu</h2>
+<hr />
+
+<div class="container">
+    @using (Html.BeginForm("Edit", "KhoAdmin", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.IngredientId)
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="IngredientName">Tên Nguyên Liệu:</label>
+                    @Html.TextBoxFor(model => model.IngredientName, new { @class = "form-control validate", id = "IngredientName" })
+                    <span class="text-danger error-message" id="error-IngredientName"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="SoLuong">Số lượng:</label>
+                    @Html.TextBoxFor(model => model.SoLuong, new { @class = "form-control validate", id = "SoLuong", type = "number", min = "1" })
+                    <span class="text-danger error-message" id="error-SoLuong"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="PhanLoai">Phân loại:</label>
+                    @Html.TextBoxFor(model => model.PhanLoai, new { @class = "form-control validate", id = "PhanLoai" })
+                    <span class="text-danger error-message" id="error-PhanLoai"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="LastUpdated">Cập nhật lần cuối:</label>
+                    @Html.TextBoxFor(model => model.LastUpdated, new { @class = "form-control validate", id = "LastUpdated", type = "datetime-local" })
+                    <span class="text-danger error-message" id="error-LastUpdated"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="ImageURL">Hình Ảnh:</label>
+                    @Html.TextBoxFor(model => model.ImageURL, new { @class = "form-control validate", id = "ImageURL" })
+                    <img id="ImagePreview" src="@(!string.IsNullOrEmpty(Model.ImageURL) ? Model.ImageURL : "/Content/Images/no-image.png")"
+                         style="max-width: 100px; margin-top: 10px; display: block;" />
+                    <span class="text-danger error-message" id="error-ImageURL"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-3">Lưu thay đổi</button>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Hàm kiểm tra URL hình ảnh hợp lệ
+            function isValidImageURL(url) {
+                return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp)|\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(url);
+            }
+
+            // Hàm kiểm tra lỗi
+            function validateInput(id, errorMessage, condition) {
+                let value = $(id).val().trim();
+                if (condition(value)) {
+                    $(id).removeClass("is-invalid").addClass("is-valid");
+                    $(id + "-error").text("");
+                } else {
+                    $(id).removeClass("is-valid").addClass("is-invalid");
+                    $(id + "-error").text(errorMessage);
+                }
+            }
+
+            // Gán sự kiện `blur` để kiểm tra ngay khi nhập xong
+            $("#IngredientName").blur(function () {
+                validateInput("#IngredientName", "Tên nguyên liệu không được để trống.", v => v !== "");
+            });
+
+            $("#SoLuong").blur(function () {
+                validateInput("#SoLuong", "Số lượng phải lớn hơn 0.", v => v !== "" && parseInt(v) > 0);
+            });
+
+            $("#PhanLoai").blur(function () {
+                validateInput("#PhanLoai", "Phân loại không được để trống.", v => v !== "");
+            });
+
+            $("#LastUpdated").blur(function () {
+                validateInput("#LastUpdated", "Bạn cần nhập ngày cập nhật.", v => v !== "");
+            });
+
+            $("#ImageURL").blur(function () {
+                validateInput("#ImageURL", "URL hình ảnh không hợp lệ. Đường dẫn phải có định dạng .png, .jpg, .jpeg, .gif, .webp",
+                    v => isValidImageURL(v));
+            });
+
+
+            // Xem trước hình ảnh khi nhập URL
+            $("#ImageURL").on("input", function () {
+                let url = $(this).val();
+                if (isValidImageURL(url)) {
+                    $("#ImagePreview").attr("src", url);
+                } else {
+                    $("#ImagePreview").attr("src", "/Content/Images/no-image.png");
+                }
+            });
+
+            // Kiểm tra tất cả khi nhấn submit
+            $("form").submit(function (event) {
+                let isValid = true;
+
+                $("#IngredientName, #SoLuong, #PhanLoai, #LastUpdated, #ImageURL").each(function () {
+                    $(this).blur();
+                    if ($(this).hasClass("is-invalid")) {
+                        isValid = false;
+                    }
+                });
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
+        });
+    </script>
+}

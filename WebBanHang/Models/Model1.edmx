@@ -124,7 +124,14 @@
           <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="PasswordHash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="15" />
+          <Property Name="Address" Type="nvarchar" MaxLength="255" />
           <Property Name="Role" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="OTPCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="OTPExpiry" Type="datetime" />
+          <Property Name="ResetToken" Type="nvarchar" MaxLength="100" />
+          <Property Name="ResetTokenExpiry" Type="datetime" />
         </EntityType>
         <EntityType Name="Warehouse">
           <Key>
@@ -355,6 +362,13 @@
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Role" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="OTPCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="OTPExpiry" Type="DateTime" Precision="3" />
+          <Property Name="ResetToken" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ResetTokenExpiry" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityContainer Name="WebAppDBEntities2" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Users" EntityType="Self.User" />
@@ -681,6 +695,13 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="WebAppDBModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ResetTokenExpiry" ColumnName="ResetTokenExpiry" />
+                <ScalarProperty Name="ResetToken" ColumnName="ResetToken" />
+                <ScalarProperty Name="OTPExpiry" ColumnName="OTPExpiry" />
+                <ScalarProperty Name="OTPCode" ColumnName="OTPCode" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

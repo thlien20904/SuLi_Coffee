@@ -119,7 +119,14 @@
     <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="PasswordHash" Type="nvarchar" MaxLength="255" Nullable="false" />
+    <Property Name="FullName" Type="nvarchar" MaxLength="100" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="15" />
+    <Property Name="Address" Type="nvarchar" MaxLength="255" />
     <Property Name="Role" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="OTPCode" Type="nvarchar" MaxLength="10" />
+    <Property Name="OTPExpiry" Type="datetime" />
+    <Property Name="ResetToken" Type="nvarchar" MaxLength="100" />
+    <Property Name="ResetTokenExpiry" Type="datetime" />
   </EntityType>
   <EntityType Name="Warehouse">
     <Key>

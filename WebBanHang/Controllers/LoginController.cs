@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
 using WebBanHang.Models;
-using WebBanHang.Models; // đổi thành namespace project của bạn
 
 namespace WebBanHang.Controllers
 {
@@ -14,33 +13,52 @@ namespace WebBanHang.Controllers
         {
             return View();
         }
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            Session.Clear();
+            return RedirectToAction("Login", "Login");
+        }
+
 
         [HttpPost]
         public ActionResult Login(string username, string password)
         {
-            var user = db.Users.FirstOrDefault(u => u.Username == username && u.PasswordHash == password);
+            var user = db.Users.FirstOrDefault(u => u.Username == username);
             if (user != null)
             {
-                Session["Username"] = user.Username;
-                Session["Role"] = user.Role;
+                bool isValid = false;
 
-                if (user.Role == "Admin")
+                if (user.PasswordHash.StartsWith("$2a$") || user.PasswordHash.StartsWith("$2b$"))
                 {
-                    return RedirectToAction("HomeAdmin", "HomeAdmin", new { area = "Admin" });
+                    // Là password hash chuẩn bcrypt
+                    isValid = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
                 }
                 else
                 {
-                    return RedirectToAction("Home", "Home");
+                    // Password cũ lưu dạng plain text
+                    isValid = (password == user.PasswordHash);
+                }
+
+                if (isValid)
+                {
+                    Session["Username"] = user.Username;
+                    Session["Role"] = user.Role;
+
+                    if (user.Role == "Admin")
+                    {
+                        return RedirectToAction("HomeAdmin", "HomeAdmin", new { area = "Admin" });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Home", "Home");
+                    }
                 }
             }
+
             ViewBag.Message = "Sai thông tin đăng nhập!";
             return View();
         }
 
-        public ActionResult Logout()
-        {
-            Session.Clear();
-            return RedirectToAction("Home", "Home");
-        }
     }
 }

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - MyBeauty</title>
+    <title>@ViewBag.Title - SuLi Coffee</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
@@ -10,18 +10,35 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #fce4ec;
+            background: url('/images/nen6.png') no-repeat center center fixed;
+            background-size: cover;
             font-family: 'Poppins', sans-serif;
         }
 
         .container {
-            max-width: 400px;
-            margin: 60px auto;
-            background: #fff;
-            padding: 40px;
-            border-radius: 15px;
+            width: 35%; /* thu hẹp lại */
+            margin: 30px auto;
+            min-height: 600px;
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 30px; /* thêm padding vào */
+            box-sizing: border-box;
         }
+
+
+        .left, .right {
+            flex: 1 1 300px;
+            padding: 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 600px; /* mỗi khối tối thiểu cao 600px */
+        }
+
+
 
         h2 {
             text-align: center;
@@ -48,8 +65,6 @@
                 color: #777;
             }
 
-
-
             .input-group input {
                 width: 100%;
                 padding: 12px 40px;
@@ -59,7 +74,6 @@
                 box-sizing: border-box;
             }
 
-            /* Icon con mắt */
             .input-group .toggle-password {
                 position: absolute;
                 right: 15px;
@@ -166,10 +180,13 @@
             text-align: center;
         }
     </style>
+
 </head>
 <body>
     <div class="container">
-        @RenderBody()
+        <div class="right">
+            @RenderBody()
+        </div>
     </div>
 
     <script>
@@ -187,6 +204,7 @@
             }
         }
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
-

@@ -16,6 +16,7 @@ public class AdminAreaRegistration : AreaRegistration
             "Admin_default",
             "Admin/{controller}/{action}/{id}",
             new { action = "HomeAdmin", id = UrlParameter.Optional }
+            //namespaces: new[] { "WebBanHang.Areas.Admin.Controllers" } // <<< Thêm dòng này để fix lỗi 404
         );
     }
 }

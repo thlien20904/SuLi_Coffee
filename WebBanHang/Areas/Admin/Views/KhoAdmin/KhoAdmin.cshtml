@@ -1,7 +1,152 @@
-﻿
+﻿@model IEnumerable<WebBanHang.Models.Ingredient>
+
 @{
-    ViewBag.Title = "KhoAdmin";
+    Layout = "../Shared/_Layout.cshtml";
 }
 
-<h2>KhoAdmin</h2>
+<link href="~/Content/SanPhamAdmin.css" rel="stylesheet" />
+<style>
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
 
+    .product-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Căn trái tất cả nội dung */
+        height: auto;
+        width: 260px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: left; /* Căn trái nội dung */
+    }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 5px; /* Giảm khoảng cách với tên nguyên liệu */
+        }
+
+    .product-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 2px 0; /* Thu hẹp khoảng cách giữa tên và số lượng */
+        line-height: 1.2;
+    }
+
+    .product-info {
+        font-size: 14px;
+        line-height: 1.1;
+        margin-top: -3px; /* Kéo lên gần với tên nguyên liệu */
+        text-align: left; /* Căn trái thông tin */
+        width: 100%;
+    }
+
+    .alert-warning {
+        font-size: 13px;
+        padding: 5px 8px;
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+        border-radius: 5px;
+        text-align: left;
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: auto;
+    }
+    .btn-edit, .btn-delete {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        text-align: center;
+        width: 48%;
+        background-color: #d3b49e; /* Đổi màu nút */
+        color: white;
+        border: none;
+    }
+
+        .btn-edit:hover, .btn-delete:hover {
+            background-color: #b89a86; /* Màu hover nhẹ hơn */
+        }
+
+</style>
+
+
+
+<div class="page-container">
+    <div class="header-container">
+        <h2>Quản lý kho</h2>
+        <a href="@Url.Action("Add", "KhoAdmin")" class="btn-add">➕ Thêm nguyên liệu mới</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <p class="alert alert-warning">Không có nguyên liệu nào trong kho.</p>
+    }
+    else
+    {
+        <div class="product-container">
+            @foreach (var item in Model)
+            {
+                <div class="product-card">
+                    <img src="@(!string.IsNullOrEmpty(item.ImageURL) ? Url.Content(item.ImageURL) : "/Content/Images/no-image.png")" alt="@item.IngredientName" />
+
+                    <h4 class="product-title">@item.IngredientName</h4>
+
+                    <div class="product-info">
+                        <p><strong>Số lượng:</strong> @item.SoLuong</p>
+                        <p><strong>Phân loại:</strong> @item.PhanLoai</p>
+                    </div>
+
+                    @if (item.SoLuong <= 5)
+                    {
+                        <div class="alert-warning">⚠️ Số lượng nguyên liệu sắp hết!</div>
+                    }
+
+                    <div class="button-group">
+                        <a href="@Url.Action("Edit", "KhoAdmin", new { id = item.IngredientId })" class="btn-edit">📝 Sửa</a>
+                        <a href="@Url.Action("Delete", "KhoAdmin", new { id = item.IngredientId })" class="btn-delete" onclick="return confirmDelete('@item.IngredientName');">❌ Xóa</a>
+                    </div>
+                </div>
+            }
+        </div>
+
+    }
+</div>
+
+<script>
+    function confirmDelete(ingredientName) {
+        return confirm("Bạn có chắc chắn muốn xóa nguyên liệu \"" + ingredientName + "\" không?");
+    }
+</script>

@@ -2,25 +2,39 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>@ViewBag.Title - MyBeauty</title>
+    <title>@ViewBag.Title - SuLi Coffee</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
         body {
-            background-color: #fddde6;
-            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background: url('/images/nen6.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Poppins', sans-serif;
         }
 
-        .register-container {
-            max-width: 400px;
-            margin: 60px auto;
-            background: #fff;
-            padding: 40px;
-            border-radius: 15px;
+        .container {
+            width: 35%;
+            margin: 20px auto;
+            min-height: 500px;
+            background: rgba(255, 255, 255, 0.01);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            padding: 0px; /* thêm padding vào */
             box-sizing: border-box;
+        }
+
+        .left, .right {
+            flex: 1 1 200px;
+            padding: 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 600px; /* mỗi khối tối thiểu cao 600px */
         }
 
         h2 {
@@ -41,33 +55,36 @@
             width: 100%;
         }
 
-            .input-group i.fa-lock,
-            .input-group i.fa-user,
-            .input-group i.fa-envelope {
-                position: absolute;
-                left: 15px;
-                top: 50%;
-                transform: translateY(-50%);
-                color: #777;
-            }
-
             .input-group input {
                 width: 100%;
-                padding: 12px 40px;
+                padding: 12px 40px 12px 40px; /* padding 2 bên đều 40px */
                 border-radius: 30px;
                 border: 1px solid #ccc;
                 box-sizing: border-box;
                 outline: none;
             }
 
-        .toggle-password {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #777;
-            cursor: pointer;
-        }
+            /* Tất cả icon bên trái input */
+            .input-group i:not(.toggle-password) {
+                position: absolute;
+                left: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #777;
+                font-size: 16px;
+                pointer-events: none;
+            }
+
+            /* Icon con mắt (toggle-password) bên phải */
+            .input-group .toggle-password {
+                position: absolute;
+                right: 15px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #777;
+                cursor: pointer;
+            }
+
 
         .btn-register {
             width: 100%;
@@ -98,6 +115,7 @@
         .divider {
             display: flex;
             align-items: center;
+            justify-content: center;
             margin: 20px 0;
         }
 
@@ -111,6 +129,7 @@
             .divider span {
                 margin: 0 10px;
                 color: #555;
+                white-space: nowrap;
             }
 
         .social-btn {
@@ -145,16 +164,69 @@
             text-align: center;
             margin-bottom: 10px;
         }
+        .or-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+            .or-divider::before,
+            .or-divider::after {
+                content: "";
+                flex: 1;
+                height: 1px;
+                background: #ccc;
+            }
+
+            .or-divider span {
+                margin: 0 10px;
+                color: #555;
+                font-weight: 500;
+            }
+        .error-message {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .input-group input.invalid {
+            border: 1px solid red;
+        }
+
     </style>
 </head>
 <body>
-    <div class="register-container">
-        @RenderBody()
+    <div class="container">
+
+        <div class="right">
+            @RenderBody()
+        </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function responsiveLayout() {
+            const container = document.querySelector('.container');
+            const left = document.querySelector('.left');
+            const right = document.querySelector('.right');
 
+            if (window.innerWidth <= 768) {
+                container.style.display = 'block';
+                left.style.width = '100%';
+                right.style.width = '100%';
+            } else {
+                container.style.display = 'flex';
+                left.style.width = '50%';
+                right.style.width = '50%';
+            }
+        }
+
+        window.addEventListener('resize', responsiveLayout);
+        window.addEventListener('load', responsiveLayout);
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
-
 </html>

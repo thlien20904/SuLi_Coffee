@@ -50,11 +50,107 @@
                     </p>
                     <p><strong>Trạng thái:</strong> @(item.Status == true ? "Còn bán" : "Ngừng bán")</p>
                     <div class="button-group">
-                        <a href="@Url.Action("Edit", "SanPhamAdmin", new { id = item.FoodId })" class="btn-edit">Edit</a>
-                        <a href="@Url.Action("Delete", "SanPhamAdmin", new { id = item.FoodId })" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa món ăn này không?');">Delete</a>
+                        <a href="@Url.Action("Edit", "SanPhamAdmin", new { id = item.FoodId })" class="btn-edit">📝 Sửa</a>
+                        <a href="@Url.Action("Delete", "SanPhamAdmin", new { id = item.FoodId })" class="btn-delete" onclick="return confirm('Bạn có chắc chắn muốn xóa món ăn này không?');">❌ Xóa</a>
                     </div>
                 </div>
             }
         </div>
     }
 </div>
+<style>
+    .product-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .price {
+        font-size: 16px;
+        font-weight: bold;
+        color: #d8804b; /* Đổi màu giá thành */
+        margin-top: 3px;
+    }
+
+    .old-price {
+        font-size: 14px;
+        text-decoration: line-through;
+        color: #b89a86; /* Màu nhẹ hơn cho giá cũ */
+        margin-left: 5px;
+    }
+
+    .product-card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Căn trái tất cả nội dung */
+        height: auto;
+        width: 260px;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        text-align: left; /* Căn trái nội dung */
+    }
+
+        .product-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 5px; /* Giảm khoảng cách với tên nguyên liệu */
+        }
+
+    .product-title {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 2px 0; /* Thu hẹp khoảng cách giữa tên và số lượng */
+        line-height: 1.2;
+    }
+
+    .product-info {
+        font-size: 14px;
+        line-height: 1.1;
+        margin-top: -3px; /* Kéo lên gần với tên nguyên liệu */
+        text-align: left; /* Căn trái thông tin */
+        width: 100%;
+    }
+
+    .alert-warning {
+        font-size: 13px;
+        padding: 5px 8px;
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+        border-radius: 5px;
+        text-align: left;
+        margin-top: 5px;
+        width: 100%;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: auto;
+    }
+
+    .btn-edit, .btn-delete {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        text-align: center;
+        width: 48%;
+        background-color: #d3b49e; /* Đổi màu nút */
+        color: white;
+        border: none;
+    }
+
+        .btn-edit:hover, .btn-delete:hover {
+            background-color: #b89a86; /* Màu hover nhẹ hơn */
+        }
+</style>

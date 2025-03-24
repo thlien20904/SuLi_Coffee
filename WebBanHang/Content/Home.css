@@ -286,3 +286,27 @@ footer {
     font-weight: 600;
     font-size: 18px;
 }
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 10px;
+    min-width: 150px;
+    z-index: 999;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+    .dropdown-menu a {
+        display: block;
+        padding: 8px 12px;
+        color: #333;
+        border-radius: 5px;
+    }
+
+        .dropdown-menu a:hover {
+            background-color: #f0f0f0;
+            color: #000;
+        }

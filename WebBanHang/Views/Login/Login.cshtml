@@ -1,12 +1,14 @@
 ﻿@{
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
     ViewBag.Title = "Login";
+
+    var forgotLink = "<a href='" + Url.Action("Forgot", "Forgot") + "' style='color:#d81b60; text-decoration:none;'>Forgot Password?</a>";
 }
 
 <div class="login-container">
     <h2>Sign In</h2>
-    <p class="subtitle">Welcome to MyBeauty! Please login to continue.</p>
-    <!-- THÔNG BÁO ĐĂNG KÝ THÀNH CÔNG -->
+    <p class="subtitle">Welcome to SuLi Coffee! Please login to continue.</p>
+
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success">
@@ -17,27 +19,25 @@
     @using (Html.BeginForm("Login", "Login", FormMethod.Post))
     {
         @Html.Raw(@"
-        <div class='input-group'>
-            <i class='fas fa-user'></i>
-            <input type='text' name='username' placeholder='Username' required />
-        </div>
+            <div class='input-group'>
+                <i class='fas fa-user'></i>
+                <input type='text' name='username' placeholder='Username' required />
+            </div>
 
-     <div class=""input-group"">
-    <i class=""fas fa-lock""></i>
-    <input type=""password"" name=""password"" placeholder=""Password"" id=""password"" required />
-    <i class=""fas fa-eye toggle-password"" onclick=""togglePassword()""></i>
-</div>
+            <div class='input-group'>
+                <i class='fas fa-lock'></i>
+                <input type='password' name='password' placeholder='Password' id='password' required />
+                <i class='fas fa-eye toggle-password' onclick='togglePassword()'></i>
+            </div>
 
+            <div class='options'>
+                <label>
+                    <input type='checkbox' name='remember' /> Remember Me
+                </label>
+                " + forgotLink + @"
+            </div>
 
-
-        <div class='options'>
-            <label>
-                <input type='checkbox' name='remember' /> Remember Me
-            </label>
-            <a href='#'>Forgot Password?</a>
-        </div>
-
-        <input type='submit' class='btn-login' value='Sign In' />
+            <input type='submit' class='btn-login' value='Sign In' />
         ")
 
         if (ViewBag.Message != null)
@@ -48,11 +48,9 @@
 
     <div class="signup">
         Don't have an account? <a href="@Url.Action("Register", "Register")">Signup</a>
-
     </div>
 
     <div class="or-divider">OR</div>
-
     <button class="social-btn facebook">
         <i class="fab fa-facebook-f"></i> Connect with Facebook
     </button>

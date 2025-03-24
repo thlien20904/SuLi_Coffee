@@ -3,20 +3,32 @@
   "WorkspaceRootPath": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\areas\\admin\\views\\baocao\\baocao.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\baocao\\baocao.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\areas\\admin\\controllers\\sanphamadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\controllers\\sanphamadmincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\areas\\admin\\controllers\\baocaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\controllers\\baocaocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\webbanhang\\areas\\admin\\views\\sanphamadmin\\info.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\sanphamadmin\\info.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\areas\\admin\\views\\sanphamadmin\\add.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\sanphamadmin\\add.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\areas\\admin\\views\\sanphamadmin\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\sanphamadmin\\edit.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\areas\\admin\\views\\nhanvien\\nhanvien.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\nhanvien\\nhanvien.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\areas\\admin\\views\\nguoidung\\nguoidung.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\nguoidung\\nguoidung.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\areas\\admin\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|e:\\hk2_2024_2025\\web_nang_cao\\webbanhang\\webbanhang\\areas\\admin\\views\\homeadmin\\homeadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{4DD6EC17-39D7-4F7A-A732-7A74230EB56D}|WebBanHang\\WebBanHang.csproj|solutionrelative:webbanhang\\areas\\admin\\views\\homeadmin\\homeadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -42,54 +54,93 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "BaoCao.cshtml",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\BaoCao\\BaoCao.cshtml",
-              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\BaoCao\\BaoCao.cshtml",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\BaoCao\\BaoCao.cshtml",
-              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\BaoCao\\BaoCao.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-20T10:51:16.063Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "BaoCaoController.cs",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Controllers\\BaoCaoController.cs",
-              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Controllers\\BaoCaoController.cs",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Controllers\\BaoCaoController.cs",
-              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Controllers\\BaoCaoController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAiAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-20T10:51:00.741Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "HomeAdmin.cshtml",
-              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\HomeAdmin\\HomeAdmin.cshtml",
-              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\HomeAdmin\\HomeAdmin.cshtml",
-              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\HomeAdmin\\HomeAdmin.cshtml",
-              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\HomeAdmin\\HomeAdmin.cshtml",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABuAAAAAAAAAA==",
+              "Title": "Edit.cshtml",
+              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Edit.cshtml",
+              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Edit.cshtml",
+              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Edit.cshtml",
+              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Edit.cshtml",
+              "ViewState": "AgIAAJoAAAAAAAAAAADwv70AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-20T09:27:29.285Z",
+              "WhenOpened": "2025-03-24T16:06:16.667Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "Add.cshtml",
+              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Add.cshtml",
+              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Add.cshtml",
+              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Add.cshtml",
+              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Add.cshtml",
+              "ViewState": "AgIAAEUAAAAAAAAAAAAAABQAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-24T16:04:36.701Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SanPhamAdminController.cs",
+              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Controllers\\SanPhamAdminController.cs",
+              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Controllers\\SanPhamAdminController.cs",
+              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Controllers\\SanPhamAdminController.cs",
+              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Controllers\\SanPhamAdminController.cs",
+              "ViewState": "AgIAAKIAAAAAAAAAAAAQwMgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-24T15:37:55.094Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Info.cshtml",
+              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Info.cshtml",
+              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Info.cshtml",
+              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Info.cshtml*",
+              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\SanPhamAdmin\\Info.cshtml*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-21T13:34:25.81Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "NhanVien.cshtml",
+              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\NhanVien\\NhanVien.cshtml",
+              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\NhanVien\\NhanVien.cshtml",
+              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\NhanVien\\NhanVien.cshtml",
+              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\NhanVien\\NhanVien.cshtml",
+              "ViewState": "AgIAAEMAAAAAAAAAAAAgwDEAAAAuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-24T14:27:13.117Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "NguoiDung.cshtml",
+              "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\NguoiDung\\NguoiDung.cshtml",
+              "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\NguoiDung\\NguoiDung.cshtml",
+              "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\NguoiDung\\NguoiDung.cshtml",
+              "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\NguoiDung\\NguoiDung.cshtml",
+              "ViewState": "AgIAAMwAAAAAAAAAAAAAANgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-03-24T08:55:25.918Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "_Layout.cshtml",
               "DocumentMoniker": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
               "RelativeDocumentMoniker": "WebBanHang\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
               "ToolTip": "E:\\HK2_2024_2025\\Web_nang_cao\\WebBanHang\\WebBanHang\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
               "RelativeToolTip": "WebBanHang\\Areas\\Admin\\Views\\Shared\\_Layout.cshtml",
-              "ViewState": "AgIAAKMAAAAAAAAAAAAkwLkAAAAxAAAAAAAAAA==",
+              "ViewState": "AgIAAG8AAAAAAAAAAAAAAH0AAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-03-20T07:05:27.658Z",
+              "WhenOpened": "2025-03-24T09:03:32.774Z",
               "EditorCaption": ""
             }
           ]

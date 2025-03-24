@@ -4,6 +4,13 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="WebAppDBModel.User">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="ResetTokenExpiry" ColumnName="ResetTokenExpiry" />
+          <ScalarProperty Name="ResetToken" ColumnName="ResetToken" />
+          <ScalarProperty Name="OTPExpiry" ColumnName="OTPExpiry" />
+          <ScalarProperty Name="OTPCode" ColumnName="OTPCode" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Username" ColumnName="Username" />
           <ScalarProperty Name="Email" ColumnName="Email" />

@@ -1,0 +1,31 @@
+﻿@model IEnumerable<WebBanHang.Models.Invoice>
+
+@foreach (var hd in Model)
+{
+    <tr>
+        <td>@hd.InvoiceId</td>
+        <td>@hd.TableId</td>
+        <td>@hd.DateCheckIn</td>
+        <td>@(hd.DateCheckOut.HasValue ? hd.DateCheckOut.Value.ToString("dd/MM/yyyy HH:mm") : "Chưa checkout")</td>
+        <td>@(hd.TrangThai == 1 ? "Đã thanh toán" : "Chưa thanh toán")</td>
+        <td>
+            <button class="btn btn-info btnChiTiet" data-id="@hd.InvoiceId">📄 Xem Chi Tiết</button>
+        </td>
+    </tr>
+    <tr id="chiTiet_@hd.InvoiceId" class="d-none">
+        <td colspan="6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Mã Món</th>
+                        <th>Số Lượng</th>
+                        <th>Giá</th>
+                    </tr>
+                </thead>
+                <tbody id="chiTietTable_@hd.InvoiceId">
+                    <tr><td colspan="3">⏳ Đang tải...</td></tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+}

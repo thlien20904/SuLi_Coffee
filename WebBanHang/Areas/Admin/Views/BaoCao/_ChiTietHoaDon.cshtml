@@ -1,0 +1,10 @@
+﻿@model IEnumerable<WebBanHang.Models.InvoiceDetail>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.FoodId</td>
+        <td>@item.SoLuong</td>
+        <td>@item.Price.ToString("N0") đ</td>
+    </tr>
+}

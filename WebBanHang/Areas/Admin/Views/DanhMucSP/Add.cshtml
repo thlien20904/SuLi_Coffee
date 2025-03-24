@@ -1,0 +1,33 @@
+﻿@model WebBanHang.Models.Category
+
+
+<h2>Thêm danh mục mới</h2>
+<hr />
+
+<div class="container">
+    @using (Html.BeginForm("Add", "DanhMucSP", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label for="CategoryName">Tên danh mục:</label>
+            @Html.TextBoxFor(model => model.CategoryName, new { @class = "form-control", id = "CategoryName", placeholder = "Nhập tên danh mục" })
+        </div>
+
+        <button type="submit" class="btn btn-success mt-3">Thêm danh mục</button>
+    }
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+@if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["ErrorMessage"]
+    </div>
+}

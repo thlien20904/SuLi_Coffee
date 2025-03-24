@@ -38,30 +38,45 @@
                 <ul class="d-flex list-unstyled mb-0">
                     <li><a href="@Url.Action("Home", "Home")">Trang chủ</a></li>
                     @*@if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
-                    {
-                        <li><a href="@Url.Action("Index", "SanPhamAdmin", new { area = "Admin" })">Sản phẩm (Admin)</a></li>
-                    }
-                    else
-                    {
-                        <li><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></li>
-                    }*@
+                        {
+                            <li><a href="@Url.Action("Index", "SanPhamAdmin", new { area = "Admin" })">Sản phẩm (Admin)</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></li>
+                        }*@
                     <li><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></li>
                     <li><a href="@Url.Action("Index", "GT")">Giới thiệu</a></li>
                     <li><a href="@Url.Action("Index", "Lienhe")">Liên hệ</a></li>
                     <li><a href="@Url.Action("Thethanhvien", "Thethanhvien")">Thẻ thành viên</a></li>
-                    @if (Session["Username"] == null)
-                    {
-                        <li><a href="@Url.Action("Login", "Login")">Đăng nhập</a></li>
-                    }
-                    else
-                    {
-                        <li class="user-info">Xin chào, @Session["Username"]</li>
-                        <li><a href="@Url.Action("Logout", "Login")">Đăng xuất</a></li>
-                    }
+                    <li class="dropdown mx-3 position-relative">
+                        @if (Session["Username"] == null)
+                        {
+                            <div class="dropdown-toggle">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="dropdown-menu">
+                                <a href="@Url.Action("Login", "Login")">Đăng nhập</a>
+                                <a href="@Url.Action("Register", "Register")">Đăng ký</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="dropdown-toggle">
+                                <i class="fas fa-user"></i> @Session["Username"]
+                            </div>
+                            <div class="dropdown-menu">
+                                @*<a href="@Url.Action("TaiKhoan", "ThongTinTk")">Tài khoản</a>*@
+                                <a href="@Url.Action("Logout", "Login", new { area = "" })">Đăng xuất</a>
+
+                            </div>
+
+                        }
+                    </li>
                 </ul>
             </nav>
         </div>
-      
+
     </header>
 
     <main class="main-content">
@@ -133,6 +148,41 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("scripts", required: false)
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-chevron-up"></i>
+        <div>Lên đầu trang</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        // Hover dropdown effect
+        $('.dropdown').hover(function () {
+            $(this).find('.dropdown-menu').stop(true, true).slideDown(200);
+        }, function () {
+            $(this).find('.dropdown-menu').stop(true, true).slideUp(200);
+        });
+        // Click vào nút back to top
+        $('#backToTop').click(function () {
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+        });
+
+        // Hiện nút back to top khi scroll xuống
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 300) {
+                $('#backToTop').fadeIn();
+            } else {
+                $('#backToTop').fadeOut();
+            }
+        });
+
+        // Ẩn nút lúc đầu
+        $('#backToTop').hide();
+    </script>
+
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

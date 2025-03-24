@@ -46,16 +46,56 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net-Next, Version=4.0.3.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>..\packages\BCrypt.Net-Next.4.0.3\lib\net472\BCrypt.Net-Next.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML, Version=0.104.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.104.2\lib\netstandard2.0\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="ClosedXML.Parser, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1d5f7376574c51ec, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.Parser.1.2.0\lib\netstandard2.0\ClosedXML.Parser.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=3.1.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.3.1.1\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml.Framework, Version=3.1.1.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.Framework.3.1.1\lib\net46\DocumentFormat.OpenXml.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.1\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.1.0.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.1.0\lib\net20\ExcelNumberFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="RBush, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RBush.4.0.0\lib\net47\RBush.dll</HintPath>
+    </Reference>
+    <Reference Include="SixLabors.Fonts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=d998eea7b14cab13, processorArchitecture=MSIL">
+      <HintPath>..\packages\SixLabors.Fonts.1.0.0\lib\netstandard2.0\SixLabors.Fonts.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.7.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -119,6 +159,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
@@ -135,9 +176,12 @@
     <Compile Include="Areas\Admin\Controllers\DonHangController.cs" />
     <Compile Include="Areas\Admin\Controllers\HomeAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\KhoAdminController.cs" />
+    <Compile Include="Areas\Admin\Controllers\KhoXuatFileController.cs" />
+    <Compile Include="Areas\Admin\Controllers\NguoiDungController.cs" />
+    <Compile Include="Areas\Admin\Controllers\NhanVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\SanPhamAdminController.cs" />
     <Compile Include="Areas\Admin\Controllers\ThanhToanController.cs" />
-    <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
+    <Compile Include="Controllers\ForgotController.cs" />
     <Compile Include="Controllers\GTController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LienheController.cs" />
@@ -154,6 +198,7 @@
     <Compile Include="Models\AccRole.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BanChayModel.cs" />
     <Compile Include="Models\Category.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -243,6 +288,12 @@
     <Content Include="images\gt6png.jpg" />
     <Content Include="images\logo.png" />
     <Content Include="images\logo1.png" />
+    <Content Include="images\nen.png" />
+    <Content Include="images\nen1.png" />
+    <Content Include="images\nen2.png" />
+    <Content Include="images\nen5.png" />
+    <Content Include="images\nen6.png" />
+    <Content Include="images\nen7.png" />
     <Content Include="images\noibat.png" />
     <Content Include="images\noibat1.png" />
     <Content Include="images\noibat2.png" />
@@ -288,11 +339,35 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Content>
     <Content Include="Areas\Admin\Views\Thanhtoan\ThanhToan.cshtml" />
-    <Content Include="Areas\Admin\Views\Users\Users.cshtml" />
     <Content Include="Areas\Admin\Views\DanhMucSP\DanhMucSP.cshtml" />
     <Content Include="Areas\Admin\Views\KhoAdmin\KhoAdmin.cshtml" />
-    <Content Include="Areas\Admin\Views\DonHang\DonHang.cshtml" />
-    <Content Include="Areas\Admin\Views\BaoCao\BaoCao.cshtml" />
+    <Content Include="Areas\Admin\Views\DonHang\_DanhSachBanPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\BaoCao\_HoaDonTable.cshtml" />
+    <Content Include="Areas\Admin\Views\DanhMucSP\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\DanhMucSP\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\DanhMucSP\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoAdmin\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoAdmin\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoAdmin\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoXuatFile\ExportToExcel.cshtml" />
+    <Content Include="Areas\Admin\Views\KhoXuatFile\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\BaoCao\HoaDon.cshtml" />
+    <Content Include="Areas\Admin\Views\BaoCao\DoanhThu.cshtml" />
+    <Content Include="Areas\Admin\Views\BaoCao\BanChay.cshtml" />
+    <Content Include="Areas\Admin\Views\BaoCao\_ChiTietHoaDon.cshtml" />
+    <Content Include="Areas\Admin\Views\BaoCao\ExportToExcel.cshtml" />
+    <Content Include="Areas\Admin\Views\NhanVien\NhanVien.cshtml" />
+    <Content Include="Areas\Admin\Views\NhanVien\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\NhanVien\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\NhanVien\Delete.cshtml" />
+    <Content Include="Areas\Admin\Views\DonHang\_DanhSachLoaiSanPhamPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\DonHang\_DanhSachSanPhamPartial.cshtml" />
+    <Content Include="Areas\Admin\Views\DonHang\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\DonHang\_InvoicePartial.cshtml" />
+    <Content Include="Areas\Admin\Views\NguoiDung\NguoiDung.cshtml" />
+    <Content Include="Areas\Admin\Views\NguoiDung\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\NguoiDung\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\NguoiDung\Delete.cshtml" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -334,10 +409,14 @@
     <Content Include="Views\GT\Index.cshtml" />
     <Content Include="Views\Lienhe\Index.cshtml" />
     <Content Include="Views\Thethanhvien\Thethanhvien.cshtml" />
+    <Content Include="Views\Forgot\Forgot.cshtml" />
+    <Content Include="Views\Forgot\VerifyOTP.cshtml" />
+    <Content Include="Views\Forgot\ResetPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Views\SearchResultViewModel\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.rtl.min.css.map" />
