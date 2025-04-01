@@ -1,10 +1,10 @@
-﻿@model WebBanHang.Models.FoodEditViewModel
+﻿@model  WebBanHang.Models.FoodEditViewModel
 
-<h2>Chỉnh sửa món ăn</h2>
+<h2>Thêm món ăn</h2>
 <hr />
 
 <div class="container">
-    @using (Html.BeginForm("Edit", "SanPhamAdmin", FormMethod.Post))
+    @using (Html.BeginForm("Edit", "SanPhamAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.Food.FoodId)
@@ -67,11 +67,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="ImageURL">Hình Ảnh:</label>
-                    @Html.TextBoxFor(model => model.Food.ImageURL, new { @class = "form-control validate", id = "ImageURL" })
-                    <img id="ImagePreview" src="@(!string.IsNullOrEmpty(Model.Food.ImageURL) ? Model.Food.ImageURL : "/Content/Images/no-image.png")"
-                         style="max-width: 100px; margin-top: 10px; display: block;" />
-                    <span class="text-danger error-message" id="error-ImageURL"></span>
+                    <label>Ảnh nguyên liệu</label>
+                    <input type="file" id="ImageFile" name="ImageFile" class="form-control" accept="image/*" onchange="showPreview(event)" />
+                    <img id="previewImage" src="@Url.Content(Model.Food?.ImageURL ?? "/images/no-image.png")"
+                         alt="Ảnh nguyên liệu" width="150" height="150"
+                         style="display:block; margin-top:10px;" />
+                    <span id="error-ImageURL" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
@@ -104,10 +105,17 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
+        function showPreview(event) {
+            let reader = new FileReader();
+            reader.onload = function () {
+                $("#previewImage").attr("src", reader.result).show();
+                $("#error-ImageURL").text("");
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
         $(document).ready(function () {
-            function isValidImageURL(url) {
-                return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp)|\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(url);
-            }
+            $(".select2").select2({ placeholder: "Chọn nguyên liệu" });
 
             function validateInput(id, errorMessage, condition) {
                 let value = $(id).val().trim();
@@ -141,36 +149,6 @@
                 validateInput("#Stock", "Số lượng tồn phải lớn hơn hoặc bằng 0.", v => v !== "" && parseInt(v) >= 0);
             });
 
-            $("#ImageURL").blur(function () {
-                validateInput("#ImageURL", "URL hình ảnh không hợp lệ.", v => isValidImageURL(v));
-            });
-
-            $("#ImageURL").on("input", function () {
-                let url = $(this).val();
-                if (isValidImageURL(url)) {
-                    $("#ImagePreview").attr("src", url);
-                } else {
-                    $("#ImagePreview").attr("src", "/Content/Images/no-image.png");
-                }
-            });
-
-            $("form").submit(function (event) {
-                let isValid = true;
-
-                $(".validate").each(function () {
-                    $(this).blur();
-                    if ($(this).hasClass("is-invalid")) {
-                        isValid = false;
-                    }
-                });
-
-                if (!isValid) {
-                    event.preventDefault();
-                }
-            });
-
-            $(".select2").select2({ placeholder: "Chọn nguyên liệu" });
-
             // Cập nhật giá giảm tự động
             function updateDiscountPrice() {
                 let price = parseFloat($("#Price").val()) || 0;
@@ -184,6 +162,53 @@
             });
 
             updateDiscountPrice(); // Cập nhật ngay khi trang tải xong
+            $("form").submit(function (event) {
+                event.preventDefault(); // Ngăn chặn reload trang
+
+                let formData = new FormData(this);
+
+                $.ajax({
+                    url: $(this).attr("action"),
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            window.location.href = "/Admin/SanPhamAdmin/Info"; // Chuyển về danh sách
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert("Lỗi kết nối!");
+                    }
+                });
+            });
+            // Kiểm tra khi submit form
+            $("form").submit(function (event) {
+                let isValid = true;
+
+                $(".validate").each(function () {
+                    $(this).blur();
+                    if ($(this).hasClass("is-invalid")) {
+                        isValid = false;
+                    }
+                });
+
+                let fileInput = $("#ImageFile")[0];
+                if (fileInput.files.length === 0 && $("#previewImage").attr("src").includes("no-image.png")) {
+                    $("#error-ImageURL").text("Vui lòng chọn một file ảnh.");
+                    isValid = false;
+                } else {
+                    $("#error-ImageURL").text("");
+                }
+
+                if (!isValid) {
+                    event.preventDefault();
+                }
+            });
         });
     </script>
 }

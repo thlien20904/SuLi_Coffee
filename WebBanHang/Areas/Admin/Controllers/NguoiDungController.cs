@@ -7,7 +7,7 @@ namespace WebBanHang.Areas.Admin.Controllers
 {
     public class NguoiDungController : Controller
     {
-        private WebAppDBEntities2 db = new WebAppDBEntities2();
+        private WebAppDBEntities3 db = new WebAppDBEntities3();
 
         // Hiển thị danh sách Users
         public ActionResult NguoiDung()
@@ -64,7 +64,6 @@ namespace WebBanHang.Areas.Admin.Controllers
             }
             return View(user);
         }
-
         // POST: Xử lý sửa User
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -86,9 +85,25 @@ namespace WebBanHang.Areas.Admin.Controllers
                     return View(user);
                 }
 
-                db.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("NguoiDung");
+                try
+                {
+                    db.Entry(user).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("NguoiDung");
+                }
+                catch (System.Data.Entity.Validation.DbEntityValidationException ex)
+                {
+                    foreach (var eve in ex.EntityValidationErrors)
+                    {
+                        Console.WriteLine($"Entity \"{eve.Entry.Entity.GetType().Name}\" có lỗi:");
+                        foreach (var ve in eve.ValidationErrors)
+                        {
+                            Console.WriteLine($"- Thuộc tính: {ve.PropertyName}, Lỗi: {ve.ErrorMessage}");
+                            ModelState.AddModelError(ve.PropertyName, ve.ErrorMessage);
+                        }
+                    }
+                    return View(user);
+                }
             }
             return View(user);
         }

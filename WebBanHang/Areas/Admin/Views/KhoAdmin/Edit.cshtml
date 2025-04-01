@@ -4,7 +4,7 @@
 <hr />
 
 <div class="container">
-    @using (Html.BeginForm("Edit", "KhoAdmin", FormMethod.Post))
+    @using (Html.BeginForm("Edit", "KhoAdmin", FormMethod.Post, new { enctype = "multipart/form-data" }))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.IngredientId)
@@ -38,11 +38,14 @@
 
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="ImageURL">Hình Ảnh:</label>
-                    @Html.TextBoxFor(model => model.ImageURL, new { @class = "form-control validate", id = "ImageURL" })
-                    <img id="ImagePreview" src="@(!string.IsNullOrEmpty(Model.ImageURL) ? Model.ImageURL : "/Content/Images/no-image.png")"
-                         style="max-width: 100px; margin-top: 10px; display: block;" />
-                    <span class="text-danger error-message" id="error-ImageURL"></span>
+                    <label>Ảnh nguyên liệu</label>
+                    <input type="file" id="ImageFile" name="ImageFile" class="form-control" accept="image/*" onchange="showPreview(event)" />
+
+                    <img id="previewImage" src="@Url.Content(Model.ImageURL ?? "~/images/no-image.png")"
+                         alt="Ảnh nguyên liệu" width="150" height="150"
+                         style="display:block; margin-top:10px;" />
+
+                    <span id="error-ImageURL" class="text-danger"></span>
                 </div>
 
                 <button type="submit" class="btn btn-primary mt-3">Lưu thay đổi</button>
@@ -54,72 +57,137 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+        var checkIngredientUrl = "@Html.Raw(Url.Action("CheckIngredientName", "KhoAdmin"))";
+
+        // Hiển thị ảnh khi chọn file
+        function showPreview(event) {
+            let reader = new FileReader();
+            reader.onload = function () {
+                $("#previewImage").attr("src", reader.result).show();
+                $("#error-ImageURL").text("");
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
         $(document).ready(function () {
-            // Hàm kiểm tra URL hình ảnh hợp lệ
-            function isValidImageURL(url) {
-                return /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp)|\/.*\.(?:png|jpg|jpeg|gif|webp))$/i.test(url);
-            }
-
-            // Hàm kiểm tra lỗi
-            function validateInput(id, errorMessage, condition) {
-                let value = $(id).val().trim();
-                if (condition(value)) {
-                    $(id).removeClass("is-invalid").addClass("is-valid");
-                    $(id + "-error").text("");
-                } else {
-                    $(id).removeClass("is-valid").addClass("is-invalid");
-                    $(id + "-error").text(errorMessage);
-                }
-            }
-
-            // Gán sự kiện `blur` để kiểm tra ngay khi nhập xong
+            // Kiểm tra input khi mất focus
             $("#IngredientName").blur(function () {
-                validateInput("#IngredientName", "Tên nguyên liệu không được để trống.", v => v !== "");
+                let name = $(this).val().trim();
+                if (name === "") {
+                    showError("#IngredientName", "Tên nguyên liệu không được để trống.");
+                } else {
+                    $.ajax({
+                        url: checkIngredientUrl,
+                        type: "POST",
+                        data: { name: name, id: @Html.Raw(Json.Encode(Model.IngredientId)) },
+                        success: function (response) {
+                            if (response.exists) {
+                                showError("#IngredientName", "Tên nguyên liệu đã tồn tại.");
+                            } else {
+                                hideError("#IngredientName");
+                            }
+                        },
+                        error: function () {
+                            console.error("Lỗi kết nối đến server.");
+                        }
+                    });
+                }
             });
 
             $("#SoLuong").blur(function () {
-                validateInput("#SoLuong", "Số lượng phải lớn hơn 0.", v => v !== "" && parseInt(v) > 0);
-            });
-
-            $("#PhanLoai").blur(function () {
-                validateInput("#PhanLoai", "Phân loại không được để trống.", v => v !== "");
-            });
-
-            $("#LastUpdated").blur(function () {
-                validateInput("#LastUpdated", "Bạn cần nhập ngày cập nhật.", v => v !== "");
-            });
-
-            $("#ImageURL").blur(function () {
-                validateInput("#ImageURL", "URL hình ảnh không hợp lệ. Đường dẫn phải có định dạng .png, .jpg, .jpeg, .gif, .webp",
-                    v => isValidImageURL(v));
-            });
-
-
-            // Xem trước hình ảnh khi nhập URL
-            $("#ImageURL").on("input", function () {
-                let url = $(this).val();
-                if (isValidImageURL(url)) {
-                    $("#ImagePreview").attr("src", url);
+                let value = parseInt($(this).val());
+                if (isNaN(value) || value <= 0) {
+                    showError("#SoLuong", "Số lượng phải lớn hơn 0.");
                 } else {
-                    $("#ImagePreview").attr("src", "/Content/Images/no-image.png");
+                    hideError("#SoLuong");
                 }
             });
 
-            // Kiểm tra tất cả khi nhấn submit
+            $("#PhanLoai").blur(function () {
+                if ($(this).val().trim() === "") {
+                    showError("#PhanLoai", "Phân loại không được để trống.");
+                } else {
+                    hideError("#PhanLoai");
+                }
+            });
+
+            $("#LastUpdated").blur(function () {
+                let now = new Date();
+                let selectedDate = new Date($(this).val());
+                if ($(this).val().trim() === "" || selectedDate > now) {
+                    showError("#LastUpdated", "Ngày cập nhật không hợp lệ hoặc lớn hơn hiện tại.");
+                } else {
+                    hideError("#LastUpdated");
+                }
+            });
+
+            // Kiểm tra trước khi submit form
             $("form").submit(function (event) {
                 let isValid = true;
 
-                $("#IngredientName, #SoLuong, #PhanLoai, #LastUpdated, #ImageURL").each(function () {
+                $("#IngredientName, #SoLuong, #PhanLoai, #LastUpdated").each(function () {
                     $(this).blur();
                     if ($(this).hasClass("is-invalid")) {
                         isValid = false;
                     }
                 });
 
+                let fileInput = $("#ImageFile")[0];
+                if (fileInput.files.length === 0) {
+                    showError("#error-ImageURL", "Vui lòng chọn một file ảnh.");
+                    isValid = false;
+                } else {
+                    let file = fileInput.files[0];
+                    let allowedExtensions = ["png", "jpg", "jpeg", "gif", "webp"];
+                    let fileExt = file.name.split('.').pop().toLowerCase();
+
+                    if (!allowedExtensions.includes(fileExt)) {
+                        showError("#error-ImageURL", "Chỉ chấp nhận file ảnh (.png, .jpg, .jpeg, .gif, .webp).");
+                        isValid = false;
+                    } else {
+                        hideError("#error-ImageURL");
+                    }
+                }
+
                 if (!isValid) {
                     event.preventDefault();
                 }
             });
         });
+        $("form").submit(function (event) {
+            event.preventDefault(); // Ngăn chặn reload trang
+
+            let formData = new FormData(this);
+
+            $.ajax({
+                url: $(this).attr("action"),
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    if (response.success) {
+                        alert(response.message);
+                        window.location.href = "/Admin/KhoAdmin/KhoAdmin"; // Chuyển về danh sách
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert("Lỗi kết nối!");
+                }
+            });
+        });
+        // Hiển thị lỗi
+        function showError(selector, message) {
+            $(selector).addClass("is-invalid");
+            $(selector).siblings(".error-message").text(message);
+        }
+
+        // Ẩn lỗi
+        function hideError(selector) {
+            $(selector).removeClass("is-invalid");
+            $(selector).siblings(".error-message").text("");
+        }
     </script>
 }

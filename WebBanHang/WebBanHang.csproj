@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" />
-  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -72,6 +71,9 @@
     </Reference>
     <Reference Include="Microsoft.Bcl.HashCode, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.HashCode.1.1.1\lib\net461\Microsoft.Bcl.HashCode.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="RBush, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -162,11 +164,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
-      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -188,6 +185,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\SanPhamController.cs" />
+    <Compile Include="Controllers\TaiKhoanController.cs" />
     <Compile Include="Controllers\ThethanhvienController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -271,29 +269,106 @@
     <Content Include="Content\SanPham.css" />
     <Content Include="Content\SanPhamAdmin.css" />
     <Content Include="Content\GT.css" />
+    <Content Include="Content\TaiKhoan.css" />
     <Content Include="Content\Thethanhvien.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="images\banh\banhgau.png" />
+    <Content Include="images\banh\banhmyvn.png" />
+    <Content Include="images\banh\bimbimngo.png" />
+    <Content Include="images\banh\bimbimsuadua.png" />
+    <Content Include="images\banh\Butter_croissant.png" />
+    <Content Include="images\banh\mochi_kemchocolate.png" />
+    <Content Include="images\banh\mochi_phucbt.png" />
+    <Content Include="images\banh\mochi_vietquat.png" />
+    <Content Include="images\banh\mousse_gauchoco.png" />
+    <Content Include="images\baocao.png" />
     <Content Include="images\cafe.png" />
     <Content Include="images\cafe1.png" />
     <Content Include="images\cafe2.png.png" />
     <Content Include="images\cafe3.png" />
     <Content Include="images\cafe4.png" />
+    <Content Include="images\Cafe\bacxiu.png" />
+    <Content Include="images\Cafe\bacxiulachanhnhan.png" />
+    <Content Include="images\Cafe\bacxiulacmuoi.png" />
+    <Content Include="images\Cafe\bacxiulacsua.png" />
+    <Content Include="images\Cafe\bacxiulsyenmach.png" />
+    <Content Include="images\Cafe\bac_xiu.png" />
+    <Content Include="images\Cafe\bo_arabica.png" />
+    <Content Include="images\Cafe\cafeden.png" />
+    <Content Include="images\Cafe\cafesuada.png" />
+    <Content Include="images\Cafe\cafesuanong.png" />
+    <Content Include="images\Cafe\duongdensuada.png" />
+    <Content Include="images\Cafe\loi_img.png" />
+    <Content Include="images\Cafe\traxanhespresso.png" />
+    <Content Include="images\Cafe\tst.png" />
+    <Content Include="images\close.png" />
+    <Content Include="images\donhang.png" />
+    <Content Include="images\donhangicon.png" />
     <Content Include="images\gt.png" />
     <Content Include="images\gt2.png" />
     <Content Include="images\gt3.png" />
     <Content Include="images\gt4.png" />
     <Content Include="images\gt5.png" />
     <Content Include="images\gt6png.jpg" />
+    <Content Include="images\history.png" />
+    <Content Include="images\home.png" />
+    <Content Include="images\icon\basil_add-solid.png" />
+    <Content Include="images\icon\câập nhật.png" />
+    <Content Include="images\icon\f7_lessthan-square-fill %282%29.png" />
+    <Content Include="images\icon\logo 1.png" />
+    <Content Include="images\icon\material-symbols_change-circle.png" />
+    <Content Include="images\icon\mdi_search.png" />
+    <Content Include="images\icon\previous.png" />
+    <Content Include="images\icon\typcn_delete %281%29.png" />
+    <Content Include="images\icon\typcn_delete.png" />
+    <Content Include="images\intronew.png" />
+    <Content Include="images\khohang.png" />
     <Content Include="images\logo.png" />
     <Content Include="images\logo1.png" />
+    <Content Include="images\lucide_x.png" />
+    <Content Include="images\menu.png" />
     <Content Include="images\nen.png" />
     <Content Include="images\nen1.png" />
     <Content Include="images\nen2.png" />
+    <Content Include="images\nen3.png" />
+    <Content Include="images\nen4.png" />
     <Content Include="images\nen5.png" />
     <Content Include="images\nen6.png" />
     <Content Include="images\nen7.png" />
+    <Content Include="images\nguyenlieu\banhgau.png" />
+    <Content Include="images\nguyenlieu\banhmy.png" />
+    <Content Include="images\nguyenlieu\bimbimngo.png" />
+    <Content Include="images\nguyenlieu\bimbimsuadua.png" />
+    <Content Include="images\nguyenlieu\bo.png" />
+    <Content Include="images\nguyenlieu\cam.png" />
+    <Content Include="images\nguyenlieu\caramel.png" />
+    <Content Include="images\nguyenlieu\choco_chip.png" />
+    <Content Include="images\nguyenlieu\coffee.png" />
+    <Content Include="images\nguyenlieu\dao.png" />
+    <Content Include="images\nguyenlieu\dau.png" />
+    <Content Include="images\nguyenlieu\duong.png" />
+    <Content Include="images\nguyenlieu\hanhnhan.png" />
+    <Content Include="images\nguyenlieu\hatsen.png" />
+    <Content Include="images\nguyenlieu\kem.png" />
+    <Content Include="images\nguyenlieu\matcha.png" />
+    <Content Include="images\nguyenlieu\mochi_kemchoco.png" />
+    <Content Include="images\nguyenlieu\mochi_kpbt.png" />
+    <Content Include="images\nguyenlieu\mochi_kvq.png" />
+    <Content Include="images\nguyenlieu\mousse_gau.png" />
+    <Content Include="images\nguyenlieu\muoi.png" />
+    <Content Include="images\nguyenlieu\sa.png" />
+    <Content Include="images\nguyenlieu\sua.png" />
+    <Content Include="images\nguyenlieu\suadac.png" />
+    <Content Include="images\nguyenlieu\suongsao.png" />
+    <Content Include="images\nguyenlieu\tao.png" />
+    <Content Include="images\nguyenlieu\tra.png" />
+    <Content Include="images\nguyenlieu\tranchau.png" />
+    <Content Include="images\nguyenlieu\vai.png" />
+    <Content Include="images\nguyenlieu\yenmach.png" />
+    <Content Include="images\nguyenlieu\yuzu.png" />
+    <Content Include="images\nhanvien.png" />
     <Content Include="images\noibat.png" />
     <Content Include="images\noibat1.png" />
     <Content Include="images\noibat2.png" />
@@ -306,7 +381,29 @@
     <Content Include="images\product6.png" />
     <Content Include="images\product7.png" />
     <Content Include="images\product8.png" />
+    <Content Include="images\Resources\basil_add-solid.png" />
+    <Content Include="images\Resources\material-symbols_change-circle.png" />
+    <Content Include="images\Resources\typcn_delete %281%29.png" />
     <Content Include="images\Screenshot 2025-03-18 205158.png" />
+    <Content Include="images\setting.png" />
+    <Content Include="images\trangchu-active.png" />
+    <Content Include="images\trangchu.png" />
+    <Content Include="images\trasua\hongtrasua.png" />
+    <Content Include="images\trasua\tradenmacchiato.png" />
+    <Content Include="images\trasua\tstcduongden.png" />
+    <Content Include="images\trasua\ts_olong.png" />
+    <Content Include="images\trasua\ts_olongss.png" />
+    <Content Include="images\trasua\ts_olongtqbo.png" />
+    <Content Include="images\ttc\dao_kombucha.png" />
+    <Content Include="images\ttc\olongtuquysen.png" />
+    <Content Include="images\ttc\tradaocamsa.png" />
+    <Content Include="images\ttc\travai.png" />
+    <Content Include="images\ttc\yuzu_kombucha.png" />
+    <Content Include="images\tudx\frosty_banhkemdau.png" />
+    <Content Include="images\tudx\frosty_caramel.png" />
+    <Content Include="images\tudx\frosty_cfduongden.png" />
+    <Content Include="images\tudx\frosty_choco.png" />
+    <Content Include="images\tudx\frosty_phin.png" />
     <Content Include="Models\Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>
@@ -331,13 +428,6 @@
     <Content Include="Areas\Admin\Views\SanPhamAdmin\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\SanPhamAdmin\Info.cshtml" />
     <Content Include="Areas\Admin\Views\SanPhamAdmin\Delete.cshtml" />
-    <EntityDeploy Include="Models\Model1.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
-    </Content>
     <Content Include="Areas\Admin\Views\Thanhtoan\ThanhToan.cshtml" />
     <Content Include="Areas\Admin\Views\DanhMucSP\DanhMucSP.cshtml" />
     <Content Include="Areas\Admin\Views\KhoAdmin\KhoAdmin.cshtml" />
@@ -368,6 +458,13 @@
     <Content Include="Areas\Admin\Views\NguoiDung\Add.cshtml" />
     <Content Include="Areas\Admin\Views\NguoiDung\Edit.cshtml" />
     <Content Include="Areas\Admin\Views\NguoiDung\Delete.cshtml" />
+    <EntityDeploy Include="Models\Model1.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\Model1.edmx.diagram">
+      <DependentUpon>Model1.edmx</DependentUpon>
+    </Content>
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -412,10 +509,12 @@
     <Content Include="Views\Forgot\Forgot.cshtml" />
     <Content Include="Views\Forgot\VerifyOTP.cshtml" />
     <Content Include="Views\Forgot\ResetPassword.cshtml" />
+    <Content Include="Views\TaiKhoan\TaiKhoan.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Views\FoodEditViewModel\" />
     <Folder Include="Views\SearchResultViewModel\" />
   </ItemGroup>
   <ItemGroup>
@@ -480,11 +579,12 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.1\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.5.1\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.1\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

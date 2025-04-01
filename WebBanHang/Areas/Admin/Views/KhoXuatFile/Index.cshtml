@@ -2,7 +2,9 @@
     ViewBag.Title = "Danh sách nguyên liệu";
 }
 
-<h2 class="title">Danh sách nguyên liệu</h2>
+<div class="category-header">
+    <h2 class="category-title">Danh sách nguyên liệu</h2>
+</div>
 <div class="export-container">
     <a href="@Url.Action("ExportToExcel", "KhoXuatFile")" class="btn btn-success">Xuất Excel</a>
 </div>
@@ -35,10 +37,55 @@
     </tbody>
 </table>
 <style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+     
+        padding: 8px;
+        text-align: left;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2 !important;
+    }
+
+    tr:nth-child(odd) {
+        background-color: white !important;
+    }
+
+    .custom-table tbody tr:nth-child(even) {
+        background-color: #f2f2f2 !important;
+    }
+
+    .custom-table tbody tr:nth-child(even) {
+        background-color: #f2f2f2 !important;
+    }
+
+    .custom-table tbody tr:nth-child(odd) {
+        background-color: white !important;
+    }
+
+    .category-header {
+        background-color: #ffff;
+        padding: 20px 30px;
+        border-radius: 0 25px 25px 0;
+        margin-bottom: 20px;
+    }
+
+    .category-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+    }
+
     .export-container {
         text-align: right; /* Căn phải */
         margin-bottom: 2px;
     }
+
     .custom-table {
         width: 100%;
         text-align: center;

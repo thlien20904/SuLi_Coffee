@@ -19,7 +19,6 @@ namespace WebBanHang.Models
         {
             this.FoodIngredients = new HashSet<FoodIngredient>();
             this.InvoiceDetails = new HashSet<InvoiceDetail>();
-            this.Ingredients = new HashSet<Ingredient>();
         }
     
         public int FoodId { get; set; }
@@ -27,11 +26,11 @@ namespace WebBanHang.Models
         public Nullable<int> CategoryId { get; set; }
         public Nullable<int> IngredientId { get; set; }
         public decimal Price { get; set; }
-        public string ImageURL { get; set; }
         public Nullable<decimal> Discount { get; set; }
         public Nullable<decimal> DiscountPrice { get; set; }
         public int Stock { get; set; }
         public string Description { get; set; }
+        public string ImageURL { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
         public Nullable<System.DateTime> UpdatedDate { get; set; }
         public Nullable<bool> Status { get; set; }
@@ -42,7 +41,5 @@ namespace WebBanHang.Models
         public virtual ICollection<FoodIngredient> FoodIngredients { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<InvoiceDetail> InvoiceDetails { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
     }
 }

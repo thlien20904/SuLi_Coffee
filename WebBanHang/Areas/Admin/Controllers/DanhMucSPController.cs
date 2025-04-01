@@ -9,7 +9,7 @@ namespace WebBanHang.Areas.Admin.Controllers
 {
     public class DanhMucSPController : Controller
     {
-        private WebAppDBEntities2 db = new WebAppDBEntities2();
+        private WebAppDBEntities3 db = new WebAppDBEntities3();
 
         // Hiển thị danh sách danh mục
         public ActionResult DanhMucSP()

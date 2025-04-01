@@ -18,13 +18,15 @@ namespace WebBanHang.Models
         public string Username { get; set; }
         public string Email { get; set; }
         public string PasswordHash { get; set; }
-        public string Role { get; set; }
         public string FullName { get; set; }
         public string Phone { get; set; }
         public string Address { get; set; }
+        public string Role { get; set; }
         public string OTPCode { get; set; }
         public Nullable<System.DateTime> OTPExpiry { get; set; }
         public string ResetToken { get; set; }
         public Nullable<System.DateTime> ResetTokenExpiry { get; set; }
+        public string AvatarUrl { get; set; }
+        public Nullable<System.DateTime> CreatedDate { get; set; }
     }
 }

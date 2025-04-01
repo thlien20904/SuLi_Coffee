@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>SuLi Coffee - Admin</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
@@ -12,165 +13,235 @@
     <link href="@Url.Content("~/Content/SanPhamAdmin.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/HomeAdmin.css")" rel="stylesheet" />
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Playfair Display', serif;
-            background-color: #f8f9fa;
-        }
-
-        .sidebar {
-            width: 250px;
-            height: 100vh;
-            position: fixed;
-            left: 0;
-            top: 0;
-            background-color: #ffffff;
-            color: #333;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            z-index: 999;
-        }
-
-            .sidebar .logo {
-                font-family: 'Great Vibes', cursive;
-                font-size: 28px;
-                padding: 20px;
-                text-align: center;
-                border-bottom: 1px solid #e0e0e0;
-                color: #333;
-            }
-
-            .sidebar ul {
-                list-style: none;
-                padding-left: 0;
-                margin: 0;
-            }
-
-                .sidebar ul li {
-                    padding: 12px 20px;
-                    cursor: pointer;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    color: #333;
-                    transition: background 0.2s ease;
+                body {
+                    margin: 0;
+                    padding: 0;
+                    font-family: 'Playfair Display', serif;
+                    background-color: #f8f9fa;
                 }
+
+                      .sidebar {
+                        width: 250px;
+                        height: 100vh;
+                        position: fixed;
+                        left: 0;
+                        top: 0;
+                        background-color: #ffffff;
+                        color: #333;
+                        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+                        z-index: 999;
+                        transition: all 0.3s ease-in-out;
+                    }
+
+                    /* LOGO */
+                    .sidebar .logo {
+                        font-family: 'Great Vibes', cursive;
+                        font-size: 28px;
+                        padding: 20px;
+                        text-align: center;
+                        border-bottom: 1px solid #e0e0e0;
+                        color: #333;
+                        background: #f8f9fa;
+                    }
+
+                    /* DANH SÁCH MENU */
+                    .sidebar ul {
+                        list-style: none;
+                        padding: 0;
+                        margin: 0;
+                    }
+
+                    .sidebar ul li {
+                        padding: 12px 20px;
+                        cursor: pointer;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        color: #333;
+                        transition: background 0.3s ease-in-out;
+                        font-size: 16px;
+                        font-weight: 500;
+                    }
 
                     .sidebar ul li:hover {
                         background-color: #f0f0f0;
+                        color: #28a745;
                     }
 
+                    /* ICON MŨI TÊN XOAY KHI MỞ MENU CON */
                     .sidebar ul li i {
-                        transition: transform 0.3s ease;
+                        transition: transform 0.3s ease-in-out;
                     }
 
                     .sidebar ul li.active > i {
                         transform: rotate(90deg);
                     }
 
+                    /* SUBMENU */
+                    .submenu {
+                        display: none;
+                        padding-left: 10px;
+                        margin-top: 5px;
+                        border-left: 3px solid #28a745;
+                        padding-left: 15px;
+                    }
+
+                    .submenu.show {
+                        display: block;
+                        animation: fadeIn 0.3s ease-in-out;
+                    }
+
+                    .submenu p a {
+                        display: block;
+                        color: #666;
+                        text-decoration: none;
+                        padding: 10px 0;
+                        padding-left: 10px;
+                        transition: all 0.3s ease;
+                        border-radius: 6px;
+                        font-size: 15px;
+                    }
+
+                    .submenu p a:hover {
+                        color: #28a745 !important;
+                        background-color: rgba(40, 167, 69, 0.1);
+                        padding-left: 15px;
+                    }
+
+        /* SUBMENU */
         .submenu {
             display: none;
-            padding-left: 0;
+            padding-left: 10px;
             margin-top: 5px;
+            border-left: 3px solid #28a745;
+            padding-left: 15px;
+            opacity: 0;
+            transform: translateY(-5px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
 
-            .submenu.show {
-                display: block;
+        /* Khi submenu mở */
+        .submenu.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .sidebar ul li.active {
+            background-color: #c8c8c8 !important; /* Màu xanh lá cây */
+            color: white !important;
+            border-radius: 5px;
+        }
+
+            .sidebar ul li.active a {
+                color: white !important;
             }
 
-            .submenu p a {
-                padding: 8px 0;
-                display: block;
-                color: #666;
-                text-decoration: none;
-                padding-left: 40px;
-                transition: all 0.3s ease;
-                border-radius: 6px;
-            }
 
-                .submenu p a:hover {
-                    color: #28a745 !important;
-                    background-color: rgba(40, 167, 69, 0.1);
+                .main-wrapper {
+                    margin-left: 250px;
+                    min-height: 100vh;
+                    display: flex;
+                    flex-direction: column;
                 }
 
-        .main-wrapper {
-            margin-left: 250px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
+                .content {
+                    flex: 1;
+                    padding: 20px;
+                }
 
-        .content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        footer {
-            padding: 15px 20px;
-            background-color: #ffffff;
-            border-top: 1px solid #e0e0e0;
-            text-align: center;
-            color: #333;
-            font-size: 14px;
-        }
+                footer {
+                    padding: 15px 20px;
+                    background-color: #ffffff;
+                    border-top: 1px solid #e0e0e0;
+                    text-align: center;
+                    color: #333;
+                    font-size: 14px;
+                }
 
 
-        .navbar {
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            position: sticky;
-            top: 0;
-            background-color: #6874ec !important;
-            color: white;
-            height: 84px !important; /* Ép chiều cao luôn cố định */
-            min-height: 84px !important;
-            display: flex;
-            align-items: center;
-            flex-shrink: 0; /* Ngăn thu nhỏ */
-        }
-            .navbar .dropdown-menu {
-                position: absolute !important;
-                top: 100% !important;
-                visibility: visible !important;
-                opacity: 1 !important;
-            }
+                .navbar {
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                    z-index: 1000;
+                    position: sticky;
+                    top: 0;
+                    background-color: #6874ec !important;
+                    color: white;
+                    height: 84px !important; /* Ép chiều cao luôn cố định */
+                    min-height: 84px !important;
+                    display: flex;
+                    align-items: center;
+                    flex-shrink: 0; /* Ngăn thu nhỏ */
+                }
 
-        .input-group .form-control {
-            border-radius: 25px 0 0 25px;
-            padding-left: 15px;
-        }
+                    .navbar .dropdown-menu {
+                        position: absolute !important;
+                        top: 100% !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                    }
 
-        .input-group .btn-light {
-            border-radius: 0 25px 25px 0;
-        }
+                .input-group .form-control {
+                    border-radius: 25px 0 0 25px;
+                    padding-left: 15px;
+                }
 
-        .navbar .nav-link {
-            font-size: 18px;
-            color: #fff !important;
-        }
+                .input-group .btn-light {
+                    border-radius: 0 25px 25px 0;
+                }
 
-        .navbar .dropdown-menu {
-            min-width: 180px;
-        }
+                .navbar .nav-link {
+                    font-size: 18px;
+                    color: #fff !important;
+                }
 
-        .navbar .form-inline {
-            margin-left: 20px;
-        }
+                .navbar .dropdown-menu {
+                    min-width: 180px;
+                }
 
-        .sidebar, .sidebar a, .content, .content table, .content h1, .content h2, .content p, .content td, .content th, .content button {
-            color: #000 !important;
-        }
-        .input-group select.form-select {
-            border-radius: 25px 0 0 25px;
-        }
+                .navbar .form-inline {
+                    margin-left: 20px;
+                }
 
-        .input-group input.form-control {
-            border-radius: 0;
-        }
+                .sidebar, .sidebar a, .content, .content table, .content h1, .content h2, .content p, .content td, .content th, .content button {
+                    color: #000 !important;
+                }
 
-        .input-group .btn-light {
-            border-radius: 0 25px 25px 0;
-        }
+                .input-group select.form-select {
+                    border-radius: 25px 0 0 25px;
+                }
+
+                .input-group input.form-control {
+                    border-radius: 0;
+                }
+
+                .input-group .btn-light {
+                    border-radius: 0 25px 25px 0;
+                }
+                .scroll-buttons {
+                    position: fixed;
+                    right: 20px;
+                    bottom: 50px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
+                    z-index: 999;
+                }
+
+                    .scroll-buttons button {
+                        width: 50px;
+                        height: 50px;
+                        background-color: #6874ec;
+                        border: none;
+                        border-radius: 50%;
+                        color: white;
+                        font-size: 20px;
+                        cursor: pointer;
+                        transition: background 0.3s ease-in-out;
+                    }
+
+                        .scroll-buttons button:hover {
+                            background-color: #4751c3;
+                        }
 
     </style>
 
@@ -185,7 +256,7 @@
         </div>
         <ul>
             <!-- Sản phẩm -->
-            <li onclick="toggleMenu('product', event)">
+            <li onclick="toggleMenu('product', event)" class="@(Request.Url.AbsolutePath.Contains("SanPhamAdmin") || Request.Url.AbsolutePath.Contains("DanhMucSP") ? "active" : "")">
                 <span>Sản phẩm</span>
                 <i class="fas fa-chevron-right"></i>
             </li>
@@ -195,7 +266,7 @@
             </div>
 
             <!-- Kho nguyên liệu -->
-            <li onclick="toggleMenu('kho', event)">
+            <li onclick="toggleMenu('kho', event)" class="@(Request.Url.AbsolutePath.Contains("KhoAdmin") || Request.Url.AbsolutePath.Contains("KhoXuatFile") ? "active" : "")">
                 <span>Kho nguyên liệu</span>
                 <i class="fas fa-chevron-right"></i>
             </li>
@@ -205,7 +276,7 @@
             </div>
 
             <!-- Báo cáo -->
-            <li onclick="toggleMenu('baocao', event)">
+            <li onclick="toggleMenu('baocao', event)" class="@(Request.Url.AbsolutePath.Contains("BaoCao") ? "active" : "")">
                 <span>Báo cáo</span>
                 <i class="fas fa-chevron-right"></i>
             </li>
@@ -216,7 +287,7 @@
             </div>
 
             <!-- Quản lý shop -->
-            <li onclick="toggleMenu('manageshop', event)">
+            <li onclick="toggleMenu('manageshop', event)" class="@(Request.Url.AbsolutePath.Contains("NguoiDung") || Request.Url.AbsolutePath.Contains("NhanVien") ? "active" : "")">
                 <span>Manage Shop</span>
                 <i class="fas fa-chevron-right"></i>
             </li>
@@ -226,11 +297,17 @@
             </div>
 
             <!-- Các menu khác không cần toggle -->
-            <li><a href="@Url.Action("Index", "DonHang", new { area = "Admin" })">Đơn hàng</a></li>
-            <li><a href="@Url.Action("ThanhToan", "ThanhToan", new { area = "Admin" })">Thanh toán</a></li>
+            <li class="@(Request.Url.AbsolutePath.Contains("DonHang") ? "active" : "")">
+                <a href="@Url.Action("Index", "DonHang", new { area = "Admin" })">Đơn hàng</a>
+            </li>
+            <li class="@(Request.Url.AbsolutePath.Contains("ThanhToan") ? "active" : "")">
+                <a href="@Url.Action("ThanhToan", "ThanhToan", new { area = "Admin" })">Thanh toán</a>
+            </li>
             <li><a href="@Url.Action("Logout", "Login")">Đăng xuất</a></li>
         </ul>
+
     </div>
+
 
     <div class="main-wrapper">
         <!-- Navbar -->
@@ -287,6 +364,11 @@
         <div class="content">
             @RenderBody()
         </div>
+        <!-- Nút điều hướng lên đầu và xuống cuối trang -->
+        <div class="scroll-buttons">
+            <button id="scrollToTop"><i class="fas fa-arrow-up"></i></button>
+            <button id="scrollToBottom"><i class="fas fa-arrow-down"></i></button>
+        </div>
 
         <!-- Footer -->
         <footer>
@@ -321,6 +403,27 @@
                 performGlobalSearch();
             }
         });
+        document.getElementById("scrollToTop").addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        document.getElementById("scrollToBottom").addEventListener("click", function () {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+        });
+        function toggleMenu(menuId, event) {
+            event.stopPropagation();
+            let submenu = document.getElementById("submenu-" + menuId).parentElement;
+            submenu.classList.toggle("active");
+        }
+        document.addEventListener("click", function (event) {
+            const toggleMenus = document.querySelectorAll(".toggleMenu");
+            toggleMenus.forEach((menu) => {
+                if (!menu.contains(event.target)) {
+                    menu.classList.remove("open"); // Đóng menu khi click bên ngoài
+                }
+            });
+        });
+
 
         // Xử lý tìm kiếm
         function performGlobalSearch() {
@@ -356,6 +459,7 @@
         });
     });
     </script>
+
 
     @RenderSection("Scripts", required: false)
 </body>

@@ -7,11 +7,120 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="@Url.Content("~/Content/GT.css")" rel="stylesheet" />
-    <link href="@Url.Content("~/Content/Lienhe.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/Thethanhvien.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/GT.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/Lienhe.css")" rel="stylesheet" />
     @RenderSection("Styles", required: false)
+    <style>
+
+        .scroll-buttons {
+            position: fixed;
+            right: 20px;
+            bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 999;
+        }
+
+            .scroll-buttons button {
+                width: 50px;
+                height: 50px;
+                background-color: #eceaea;
+                border: none;
+                border-radius: 50%;
+                color: white;
+                font-size: 20px;
+                cursor: pointer;
+                transition: background 0.3s ease-in-out;
+            }
+
+                .scroll-buttons button:hover {
+                    background-color: #a29d9d;
+                }
+        /* Đổi màu icon thành trắng */
+        .dropdown-toggle i {
+            color: white;
+        }
+
+        /* Bỏ nền trắng của dropdown */
+        .dropdown-menu {
+            background-color: transparent; /* Nền trong suốt */
+            box-shadow: none; /* Bỏ đổ bóng */
+            padding: 10px;
+            min-width: 150px;
+            z-index: 999;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+            /* Chỉnh màu chữ và bỏ gạch chân */
+            .dropdown-menu a {
+                display: block;
+                padding: 8px 12px;
+                color: white; /* Chữ màu trắng */
+                text-decoration: none; /* Bỏ gạch chân */
+                border-radius: 5px;
+            }
+
+                /* Hiệu ứng hover */
+                .dropdown-menu a:hover {
+                    background-color: rgba(255, 255, 255, 0.2); /* Hiệu ứng hover nhẹ */
+                    color: #fff;
+                }
+
+        .logo-middle {
+            white-space: nowrap; /* Ngăn chữ xuống dòng */
+            font-family: 'Great Vibes', cursive;
+            font-size: 32px;
+            color: white; /* Màu mặc định */
+            transition: color 0.3s ease-in-out;
+        }
+
+            .logo-middle:hover {
+                text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+                color: #eceaea;
+            }
+
+        /* Đảm bảo chữ ở header không bị xuống dòng và căn giữa */
+        .nav ul {
+            display: flex;
+            gap: 20px; /* Khoảng cách giữa các mục */
+            white-space: nowrap; /* Ngăn chữ xuống dòng */
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Định dạng chữ màu trắng và hiệu ứng hover */
+        .nav a {
+            color: white !important; /* Màu trắng */
+            font-weight: bold;
+            text-decoration: none !important;
+            padding: 10px 15px; /* Thêm padding cho dễ bấm */
+            transition: color 0.3s ease-in-out;
+        }
+
+            .nav a:hover {
+                color: #c4a48c !important; /* Màu hover */
+            }
+
+
+        .dropdown-toggle.logged-in {
+            color: white;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background-color: transparent;
+            padding: 10px 0;
+        }
+    </style>
+
 </head>
 <body>
     <header class="header d-flex align-items-center">
@@ -37,14 +146,6 @@
             <nav class="nav">
                 <ul class="d-flex list-unstyled mb-0">
                     <li><a href="@Url.Action("Home", "Home")">Trang chủ</a></li>
-                    @*@if (Session["Role"] != null && Session["Role"].ToString() == "Admin")
-                        {
-                            <li><a href="@Url.Action("Index", "SanPhamAdmin", new { area = "Admin" })">Sản phẩm (Admin)</a></li>
-                        }
-                        else
-                        {
-                            <li><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></li>
-                        }*@
                     <li><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></li>
                     <li><a href="@Url.Action("Index", "GT")">Giới thiệu</a></li>
                     <li><a href="@Url.Action("Index", "Lienhe")">Liên hệ</a></li>
@@ -62,16 +163,15 @@
                         }
                         else
                         {
-                            <div class="dropdown-toggle">
+                            <div class="dropdown-toggle logged-in">
                                 <i class="fas fa-user"></i> @Session["Username"]
                             </div>
                             <div class="dropdown-menu">
-                                @*<a href="@Url.Action("TaiKhoan", "ThongTinTk")">Tài khoản</a>*@
+                                <a href="@Url.Action("TaiKhoan", "TaiKhoan")">Tài khoản</a>
                                 <a href="@Url.Action("Logout", "Login", new { area = "" })">Đăng xuất</a>
-
                             </div>
-
                         }
+
                     </li>
                 </ul>
             </nav>
@@ -139,6 +239,11 @@
 
             </div>
         </div>
+                <!-- Nút điều hướng lên đầu và xuống cuối trang -->
+        <div class="scroll-buttons">
+            <button id="scrollToTop"><i class="fas fa-arrow-up"></i></button>
+            <button id="scrollToBottom"><i class="fas fa-arrow-down"></i></button>
+        </div>
 
         <!-- Bản quyền -->
         <div class="text-center" style="border-top: 1px solid white; padding-top: 40px; margin-top: 5px;">
@@ -148,16 +253,17 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    @RenderSection("scripts", required: false)
-    <div class="back-to-top" id="backToTop">
-        <i class="fas fa-chevron-up"></i>
-        <div>Lên đầu trang</div>
-    </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
+             document.getElementById("scrollToTop").addEventListener("click", function () {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+
+        document.getElementById("scrollToBottom").addEventListener("click", function () {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+        });
         // Hover dropdown effect
         $('.dropdown').hover(function () {
             $(this).find('.dropdown-menu').stop(true, true).slideDown(200);

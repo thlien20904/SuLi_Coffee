@@ -5,6 +5,6 @@ namespace WebBanHang.Models
     public class FoodEditViewModel
     {
         public Food Food { get; set; }
-        public List<int> SelectedIngredientIds { get; set; } = new List<int>(); // Khởi tạo danh sách
+        public List<int> SelectedIngredientIds { get; set; } = new List<int>();
     }
 }

@@ -4,30 +4,29 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="e57e11bf503b4d7894138e0224ab72ed" Name="Diagram1" ZoomLevel="79">
-        <EntityTypeShape EntityType="WebAppDBModel.User" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="WebAppDBModel.Account" Width="1.5" PointX="10.375" PointY="1.375" />
-        <EntityTypeShape EntityType="WebAppDBModel.AccRole" Width="1.5" PointX="10.375" PointY="5.625" />
-        <EntityTypeShape EntityType="WebAppDBModel.Category" Width="1.5" PointX="3.375" PointY="4.375" />
-        <EntityTypeShape EntityType="WebAppDBModel.Food" Width="1.5" PointX="5.625" PointY="6.75" />
-        <EntityTypeShape EntityType="WebAppDBModel.FoodIngredient" Width="1.5" PointX="7.875" PointY="7.125" />
-        <EntityTypeShape EntityType="WebAppDBModel.Ingredient" Width="1.5" PointX="3.375" PointY="6.875" />
-        <EntityTypeShape EntityType="WebAppDBModel.Invoice" Width="1.5" PointX="5.625" PointY="14" />
-        <EntityTypeShape EntityType="WebAppDBModel.InvoiceDetail" Width="1.5" PointX="7.875" PointY="4" />
-        <EntityTypeShape EntityType="WebAppDBModel.Staff" Width="1.5" PointX="12.625" PointY="1" />
-        <EntityTypeShape EntityType="WebAppDBModel.TableFood" Width="1.5" PointX="3.375" PointY="14.375" />
-        <EntityTypeShape EntityType="WebAppDBModel.Warehouse" Width="1.5" PointX="5.625" PointY="10.875" />
-        <AssociationConnector Association="WebAppDBModel.FK__Staff__AccountId__32AB8735" />
-        <AssociationConnector Association="WebAppDBModel.FK__Staff__RoleId__339FAB6E" />
-        <AssociationConnector Association="WebAppDBModel.FK__Food__CategoryId__2645B050" />
-        <AssociationConnector Association="WebAppDBModel.FK__Food__Ingredient__2739D489" />
-        <AssociationConnector Association="WebAppDBModel.FK__FoodIngre__FoodI__3B40CD36" />
-        <AssociationConnector Association="WebAppDBModel.FK__InvoiceDe__FoodI__2FCF1A8A" />
-        <AssociationConnector Association="WebAppDBModel.FK__FoodIngre__Ingre__3C34F16F" />
-        <AssociationConnector Association="WebAppDBModel.FK__Warehouse__Ingre__3864608B" />
-        <AssociationConnector Association="WebAppDBModel.FK__Invoice__TableId__2B0A656D" />
-        <AssociationConnector Association="WebAppDBModel.FK__InvoiceDe__Invoi__2EDAF651" />
-        <AssociationConnector Association="WebAppDBModel.Food_Ingredient" />
+      <Diagram DiagramId="7e0ab7e0f09c41ce83c688ad6ab01b1c" Name="Diagram1" ZoomLevel="55">
+        <EntityTypeShape EntityType="WebAppDBModel.Account" Width="1.5" PointX="7.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.AccRole" Width="1.5" PointX="7.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.Category" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.Food" Width="1.5" PointX="3" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.FoodIngredient" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.Ingredient" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.Invoice" Width="1.5" PointX="3" PointY="12" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.InvoiceDetail" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.Staff" Width="1.5" PointX="10" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.TableFood" Width="1.5" PointX="0.75" PointY="12.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.User" Width="1.5" PointX="5.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="WebAppDBModel.Warehouse" Width="1.5" PointX="3" PointY="9.25" IsExpanded="true" />
+        <AssociationConnector Association="WebAppDBModel.FK__Staff__AccountId__2A6B46EF" ManuallyRouted="false" />
+        <AssociationConnector Association="WebAppDBModel.FK__Staff__RoleId__2B5F6B28" ManuallyRouted="false" />
+        <AssociationConnector Association="WebAppDBModel.FK__Food__CategoryId__1E05700A" ManuallyRouted="false" />
+        <AssociationConnector Association="WebAppDBModel.FK__Food__Ingredient__1EF99443" ManuallyRouted="false" />
+        <AssociationConnector Association="WebAppDBModel.FK__FoodIngre__FoodI__33008CF0" ManuallyRouted="false" />
+        <AssociationConnector Association="WebAppDBModel.FK__InvoiceDe__FoodI__278EDA44" ManuallyRouted="false" />
+        <AssociationConnector Association="WebAppDBModel.FK__FoodIngre__Ingre__33F4B129" ManuallyRouted="false" />
+        <AssociationConnector Association="WebAppDBModel.FK__Warehouse__Ingre__30242045" ManuallyRouted="false" />
+        <AssociationConnector Association="WebAppDBModel.FK__Invoice__TableId__22CA2527" ManuallyRouted="false" />
+        <AssociationConnector Association="WebAppDBModel.FK__InvoiceDe__Invoi__269AB60B" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

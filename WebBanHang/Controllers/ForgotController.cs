@@ -10,7 +10,7 @@ namespace WebBanHang.Controllers
 {
     public class ForgotController : Controller
     {
-        private WebAppDBEntities2 db = new WebAppDBEntities2();
+        private WebAppDBEntities3 db = new WebAppDBEntities3();
 
         // 1. Nhập Email hoặc Phone
         [HttpGet]

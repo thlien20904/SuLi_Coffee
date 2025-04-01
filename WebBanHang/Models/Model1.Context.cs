@@ -13,10 +13,10 @@ namespace WebBanHang.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class WebAppDBEntities2 : DbContext
+    public partial class WebAppDBEntities3 : DbContext
     {
-        public WebAppDBEntities2()
-            : base("name=WebAppDBEntities2")
+        public WebAppDBEntities3()
+            : base("name=WebAppDBEntities3")
         {
         }
     
@@ -25,7 +25,6 @@ namespace WebBanHang.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Account> Accounts { get; set; }
         public virtual DbSet<AccRole> AccRoles { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
@@ -36,6 +35,7 @@ namespace WebBanHang.Models
         public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<TableFood> TableFoods { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
     }
 }

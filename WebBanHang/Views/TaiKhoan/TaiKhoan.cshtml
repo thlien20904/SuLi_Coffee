@@ -1,0 +1,216 @@
+﻿@model WebBanHang.Models.User
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="@Url.Content("~/Content/TaiKhoan.css")" rel="stylesheet" />
+
+<!-- Banner Section with Bootstrap Carousel -->
+<section class="banner">
+    <div id="carouselBanner" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd6.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselBanner" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselBanner" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<div class="profile-wrapper">
+    <div class="profile-container">
+        <!-- Cột bên trái -->
+        <div class="profile-sidebar">
+            <div class="profile-header">
+                <img src="@Model.AvatarUrl" alt="Avatar">
+                <div class="profile-info">
+                    <h5>@Model.Username</h5>
+                    <p>@Model.CreatedDate</p>
+                </div>
+            </div>
+           
+            <ul class="profile-menu">
+                <li><a href="#">📦 Orders List</a></li>
+                <li><a href="#" class="text-danger">⚙ Profile Settings</a></li>
+                <li><a href="#">🎁 My Vouchers</a></li>
+                <li><a href="#">🔔 Notifications</a></li>
+                <li><a href="#">❓ Help</a></li>
+            </ul>
+        </div>
+
+        <!-- Cột bên phải -->
+        <div class="profile-content">
+            <h4>My Profile</h4>
+            <form id="profile-form">
+                <label>Username</label>
+                <input type="text" id="username" value="@Model.Username">
+                <span id="username-error" class="text-danger"></span>
+
+                <label>Name</label>
+                <input type="text" id="fullname" value="@Model.FullName">
+                <span id="fullname-error" class="text-danger"></span>
+
+                <label>Email</label>
+                <input type="email" id="email" value="@Model.Email">
+                <span id="email-error" class="text-danger"></span>
+
+                <label>Phone Number</label>
+                <input type="text" id="phone" value="@Model.Phone">
+                <span id="phone-error" class="text-danger"></span>
+
+                <label>Address</label>
+                <textarea rows="2" id="address">@Model.Address</textarea>
+                <span id="address-error" class="text-danger"></span>
+
+                <button type="submit">Update Profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            function validateField(input, errorElement, pattern, message) {
+                input.addEventListener('blur', function () {
+                    if (!pattern.test(input.value.trim())) {
+                        errorElement.textContent = message;
+                    } else {
+                        errorElement.textContent = "";
+                    }
+                });
+            }
+
+            validateField(
+                document.getElementById('username'),
+                document.getElementById('username-error'),
+                /^[a-zA-Z0-9]{3,20}$/,
+                "Username phải từ 3-20 ký tự, chỉ chứa chữ và số."
+            );
+
+            validateField(
+                document.getElementById('fullname'),
+                document.getElementById('fullname-error'),
+                /\S+/,
+                "Vui lòng nhập họ tên."
+            );
+
+            validateField(
+                document.getElementById('email'),
+                document.getElementById('email-error'),
+                /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                "Email không hợp lệ."
+            );
+
+            validateField(
+                document.getElementById('phone'),
+                document.getElementById('phone-error'),
+                /^(0[3|5|7|8|9])[0-9]{8}$/,
+                "Số điện thoại không hợp lệ!"
+            );
+
+            validateField(
+                document.getElementById('address'),
+                document.getElementById('address-error'),
+                /\S+/,
+                "Vui lòng nhập địa chỉ."
+            );
+
+            document.getElementById('profile-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                let id = @Model.Id;
+                let username = document.getElementById('username').value.trim();
+                let fullName = document.getElementById('fullname').value.trim();
+                let email = document.getElementById('email').value.trim();
+                let phone = document.getElementById('phone').value.trim();
+                let address = document.getElementById('address').value.trim();
+
+                let updates = [
+                    { field: "Username", value: username },
+                    { field: "FullName", value: fullName },
+                    { field: "Email", value: email },
+                    { field: "Phone", value: phone },
+                    { field: "Address", value: address }
+                ];
+
+                let hasError = false;
+                document.querySelectorAll('span.text-danger').forEach(function (error) {
+                    if (error.textContent !== "") hasError = true;
+                });
+
+                if (hasError) {
+                    alert("Vui lòng nhập đúng thông tin trước khi cập nhật!");
+                    return;
+                }
+
+                console.log("Dữ liệu gửi đi:", updates);
+
+                // Tách riêng request cho Username
+                let usernameUpdate = updates.find(update => update.field === "Username");
+                let otherUpdates = updates.filter(update => update.field !== "Username");
+
+                // Kiểm tra xem Username có thay đổi không
+                let originalUsername = '@Model.Username'; // Lấy Username ban đầu từ Model
+                if (usernameUpdate.value !== originalUsername) {
+                    // Gửi request cho Username trước
+                    $.ajax({
+                        url: '@Url.Action("UpdateUser", "TaiKhoan")',
+                        type: 'POST',
+                        data: { id: id, field: usernameUpdate.field, value: usernameUpdate.value },
+                        success: function (response) {
+                            console.log(`Phản hồi từ ${usernameUpdate.field}:`, response);
+                            if (response.success) {
+                                alert("Username đã được cập nhật. Vui lòng đăng nhập lại!");
+                                window.location.href = '@Url.Action("Login", "Login")'; // Chuyển hướng đến trang đăng nhập
+                            } else {
+                                alert("Cập nhật Username thất bại: " + response.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(`Lỗi khi gửi ${usernameUpdate.field}:`, error);
+                            alert("Có lỗi xảy ra khi cập nhật Username!");
+                        }
+                    });
+                } else {
+                    // Nếu Username không thay đổi, gửi các request còn lại
+                    let ajaxRequests = otherUpdates.map(update => {
+                        return $.ajax({
+                            url: '@Url.Action("UpdateUser", "TaiKhoan")',
+                            type: 'POST',
+                            data: { id: id, field: update.field, value: update.value },
+                            success: function (response) {
+                                console.log(`Phản hồi từ ${update.field}:`, response);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(`Lỗi khi gửi ${update.field}:`, error);
+                            }
+                        });
+                    });
+
+                    Promise.all(ajaxRequests).then((responses) => {
+                        let allSuccess = responses.every(r => r.success);
+                        if (allSuccess) {
+                            alert("Cập nhật thành công!");
+                            location.reload();
+                        } else {
+                            let errorMessages = responses.filter(r => !r.success).map(r => r.message).join("\n");
+                            alert("Cập nhật thất bại:\n" + errorMessages);
+                        }
+                    }).catch((error) => {
+                        console.error("Lỗi Promise:", error);
+                        alert("Có lỗi xảy ra khi cập nhật!");
+                    });
+                }
+            });
+        });
+    </script>
+}

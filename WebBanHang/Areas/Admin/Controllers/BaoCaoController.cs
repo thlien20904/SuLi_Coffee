@@ -10,7 +10,7 @@ namespace WebBanHang.Areas.Admin.Controllers
 {
     public class BaoCaoController : Controller
     {
-        private WebAppDBEntities2 db = new WebAppDBEntities2();
+        private WebAppDBEntities3 db = new WebAppDBEntities3();
 
         // 🏆 Hiển thị trang tổng hợp báo cáo
         public ActionResult BaoCao()
@@ -70,11 +70,9 @@ namespace WebBanHang.Areas.Admin.Controllers
             ViewBag.TongDoanhThu = tongDoanhThu;
             return View();
         }
-
-        // 🔥 Hiển thị Mặt Hàng Bán Chạy Nhất
         public ActionResult BanChay()
         {
-            var matHangBanChay = db.InvoiceDetails
+            var bestSellers = db.InvoiceDetails
                 .GroupBy(d => d.FoodId)
                 .Select(g => new
                 {
@@ -82,10 +80,10 @@ namespace WebBanHang.Areas.Admin.Controllers
                     TotalSold = g.Sum(d => d.SoLuong)
                 })
                 .OrderByDescending(g => g.TotalSold)
-                .Take(5)
+                .Take(8) // Giới hạn 8 sản phẩm bán chạy
                 .ToList();
 
-            var danhSachBanChay = matHangBanChay
+            var danhSachBanChay = bestSellers
                 .Join(db.Foods,
                       d => d.FoodId,
                       f => f.FoodId,
@@ -99,8 +97,18 @@ namespace WebBanHang.Areas.Admin.Controllers
                       })
                 .ToList();
 
-            return View(danhSachBanChay); // ✅ Truyền model trực tiếp
+            if (danhSachBanChay.Any())
+            {
+                return View(danhSachBanChay);
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Không có sản phẩm bán chạy.";
+                return View(new List<WebBanHang.Models.BanChayModel>()); // Trả về danh sách rỗng nhưng không null
+            }
         }
+
+
         public ActionResult ExportToExcel()
         {
             var matHangBanChay = db.InvoiceDetails
