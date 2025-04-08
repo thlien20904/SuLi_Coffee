@@ -20,7 +20,7 @@ CREATE TABLE Users (
     AvatarUrl NVARCHAR(255) NULL, 
     CreatedDate DATETIME DEFAULT GETDATE()
 );
---select *from users;
+select *from food;
 -- Table: TableFood
 CREATE TABLE TableFood(
     TableId INT IDENTITY PRIMARY KEY,
