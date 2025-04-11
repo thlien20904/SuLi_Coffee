@@ -1,0 +1,223 @@
+﻿@model List<WebBanHang.Models.GioHang>
+@{
+    ViewBag.Title = "Giỏ hàng";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="@Url.Content("~/Content/GioHang.css")" rel="stylesheet" />
+<div style="margin-top: 100px;">
+    <h2 class="text-center cart-title">Giỏ hàng của bạn</h2>
+</div>
+
+
+
+<div id="cart-empty-message" class="alert alert-warning text-center" style="@(Model == null || !Model.Any() ? "" : "display: none;")">
+    <h4>Giỏ hàng của bạn đang trống!</h4>
+    <a href="@Url.Action("Home", "Home")" class="btn btn-primary mt-3">Tiếp tục mua sắm</a>
+</div>
+
+@if (Model != null && Model.Any())
+{
+    <div id="cart-content">
+        <table id="cart-table" class="table table-bordered table-striped text-center">
+            <thead class="table-dark">
+                <tr>
+                    <th>Hình ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Size</th>
+                    <th>Topping</th>
+                    <th>Đơn giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <img src="@(string.IsNullOrEmpty(item.Food.ImageURL) ? Url.Content("~/images/no-image.png") : Url.Content(item.Food.ImageURL))"
+                                 alt="Ảnh sản phẩm" class="img-thumbnail" style="width: 100px; height: 100px;" />
+                        </td>
+                        <td>@item.Food.FoodName</td>
+                        <td>
+                            @if (item.Size != null)
+                            {
+                                <p>@item.Size.SizeName (+@String.Format("{0:N0} ₫", item.Size.ExtraPrice))</p>
+                            }
+                            else
+                            {
+                                <p>Không có</p>
+                            }
+                        </td>
+                        <td>
+                            @if (item.GioHang_Topping.Any())
+                            {
+                                foreach (var topping in item.GioHang_Topping)
+                                {
+                                    <p>@topping.Topping.ToppingName (+@String.Format("{0:N0} ₫", topping.Topping.ToppingPrice))</p>
+                                }
+                            }
+                            else
+                            {
+                                <p>Không có</p>
+                            }
+                        </td>
+                        <td>@String.Format("{0:N0} ₫", item.Food.Price)</td>
+                        <td>
+                            <input type="number" min="1" value="@item.SoLuong" class="soLuongInput"
+                                   data-foodid="@item.FoodId" data-sizeid="@(item.SizeID.HasValue ? item.SizeID.Value.ToString() : "0")" style="width: 60px; display: inline-block; ">
+                        </td>
+                        <td class="total-price">@String.Format("{0:N0} ₫", item.TotalPrice)</td>
+                        <td>
+                            <a href="#" class="btn btn-danger btn-sm btn-xoa"
+                               data-foodid="@item.Food.FoodId"
+                               data-sizeid="@(item.SizeID.HasValue ? item.SizeID.Value.ToString() : "0")">
+                                Xóa
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <h4 id="total-price"><strong>Tổng tiền: @String.Format("{0:N0} ₫", Model.Sum(i => i.TotalPrice))</strong></h4>
+        <div class="text-right" id="cart-actions">
+            @{
+                decimal tongTien = 0;
+                foreach (var item in Model)
+                {
+                    decimal giaSize = Convert.ToDecimal(item.Size?.ExtraPrice ?? 0);
+                    decimal giaTopping = Convert.ToDecimal(item.GioHang_Topping?.Sum(t => t.Topping.ToppingPrice) ?? 0);
+                    decimal discountPrice = item.Food.DiscountPrice.HasValue ? item.Food.DiscountPrice.Value : item.Food.Price;
+                    decimal thanhTien = item.SoLuong * (discountPrice + giaSize + giaTopping);
+                    tongTien += thanhTien;
+                }
+            }
+            <a href="@Url.Action("SanPham", "SanPham")" class="btn btn-secondary">Tiếp tục mua sắm</a>
+            <a href="@Url.Action("ThanhToan", "ThanhToan")" class="btn btn-success">Thanh toán</a>
+        </div>
+    </div>
+}
+
+@section scripts {
+    <script>
+        // Xóa sản phẩm khỏi giỏ hàng
+        document.querySelectorAll(".btn-xoa").forEach(button => {
+            button.addEventListener("click", function (e) {
+                e.preventDefault();
+                var productId = this.getAttribute("data-foodid");
+                var sizeId = this.getAttribute("data-sizeid");
+
+                if (!productId || productId <= 0) {
+                    alert("Lỗi: Không tìm thấy ID sản phẩm!");
+                    return;
+                }
+
+                // Nếu sizeId là "0" hoặc không có, đặt thành null
+                if (sizeId === "0" || sizeId === "null") {
+                    sizeId = null;
+                }
+
+                console.log("Đang xóa sản phẩm với ID: " + productId + ", SizeID: " + (sizeId || "Không có"));
+
+                if (confirm("Bạn có chắc muốn xóa sản phẩm này?")) {
+                    fetch('/GioHang/XoaKhoiGio', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ foodId: parseInt(productId), sizeId: sizeId ? parseInt(sizeId) : null })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Cập nhật số lượng giỏ hàng trên biểu tượng
+                                if (data.cartCount !== undefined) {
+                                    updateCartCount(data.cartCount);
+                                }
+
+                                // Xóa dòng sản phẩm khỏi bảng
+                                this.closest("tr").remove();
+
+                                // Cập nhật tổng tiền
+                                var newTotal = data.newTotal;
+                                var totalPriceElement = document.getElementById("total-price");
+                                if (totalPriceElement && typeof newTotal === "number") {
+                                    totalPriceElement.innerHTML = "<strong>Tổng tiền: " + newTotal.toLocaleString("vi-VN") + " ₫</strong>";
+                                }
+
+                                // Nếu giỏ hàng rỗng, ẩn toàn bộ nội dung giỏ hàng và hiển thị thông báo
+                                if (document.querySelectorAll("#cart-table tbody tr").length === 0) {
+                                    var cartContent = document.getElementById("cart-content");
+                                    if (cartContent) {
+                                        cartContent.style.display = "none";
+                                    }
+                                    var emptyMessage = document.getElementById("cart-empty-message");
+                                    if (emptyMessage) {
+                                        emptyMessage.style.display = "block";
+                                    }
+                                }
+                            } else {
+                                alert(data.message);
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Lỗi Fetch:", error);
+                            alert("Có lỗi xảy ra khi xóa sản phẩm!");
+                        });
+                }
+            });
+        });
+
+        // Cập nhật số lượng sản phẩm
+        document.querySelectorAll(".soLuongInput").forEach(input => {
+            input.addEventListener("change", function () {
+                var foodId = this.getAttribute("data-foodid");
+                var sizeId = this.getAttribute("data-sizeid");
+                var soLuong = parseInt(this.value);
+
+                if (soLuong < 1) {
+                    alert("Số lượng phải lớn hơn 0!");
+                    this.value = 1;
+                    soLuong = 1;
+                }
+
+                // Nếu sizeId là "0" hoặc không có, đặt thành null
+                if (sizeId === "0" || sizeId === "null") {
+                    sizeId = null;
+                }
+
+                fetch('/GioHang/CapNhatSoLuong', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ foodId: parseInt(foodId), sizeId: sizeId ? parseInt(sizeId) : null, soLuong: soLuong })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Cập nhật số lượng giỏ hàng trên biểu tượng
+                            if (data.cartCount !== undefined) {
+                                updateCartCount(data.cartCount);
+                            }
+
+                            // Cập nhật tổng tiền của sản phẩm
+                            var totalPriceCell = this.closest("tr").querySelector(".total-price");
+                            totalPriceCell.innerText = data.newItemTotal.toLocaleString("vi-VN") + " ₫";
+
+                            // Cập nhật tổng tiền toàn giỏ hàng
+                            var totalPriceElement = document.getElementById("total-price");
+                            if (totalPriceElement && typeof data.newTotal === "number") {
+                                totalPriceElement.innerHTML = "<strong>Tổng tiền: " + data.newTotal.toLocaleString("vi-VN") + " ₫</strong>";
+                            }
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Lỗi Fetch:", error);
+                        alert("Có lỗi xảy ra khi cập nhật số lượng!");
+                    });
+            });
+        });
+    </script>
+}
+<style></style>
+

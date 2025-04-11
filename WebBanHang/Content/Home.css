@@ -140,12 +140,7 @@ main {
     flex: 1;
 }
 
-footer {
-    background: black;
-    color: white;
-    text-align: center;
-    padding: 10px 0;
-}
+
 
 .text-center p {
     text-align: center;

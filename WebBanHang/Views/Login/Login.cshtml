@@ -16,29 +16,28 @@
         </div>
     }
 
-    @using (Html.BeginForm("Login", "Login", FormMethod.Post))
+    @using (Html.BeginForm("Login", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
     {
-        @Html.Raw(@"
-            <div class='input-group'>
-                <i class='fas fa-user'></i>
-                <input type='text' name='username' placeholder='Username' required />
-            </div>
+        @Html.AntiForgeryToken()
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" name="username" placeholder="Username" autocomplete="username" required />
+        </div>
 
-            <div class='input-group'>
-                <i class='fas fa-lock'></i>
-                <input type='password' name='password' placeholder='Password' id='password' required />
-                <i class='fas fa-eye toggle-password' onclick='togglePassword()'></i>
-            </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="password" placeholder="Password" id="password" autocomplete="current-password" required />
+            <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+        </div>
 
-            <div class='options'>
-                <label>
-                    <input type='checkbox' name='remember' /> Remember Me
-                </label>
-                " + forgotLink + @"
-            </div>
+        <div class="options">
+            <label>
+                <input type="checkbox" name="remember" /> Remember Me
+            </label>
+            @Html.Raw(forgotLink)
+        </div>
 
-            <input type='submit' class='btn-login' value='Sign In' />
-        ")
+        <input type="submit" class="btn-login" value="Sign In" />
 
         if (ViewBag.Message != null)
         {
@@ -59,3 +58,19 @@
         <i class="fab fa-google"></i> Connect with Google
     </button>
 </div>
+
+<script>
+    function togglePassword() {
+        var passwordField = document.getElementById("password");
+        var toggleIcon = document.querySelector(".toggle-password");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
+    }
+</script>

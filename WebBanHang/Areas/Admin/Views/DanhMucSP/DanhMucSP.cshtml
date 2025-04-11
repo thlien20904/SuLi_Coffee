@@ -10,6 +10,19 @@
     <div class="category-header">
         <h2 class="category-title">Danh mục sản phẩm</h2>
     </div>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mt-3">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"] as string))
+    {
+        <div class="alert alert-danger mt-3">
+            @TempData["ErrorMessage"]
+        </div>
+    }
     <div class="top-actions">
         <a href="@Url.Action("Add", "DanhMucSP")" class="btn-add">
             <i class="fas fa-plus"></i>

@@ -234,19 +234,6 @@ img, video {
 }
 
 
-/* Footer */
-.footer {
-    background-color: #fff;
-    text-align: center;
-    padding: 20px 0;
-    border-top: 1px solid #eee;
-    margin-top: 40px;
-}
-
-    .footer p {
-        color: #888;
-        font-size: 0.9rem;
-    }
 
 /* Timeline Section */
 .timeline {

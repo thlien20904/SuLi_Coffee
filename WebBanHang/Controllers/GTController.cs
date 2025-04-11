@@ -10,7 +10,7 @@ namespace WebBanHang.Controllers
     public class GTController : Controller
     {
         // GET: GT
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
         public ActionResult Index()
         {
             var bestSellers = db.InvoiceDetails

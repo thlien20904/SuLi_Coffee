@@ -3,6 +3,10 @@
     Layout = "../Shared/_Layout.cshtml";
 }
 
+<!-- Thêm Chart.js và Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
+
 <!-- Dashboard Statistics -->
 <section class="dashboard-stats container mt-4">
     <div class="row">
@@ -22,83 +26,142 @@
                 </div>
             </a>
         </div>
+        <div class="col-md-3">
+            <a href="@Url.Action("Index", "DonHangOnline", new { area = "Admin" })" class="text-decoration-none">
+                <div class="card text-center p-3 bg-light">
+                    <h5><i class="fas fa-shopping-cart"></i> Đơn hàng</h5>
+                    <p class="display-6">@ViewBag.TotalOrders</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center p-3 bg-light">
+                <h5><i class="fas fa-money-bill"></i> Tổng doanh thu</h5>
+                <p class="display-6">@ViewBag.TotalSales.ToString("N0") VND</p>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col-md-3">
+            <div class="card text-center p-3 bg-light">
+                <h5><i class="fas fa-hourglass-half"></i> Đặt hàng thành công</h5>
+                <p class="display-6">@ViewBag.PlacedOrders</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center p-3 bg-light">
+                <h5><i class="fas fa-box-open"></i> Đang chuẩn bị</h5>
+                <p class="display-6">@ViewBag.PreparingOrders</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center p-3 bg-light">
+                <h5><i class="fas fa-truck"></i> Đang giao hàng</h5>
+                <p class="display-6">@ViewBag.ShippingOrders</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-center p-3 bg-light">
+                <h5><i class="fas fa-check-circle"></i> Giao hàng thành công</h5>
+                <p class="display-6">@ViewBag.CompletedOrders</p>
+            </div>
+        </div>
     </div>
 </section>
 
+<!-- Budget vs Sales Chart -->
+<section class="budget-vs-sales container mt-4">
+    <h3 class="text-center">Ngân sách vs Doanh thu</h3>
+    <canvas id="budgetVsSalesChart" height="100"></canvas>
+</section>
 
-<!-- SẢN PHẨM BÁN CHẠY - CAROUSEL -->
-<section class="best-sellers container mt-4">
-    <h3 class="text-center">🔥 SẢN PHẨM BÁN CHẠY 🔥</h3>
-
-    <div id="carouselBestSellers" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            @if (ViewBag.BanChay is List<WebBanHang.Models.BanChayModel> bestSellers && bestSellers.Any())
-            {
-
-                int itemsPerSlide = 4; // Hiển thị 4 sản phẩm mỗi lần
-                int totalItems = bestSellers.Count;
-                int slideIndex = 0;
-
-                for (int i = 0; i < totalItems; i += itemsPerSlide)
+<!-- Top Products and Top Countries -->
+<section class="top-products-countries container mt-4">
+    <div class="row">
+        <!-- Top Products -->
+        <div class="col-md-6">
+            <h3 class="text-center">🔥 SẢN PHẨM BÁN CHẠY 🔥</h3>
+            <div class="row">
+                @if (ViewBag.BanChay is List<WebBanHang.Models.BanChayModel> bestSellers && bestSellers.Any())
                 {
-                    var itemsInThisSlide = bestSellers.Skip(i).Take(itemsPerSlide).ToList();
-
-                    <div class="carousel-item @(slideIndex == 0 ? "active" : "")">
-                        <div class="row">
-                            @foreach (var item in itemsInThisSlide)
-                            {
-                                <div class="col-md-3">
-                                    <div class="product-card">
-                                        <img id="ImagePreview" src="@(!string.IsNullOrEmpty(item.ImageUrl) ? item.ImageUrl : Url.Content("~/Images/no-image.png"))"
-                                             style="max-width: 100%; height: auto; display: block;" />
-
-                                        <h5>@item.FoodName</h5>
-                                        <p class="price" style="color: #C19A6B; font-weight: bold;">@item.Price.ToString("N0")đ</p>
-
-                                        <p class="sold">Đã bán: @item.TotalSold</p>
-                                        <a href="@Url.Action("Info", "SanPhamAdmin", new { id = item.FoodId })" class="btn-buy">
-                                            Xem chi tiết
-                                        </a>
-                                    </div>
-                                </div>
-                            }
+                    foreach (var item in bestSellers)
+                    {
+                        <div class="col-md-4 mb-3">
+                            <div class="card text-center p-3 bg-light">
+                                <img src="@(!string.IsNullOrEmpty(item.ImageUrl) ? item.ImageUrl : Url.Content("~/Images/no-image.png"))"
+                                     style="max-width: 100%; height: auto; display: block;" />
+                                <h5>@item.FoodName</h5>
+                                <p class="price" style="color: #C19A6B; font-weight: bold;">@item.Price.ToString("N0")đ</p>
+                                <p class="sold">Đã bán: @item.TotalSold</p>
+                            </div>
                         </div>
-                    </div>
-                    slideIndex++;
+                    }
+                }
+                else
+                {
+                    <p class="text-center text-danger">Không có dữ liệu</p>
+                }
+            </div>
+        </div>
+        <!-- Top Countries -->
+        <div class="col-md-6">
+            <h3 class="text-center">Top Quốc gia</h3>
+            <ul class="list-group">
+                @if (ViewBag.TopCountries is List<WebBanHang.Models.TopCountryModel> topCountriesList && topCountriesList.Any())
+                {
+                    foreach (var country in topCountriesList)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            @country.Country
+                            <span class="badge bg-primary rounded-pill">@country.OrderCount</span>
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="list-group-item text-center">Không có dữ liệu</li>
+                }
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Orders -->
+<section class="recent-orders container mt-4">
+    <h3 class="text-center">Đơn hàng gần đây</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Người dùng</th>
+                <th>Trạng thái</th>
+                <th>Ngày đặt</th>
+                <th>Tổng tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (ViewBag.RecentOrders is List<WebBanHang.Models.RecentOrderModel> recentOrdersList && recentOrdersList.Any())
+            {
+                foreach (var order in recentOrdersList)
+                {
+                    <tr>
+                        <td>@order.OrderId</td>
+                        <td>@order.FullName</td>
+                        <td>@order.Status</td>
+                        <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@order.TotalAmount.ToString("N0")đ</td>
+                    </tr>
                 }
             }
             else
             {
-                <p class="text-center text-danger">Không có dữ liệu</p>
+                <tr>
+                    <td colspan="5" class="text-center">Không có dữ liệu</td>
+                </tr>
             }
-        </div>
-
-        <!-- Controls -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselBestSellers" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselBestSellers" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+        </tbody>
+    </table>
 </section>
-<script>
-    setTimeout(() => {
-        let carousel = document.querySelector("#carouselBestSellers");
-        if (carousel) {
-            let bsCarousel = new bootstrap.Carousel(carousel, {
-                interval: 3000,
-                wrap: true
-            });
-            console.log("✅ Bootstrap Carousel đã khởi động", bsCarousel);
-        } else {
-            console.warn("⚠️ Không tìm thấy #carouselBestSellers. Có thể chưa render xong.");
-        }
-    }, 1000); // Chờ 1 giây trước khi chạy script
-</script>
-
 
 <!-- NGUYÊN LIỆU SẮP HẾT -->
 <section class="low-stock container mt-4">
@@ -133,11 +196,58 @@
     </table>
 </section>
 
+<script>
+// Sử dụng kiểu dữ liệu mạnh với Monthly
+const monthlySalesData = @Html.Raw(Json.Encode(((List<WebBanHang.Models.Monthly>)ViewBag.MonthlySales).Select(m => m.TotalRevenue)));
+const monthlyBudgetData = @Html.Raw(Json.Encode(((List<WebBanHang.Models.MonthlyBudget>)ViewBag.MonthlyBudget).Select(m => m.Budget)));
+const monthlyLabels = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
+
+const budgetVsSalesChart = new Chart(document.getElementById('budgetVsSalesChart'), {
+    type: 'line',
+    data: {
+        labels: monthlyLabels,
+        datasets: [
+            {
+                label: 'Doanh thu',
+                data: monthlySalesData,
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true
+            },
+            {
+                label: 'Ngân sách',
+                data: monthlyBudgetData,
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                fill: true
+            }
+        ]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Số tiền (VND)'
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'Tháng'
+                }
+            }
+        }
+    }
+});
+</script>
 <style>
     /* Dashboard Statistics */
     body {
         background-color: #f8f9fa !important; /* Đổi màu nền theo giao diện */
     }
+
     div {
         background-color: #f8f9fa !important;
     }

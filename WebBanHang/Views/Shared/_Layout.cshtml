@@ -10,10 +10,11 @@
     <link href="@Url.Content("~/Content/Thethanhvien.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/Home.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/GT.css")" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/SanPham.css")" rel="stylesheet" />
     <link href="@Url.Content("~/Content/Lienhe.css")" rel="stylesheet" />
     @RenderSection("Styles", required: false)
     <style>
-
+        /* === Nút cuộn === */
         .scroll-buttons {
             position: fixed;
             right: 20px;
@@ -39,77 +40,104 @@
                 .scroll-buttons button:hover {
                     background-color: #a29d9d;
                 }
-        /* Đổi màu icon thành trắng */
-        .dropdown-toggle i {
+
+        .logo-middle {
+            white-space: nowrap;
+            font-family: 'Great Vibes', cursive;
+            font-size: 32px;
             color: white;
+            text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
+            transition: color 0.3s ease-in-out;
         }
 
-        /* Bỏ nền trắng của dropdown */
+            .logo-middle:hover {
+                color: #c4a48c;
+            }
+
+        /* Icon dropdown màu tiêu đề */
+        .dropdown-toggle i {
+            color: #c4a48c;
+        }
+
+        /* Dropdown menu trong suốt, không viền */
         .dropdown-menu {
-            background-color: transparent; /* Nền trong suốt */
-            box-shadow: none; /* Bỏ đổ bóng */
+            background-color: transparent;
+            box-shadow: none;
             padding: 10px;
             min-width: 150px;
             z-index: 999;
             white-space: nowrap;
             transition: all 0.3s ease;
+            position: absolute;
+            right: 0;
         }
 
-            /* Chỉnh màu chữ và bỏ gạch chân */
+            /* Link trong dropdown */
             .dropdown-menu a {
                 display: block;
                 padding: 8px 12px;
-                color: white; /* Chữ màu trắng */
-                text-decoration: none; /* Bỏ gạch chân */
+                color: #c4a48c;
+                text-decoration: none;
                 border-radius: 5px;
+                transition: all 0.3s ease;
             }
 
-                /* Hiệu ứng hover */
+                /* Hover link trong dropdown */
                 .dropdown-menu a:hover {
-                    background-color: rgba(255, 255, 255, 0.2); /* Hiệu ứng hover nhẹ */
+                    background-color: rgba(196, 164, 140, 0.2);
                     color: #fff;
                 }
 
-        .logo-middle {
-            white-space: nowrap; /* Ngăn chữ xuống dòng */
-            font-family: 'Great Vibes', cursive;
-            font-size: 32px;
-            color: white; /* Màu mặc định */
-            transition: color 0.3s ease-in-out;
+        /* Ảnh đại diện trong dropdown */
+        .avatar-img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 8px;
         }
 
-            .logo-middle:hover {
-                text-shadow: 0 0 10px rgba(255, 204, 0, 0.8);
-                color: #eceaea;
-            }
-
-        /* Đảm bảo chữ ở header không bị xuống dòng và căn giữa */
+        /* === Navbar và các phần khác === */
         .nav ul {
             display: flex;
-            gap: 20px; /* Khoảng cách giữa các mục */
-            white-space: nowrap; /* Ngăn chữ xuống dòng */
+            gap: 15px;
+            white-space: nowrap;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
+            margin-left: 10px;
         }
 
-        /* Định dạng chữ màu trắng và hiệu ứng hover */
         .nav a {
-            color: white !important; /* Màu trắng */
+            color: white !important;
             font-weight: bold;
             text-decoration: none !important;
-            padding: 10px 15px; /* Thêm padding cho dễ bấm */
+            padding: 10px 15px;
             transition: color 0.3s ease-in-out;
         }
 
             .nav a:hover {
-                color: #c4a48c !important; /* Màu hover */
+                color: #c4a48c !important;
             }
 
-
-        .dropdown-toggle.logged-in {
-            color: white;
+        /* Giỏ hàng */
+        .nav .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
+            .nav .cart-item a {
+                display: flex;
+                align-items: center;
+                padding: 10px 15px;
+            }
+
+            .nav .cart-item i {
+                font-size: 18px;
+                color: white;
+            }
+
+        /* Header */
         .header {
             position: fixed;
             top: 0;
@@ -119,16 +147,178 @@
             background-color: transparent;
             padding: 10px 0;
         }
-    </style>
 
+        /* Dropdown vị trí */
+        .dropdown.mx-3 {
+            margin-left: auto;
+            margin-right: 20px;
+        }
+
+        /* Container */
+        .container.d-flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 0;
+        }
+
+        /* Thanh tìm kiếm */
+        .search-bar {
+            flex: 1;
+            max-width: 300px;
+            margin-left: 20px;
+        }
+
+        .footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            padding: 40px 0;
+            font-family: Arial, sans-serif;
+        }
+
+            .footer .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .footer .row {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 20px;
+            }
+
+            .footer .col-md-3 {
+                flex: 0 0 23%;
+                max-width: 23%;
+                margin-bottom: 20px;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-start;
+            }
+
+            .footer h5 {
+                font-size: 16px;
+                font-weight: bold;
+                margin: 0 0 15px 0;
+                padding: 0;
+                text-transform: uppercase;
+                line-height: 1.2;
+                width: 100%;
+                text-align: left;
+            }
+
+            .footer ul {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                text-align: left;
+            }
+
+                .footer ul li {
+                    margin-bottom: 10px;
+                }
+
+                    .footer ul li a {
+                        color: #fff;
+                        text-decoration: none;
+                        font-size: 14px;
+                    }
+
+                        .footer ul li a:hover {
+                            text-decoration: underline;
+                        }
+
+            .footer p {
+                font-size: 14px;
+                line-height: 1.6;
+                margin: 0;
+            }
+
+            .footer .advertisement {
+                background-color: #fff;
+                border-radius: 8px;
+                overflow: hidden;
+                margin-bottom: 20px;
+                width: 100%;
+            }
+
+            .footer .ad-image {
+                width: 100%;
+                height: 120px;
+                object-fit: cover;
+            }
+
+            .footer .ad-content {
+                padding: 10px;
+                text-align: left;
+            }
+
+                .footer .ad-content h6 {
+                    font-size: 14px;
+                    font-weight: bold;
+                    color: #000;
+                    margin: 0 0 5px;
+                }
+
+                .footer .ad-content p {
+                    font-size: 12px;
+                    color: #555;
+                    margin: 0 0 5px;
+                }
+
+            .footer .share-btn {
+                display: inline-block;
+                padding: 5px 10px;
+                background-color: #f5f5f5;
+                color: #000;
+                text-decoration: none;
+                border-radius: 5px;
+                font-size: 12px;
+            }
+
+                .footer .share-btn:hover {
+                    background-color: #ddd;
+                }
+
+            .footer .social-icons {
+                display: flex;
+                gap: 15px;
+            }
+
+                .footer .social-icons a {
+                    color: #fff;
+                    font-size: 20px;
+                    text-decoration: none;
+                }
+
+                    .footer .social-icons a:hover {
+                        color: #ddd;
+                    }
+
+            .footer .copyright {
+                border-top: 1px solid #444;
+                padding-top: 20px;
+                margin-top: 30px;
+                text-align: center;
+                font-size: 12px;
+                line-height: 1.8;
+            }
+    </style>
 </head>
 <body>
+    @{
+        var gioHang = Session["GioHang"] as List<WebBanHang.Models.GioHang> ?? new List<WebBanHang.Models.GioHang>();
+        var soLuongGioHang = gioHang.Sum(i => i.SoLuong);
+    }
     <header class="header d-flex align-items-center">
         <!-- Logo tách riêng -->
         <div class="logo" style="padding-left: 20px;">
             <a href="@Url.Action("Home", "Home")" class="logo-link text-decoration-none d-block">
                 <div class="logo-middle" style="font-family: 'Great Vibes', cursive; font-size: 32px;">SuLi Coffee</div>
-                @*<div class="logo-bottom" style="font-size: 14px; text-align: center;">House</div>*@
             </a>
         </div>
 
@@ -146,10 +336,45 @@
             <nav class="nav">
                 <ul class="d-flex list-unstyled mb-0">
                     <li><a href="@Url.Action("Home", "Home")">Trang chủ</a></li>
-                    <li><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a>
+                        <!-- Submenu -->
+                        <div class="submenu">
+                            <div class="submenu-column">
+                                <h4>Tất Cả</h4>
+                                <p><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></p>
+                            </div>
+                            <div class="submenu-column">
+                                <h4>Cà Phê</h4>
+                                <p><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 1 })">Cà Phê</a></p>
+                            </div>
+                            <div class="submenu-column">
+                                <h4>Trà Sữa</h4>
+                                <p><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 2 })">Trà Sữa</a></p>
+                            </div>
+                            <div class="submenu-column">
+                                <h4>Thức uống đá xay</h4>
+                                <p><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 3 })">Thức uống đá xay</a></p>
+                            </div>
+                            <div class="submenu-column">
+                                <h4>Bánh & Snack</h4>
+                                <p><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 4 })">Bánh & Snack</a></p>
+                            </div>
+                            <div class="submenu-column">
+                                <h4>Trà trái cây</h4>
+                                <p><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 5 })">Trà trái cây</a></p>
+                            </div>
+                        </div>
+                    </li>
                     <li><a href="@Url.Action("Index", "GT")">Giới thiệu</a></li>
                     <li><a href="@Url.Action("Index", "Lienhe")">Liên hệ</a></li>
                     <li><a href="@Url.Action("Thethanhvien", "Thethanhvien")">Thẻ thành viên</a></li>
+                    <li class="cart-item">
+                        <a href="@Url.Action("GioHang", "GioHang")">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span id="cart-icon"></span>
+                        </a>
+                    </li>
                     <li class="dropdown mx-3 position-relative">
                         @if (Session["Username"] == null)
                         {
@@ -164,112 +389,118 @@
                         else
                         {
                             <div class="dropdown-toggle logged-in">
-                                <i class="fas fa-user"></i> @Session["Username"]
+                                @if (!string.IsNullOrEmpty(Session["AvatarUrl"]?.ToString()))
+                                {
+                                    <img src="@Session["AvatarUrl"]" alt="Avatar" class="avatar-img" />
+                                }
+                                else
+                                {
+                                    <i class="fas fa-user"></i>
+                                }
                             </div>
                             <div class="dropdown-menu">
                                 <a href="@Url.Action("TaiKhoan", "TaiKhoan")">Tài khoản</a>
                                 <a href="@Url.Action("Logout", "Login", new { area = "" })">Đăng xuất</a>
                             </div>
                         }
-
                     </li>
                 </ul>
             </nav>
         </div>
-
     </header>
 
     <main class="main-content">
         @RenderBody()
     </main>
-    <footer class="footer" style="background-color: black; color: white; padding: 20px 0;">
+    <footer class="footer">
         <div class="container">
-            <div class="row" style="text-align: left;">
-                <!-- Logo -->
-                <div class="col-md-3" style="text-align: left;">
-                    <img src="@Url.Content("~/images/logo1.png")" alt="SuLi" style="width: 1000px; height:170px;">
-
-                </div>
-
-                <!-- Về Chúng Tôi -->
-                <div class="col-md-3" style="text-align: left;">
-                    <h5>VỀ CHÚNG TÔI</h5>
-                    <ul style="list-style: none; padding: 0;">
-                        <li><a href="#" style="color: white; text-decoration: none;">Cửa hàng</a></li>
-                        <li><a href="#" style="color: white; text-decoration: none;">Về SuLi</a></li>
-                        <li><a href="#" style="color: white; text-decoration: none;">Hệ thống cửa hàng</a></li>
+            <div class="row">
+                <!-- Giới thiệu -->
+                <div class="col-md-3">
+                    <h5>Giới thiệu</h5>
+                    <ul>
+                        <li><a href="@Url.Action("Index", "GT")">Về Chúng Tôi</a></li>
+                        <li><a href="@Url.Action("SanPham", "SanPham")">Sản phẩm</a></li>
+                        <li><a href="@Url.Action("SanPham", "SanPham")">Khuyến mãi</a></li>
+                        <li><a href="@Url.Action("Index", "GT")">Chuyện cà phê</a></li>
+                        <li><a href="@Url.Action("Index", "GT")">Cửa Hàng</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
                     </ul>
                 </div>
 
-                <!-- Địa chỉ công ty -->
-                <div class="col-md-3" style="text-align: left;">
-                    <h5>ĐỊA CHỈ CÔNG TY</h5>
-                    <p>Trụ sở chính: 273 Trần Đăng Nibnh, Phường Dịch Vọng Hậu, Quận Cầu Giấy, TP Hà Nội</p>
-                    <p>Chi nhánh Đà Lạt: 7 Nguyễn Chí Thanh, phường 1, thành phố Đà Lạt, tỉnh Lâm Đồng</p>
-                    <p>Chi nhánh Hà Nội: Lô 04-9A Khu công nghiệp Vĩnh Hoàng, phường Hoàng Văn Thụ, quận Hoàng Mai, Hà Nội</p>
-                    <p><strong>EMAIL HỖ TRỢ KHÁCH HÀNG:</strong> cskh@SuLi.vn</p>
-                    <p><strong>HOTLINE HỖ TRỢ KHÁCH HÀNG:</strong> 1900 3013 (8h30 - 22h)</p>
+                <!-- Điều khoản -->
+                <div class="col-md-3">
+                    <h5>Điều khoản</h5>
+                    <ul>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Chính sách bảo mật thông tin</a></li>
+                        <li><a href="#">Hướng dẫn xuất hóa đơn GTGT</a></li>
+                    </ul>
                 </div>
 
-                <!-- Nhận thông tin -->
-                <div class="col-md-3" style="text-align: left;">
-                    <h5>NHẬN THÔNG TIN TỪ SuLi</h5>
-                    <div class="social-icons" style="display: flex; gap: 10px; margin-bottom: 10px;">
-                        <a href="https://www.facebook.com/thlien20904" target="_blank" style="color: white; font-size: 24px;">
-                            <i class="fab fa-facebook-f"></i>
-                        </a>
-                        <a href="https://www.instagram.com/thlien20904/" target="_blank" style="color: white; font-size: 24px;">
-                            <i class="fab fa-instagram"></i>
-                        </a>
-                        <a href="https://www.youtube.com/phela" target="_blank" style="color: white; font-size: 24px;">
-                            <i class="fab fa-youtube"></i>
-                        </a>
-                        <a href="https://www.tiktok.com/liencute209" target="_blank" style="color: white; font-size: 24px;">
-                            <i class="fab fa-tiktok"></i>
-                        </a>
-                    </div>
-                    <p>Xin vui lòng để lại địa chỉ email, chúng tôi sẽ cập nhật những tin tức mới nhất của SuLi</p>
-                    <form>
-                        <div style="display: flex; align-items: center; background: white; border-radius: 30px; overflow: hidden;">
-                            <input type="email" placeholder="Nhập email của bạn..." style="padding: 10px; width: 70%; border: none; outline: none; flex: 1;">
-                            <button type="submit" style="padding: 10px 15px; border: none; background-color: black; color: white; border-radius: 30px;">Gửi</button>
+                <!-- Đặt hàng -->
+                <div class="col-md-3">
+                    <h5>Đặt hàng: 1800 6936</h5>
+                    <ul>
+                        <li><a href="@Url.Action("Index", "Lienhe")">Liên hệ</a></li>
+                    </ul>
+                    <p>Tặng 7, Trung Tâm Thương Mại GigaMall, 240 - 242 Phạm Văn Đồng, P. Hiệp Bình Chánh, TP. Thủ Đức, TP.HCM</p>
+                </div>
+
+                <!-- Quảng cáo -->
+                <div class="col-md-3">
+                    <div class="advertisement">
+                        <img src="@Url.Content("~/images/logo.png")" alt="SuLi Coffee" class="ad-image">
+                        <div class="ad-content">
+                            <h6>SuLi Coffee</h6>
+                            <p>713.174 người theo dõi</p>
+                            <p>Pizza</p>
+                            <a href="#" class="share-btn">Chia sẻ</a>
                         </div>
-                    </form>
+                    </div>
+                    <div class="social-icons">
+                        <a href="https://www.facebook.com/thecoffeehousevn" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/thecoffeehousevn/" target="_blank"><i class="fab fa-instagram"></i></a>
+                    </div>
                 </div>
+            </div>
 
+            <!-- Bản quyền -->
+            <div class="copyright">
+                <p>
+                    Công ty cổ phần thương mại dịch vụ SuLi Coffee<br>
+                    Mã số DN: 0312867172 do sở kế hoạch và đầu tư TP.HCM cấp ngày 23/07/2014. Người đại diện: NGÔ NGUYÊN KHA<br>
+                    Địa chỉ: 86-88 Cao Thắng, phường 04, quận 3, TP.HCM - Điện thoại: (028) 7107 8079 Email: hi@sulicoffee.vn<br>
+                    © 2014-2025 Công ty cổ phần thương mại dịch vụ SuLi Coffee mọi quyền bảo lưu
+                </p>
             </div>
         </div>
-                <!-- Nút điều hướng lên đầu và xuống cuối trang -->
+        <!-- Nút điều hướng lên đầu và xuống cuối trang -->
         <div class="scroll-buttons">
             <button id="scrollToTop"><i class="fas fa-arrow-up"></i></button>
             <button id="scrollToBottom"><i class="fas fa-arrow-down"></i></button>
-        </div>
-
-        <!-- Bản quyền -->
-        <div class="text-center" style="border-top: 1px solid white; padding-top: 40px; margin-top: 5px;">
-            <p>©2025 Bản quyền này thuộc về Công Ty Cổ Phần SuLi</p>
+            <button><i class="fas fa-headset"></i></button>
         </div>
     </footer>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script>
-             document.getElementById("scrollToTop").addEventListener("click", function () {
+        document.getElementById("scrollToTop").addEventListener("click", function () {
             window.scrollTo({ top: 0, behavior: "smooth" });
         });
 
         document.getElementById("scrollToBottom").addEventListener("click", function () {
             window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
         });
+
         // Hover dropdown effect
         $('.dropdown').hover(function () {
             $(this).find('.dropdown-menu').stop(true, true).slideDown(200);
         }, function () {
             $(this).find('.dropdown-menu').stop(true, true).slideUp(200);
         });
+
         // Click vào nút back to top
         $('#backToTop').click(function () {
             $('html, body').animate({ scrollTop: 0 }, 'slow');
@@ -287,7 +518,6 @@
         // Ẩn nút lúc đầu
         $('#backToTop').hide();
     </script>
-
 
     @RenderSection("scripts", required: false)
 </body>

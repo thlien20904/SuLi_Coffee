@@ -13,7 +13,7 @@ namespace WebBanHang.Areas.Admin.Controllers
 {
     public class KhoAdminController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         public ActionResult KhoAdmin()
         {

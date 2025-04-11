@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="WebAppDBModelStoreContainer" CdmEntityContainer="WebAppDBEntities3">
+  <EntityContainerMapping StorageEntityContainer="WebAppDBModelStoreContainer" CdmEntityContainer="WebAppDBEntities4">
     <EntitySetMapping Name="Accounts">
       <EntityTypeMapping TypeName="WebAppDBModel.Account">
         <MappingFragment StoreEntitySet="Account">
@@ -57,6 +57,27 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="GioHangs">
+      <EntityTypeMapping TypeName="WebAppDBModel.GioHang">
+        <MappingFragment StoreEntitySet="GioHang">
+          <ScalarProperty Name="GioHangID" ColumnName="GioHangID" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+          <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+          <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+          <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GioHang_Topping">
+      <EntityTypeMapping TypeName="WebAppDBModel.GioHang_Topping">
+        <MappingFragment StoreEntitySet="GioHang_Topping">
+          <ScalarProperty Name="GioHangToppingID" ColumnName="GioHangToppingID" />
+          <ScalarProperty Name="GioHangID" ColumnName="GioHangID" />
+          <ScalarProperty Name="ToppingID" ColumnName="ToppingID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Ingredients">
       <EntityTypeMapping TypeName="WebAppDBModel.Ingredient">
         <MappingFragment StoreEntitySet="Ingredient">
@@ -91,6 +112,56 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="OrderDetails">
+      <EntityTypeMapping TypeName="WebAppDBModel.OrderDetail">
+        <MappingFragment StoreEntitySet="OrderDetails">
+          <ScalarProperty Name="OrderDetailId" ColumnName="OrderDetailId" />
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+          <ScalarProperty Name="SizeId" ColumnName="SizeId" />
+          <ScalarProperty Name="ToppingId" ColumnName="ToppingId" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orders">
+      <EntityTypeMapping TypeName="WebAppDBModel.Order">
+        <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+          <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderStatus">
+      <EntityTypeMapping TypeName="WebAppDBModel.OrderStatu">
+        <MappingFragment StoreEntitySet="OrderStatus">
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PhuongThucThanhToans">
+      <EntityTypeMapping TypeName="WebAppDBModel.PhuongThucThanhToan">
+        <MappingFragment StoreEntitySet="PhuongThucThanhToan">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="TenPhuongThuc" ColumnName="TenPhuongThuc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sizes">
+      <EntityTypeMapping TypeName="WebAppDBModel.Size">
+        <MappingFragment StoreEntitySet="Size">
+          <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+          <ScalarProperty Name="SizeName" ColumnName="SizeName" />
+          <ScalarProperty Name="ExtraPrice" ColumnName="ExtraPrice" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Staffs">
       <EntityTypeMapping TypeName="WebAppDBModel.Staff">
         <MappingFragment StoreEntitySet="Staff">
@@ -114,11 +185,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="Toppings">
+      <EntityTypeMapping TypeName="WebAppDBModel.Topping">
+        <MappingFragment StoreEntitySet="Topping">
+          <ScalarProperty Name="ToppingID" ColumnName="ToppingID" />
+          <ScalarProperty Name="ToppingName" ColumnName="ToppingName" />
+          <ScalarProperty Name="ToppingPrice" ColumnName="ToppingPrice" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="WebAppDBModel.User">
         <MappingFragment StoreEntitySet="Users">
-          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-          <ScalarProperty Name="AvatarUrl" ColumnName="AvatarUrl" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Username" ColumnName="Username" />
           <ScalarProperty Name="Email" ColumnName="Email" />
@@ -131,6 +209,8 @@
           <ScalarProperty Name="OTPExpiry" ColumnName="OTPExpiry" />
           <ScalarProperty Name="ResetToken" ColumnName="ResetToken" />
           <ScalarProperty Name="ResetTokenExpiry" ColumnName="ResetTokenExpiry" />
+          <ScalarProperty Name="AvatarUrl" ColumnName="AvatarUrl" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

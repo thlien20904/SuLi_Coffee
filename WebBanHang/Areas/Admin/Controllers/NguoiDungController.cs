@@ -7,7 +7,7 @@ namespace WebBanHang.Areas.Admin.Controllers
 {
     public class NguoiDungController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // Hiển thị danh sách Users
         public ActionResult NguoiDung()
@@ -16,122 +16,13 @@ namespace WebBanHang.Areas.Admin.Controllers
             return View(users);
         }
 
-        // GET: Hiển thị form thêm User
-        [HttpGet]
-        public ActionResult Add()
+        protected override void Dispose(bool disposing)
         {
-            ViewBag.Roles = new SelectList(new[] { "User", "Admin" });
-            return View();
-        }
-
-
-        // POST: Xử lý thêm User
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Add(User user)
-        {
-            if (ModelState.IsValid)
+            if (disposing)
             {
-                // Kiểm tra trùng Username
-                if (db.Users.Any(u => u.Username == user.Username))
-                {
-                    ModelState.AddModelError("Username", "Username đã tồn tại!");
-                    return View(user);
-                }
-
-                // Kiểm tra trùng Email
-                if (db.Users.Any(u => u.Email == user.Email))
-                {
-                    ModelState.AddModelError("Email", "Email đã tồn tại!");
-                    return View(user);
-                }
-
-                db.Users.Add(user);
-                db.SaveChanges();
-                return RedirectToAction("NguoiDung");
+                db.Dispose();
             }
-            return View(user);
-        }
-
-        // GET: Hiển thị form sửa User
-        [HttpGet]
-        public ActionResult Edit(int id)
-        {
-            var user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
-        }
-        // POST: Xử lý sửa User
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(User user)
-        {
-            if (ModelState.IsValid)
-            {
-                // Check Username trùng nhưng phải loại trừ user hiện tại
-                if (db.Users.Any(u => u.Username == user.Username && u.Id != user.Id))
-                {
-                    ModelState.AddModelError("Username", "Username đã tồn tại!");
-                    return View(user);
-                }
-
-                // Check Email trùng nhưng phải loại trừ user hiện tại
-                if (db.Users.Any(u => u.Email == user.Email && u.Id != user.Id))
-                {
-                    ModelState.AddModelError("Email", "Email đã tồn tại!");
-                    return View(user);
-                }
-
-                try
-                {
-                    db.Entry(user).State = System.Data.Entity.EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("NguoiDung");
-                }
-                catch (System.Data.Entity.Validation.DbEntityValidationException ex)
-                {
-                    foreach (var eve in ex.EntityValidationErrors)
-                    {
-                        Console.WriteLine($"Entity \"{eve.Entry.Entity.GetType().Name}\" có lỗi:");
-                        foreach (var ve in eve.ValidationErrors)
-                        {
-                            Console.WriteLine($"- Thuộc tính: {ve.PropertyName}, Lỗi: {ve.ErrorMessage}");
-                            ModelState.AddModelError(ve.PropertyName, ve.ErrorMessage);
-                        }
-                    }
-                    return View(user);
-                }
-            }
-            return View(user);
-        }
-
-        // GET: Xác nhận xóa User
-        [HttpGet]
-        public ActionResult Delete(int id)
-        {
-            var user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
-        }
-
-        // POST: Xử lý xóa User
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            var user = db.Users.Find(id);
-            if (user != null)
-            {
-                db.Users.Remove(user);
-                db.SaveChanges();
-            }
-            return RedirectToAction("NguoiDung"); // sửa ở đây
+            base.Dispose(disposing);
         }
     }
 }

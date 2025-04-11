@@ -31,108 +31,324 @@
         <!-- Cột bên trái -->
         <div class="profile-sidebar">
             <div class="profile-header">
-                <img src="@Model.AvatarUrl" alt="Avatar">
+                <img id="sidebarAvatar" src="@(string.IsNullOrEmpty(Model.AvatarUrl) ? "/Images/no-image.png" : Model.AvatarUrl)" alt="Avatar">
                 <div class="profile-info">
                     <h5>@Model.Username</h5>
                     <p>@Model.CreatedDate</p>
                 </div>
             </div>
-           
+
             <ul class="profile-menu">
-                <li><a href="#">📦 Orders List</a></li>
-                <li><a href="#" class="text-danger">⚙ Profile Settings</a></li>
-                <li><a href="#">🎁 My Vouchers</a></li>
-                <li><a href="#">🔔 Notifications</a></li>
-                <li><a href="#">❓ Help</a></li>
+                <li><a href="#" class="menu-item" data-target="orders">📦 Orders List</a></li>
+                <li><a href="#" class="menu-item text-danger" data-target="profile">⚙ Profile Settings</a></li>
+                <li><a href="#" class="menu-item" data-target="vouchers">🎁 My Vouchers</a></li>
+                <li><a href="#" class="menu-item" data-target="notifications">🔔 Notifications</a></li>
+                <li><a href="#" class="menu-item" data-target="help">❓ Help</a></li>
             </ul>
         </div>
 
         <!-- Cột bên phải -->
         <div class="profile-content">
-            <h4>My Profile</h4>
-            <form id="profile-form">
-                <label>Username</label>
-                <input type="text" id="username" value="@Model.Username">
-                <span id="username-error" class="text-danger"></span>
+            <!-- Phần My Profile (mặc định) -->
+            <div id="profile-section" class="content-section active">
+                <h4>My Profile</h4>
+                <form id="profile-form" enctype="multipart/form-data">
+                    <label>Avatar</label>
+                    <input type="file" id="avatarFile" name="AvatarFile" accept="image/*">
+                    <img id="previewAvatar" src="@(string.IsNullOrEmpty(Model.AvatarUrl) ? "/Images/no-image.png" : Model.AvatarUrl)" alt="Avatar Preview" width="150" height="150" style="display:block; margin-top:10px;" />
+                    <span id="avatar-error" class="text-danger"></span>
 
-                <label>Name</label>
-                <input type="text" id="fullname" value="@Model.FullName">
-                <span id="fullname-error" class="text-danger"></span>
+                    <label>Username</label>
+                    <input type="text" id="username" value="@Model.Username">
+                    <span id="username-error" class="text-danger"></span>
 
-                <label>Email</label>
-                <input type="email" id="email" value="@Model.Email">
-                <span id="email-error" class="text-danger"></span>
+                    <label>Name</label>
+                    <input type="text" id="fullname" value="@Model.FullName">
+                    <span id="fullname-error" class="text-danger"></span>
 
-                <label>Phone Number</label>
-                <input type="text" id="phone" value="@Model.Phone">
-                <span id="phone-error" class="text-danger"></span>
+                    <label>Email</label>
+                    <input type="email" id="email" value="@Model.Email">
+                    <span id="email-error" class="text-danger"></span>
 
-                <label>Address</label>
-                <textarea rows="2" id="address">@Model.Address</textarea>
-                <span id="address-error" class="text-danger"></span>
+                    <label>Phone Number</label>
+                    <input type="text" id="phone" value="@Model.Phone">
+                    <span id="phone-error" class="text-danger"></span>
 
-                <button type="submit">Update Profile</button>
-            </form>
+                    <label>Address</label>
+                    <textarea rows="2" id="address">@Model.Address</textarea>
+                    <span id="address-error" class="text-danger"></span>
+
+                    <button type="submit">Update Profile</button>
+                </form>
+            </div>
+
+            <!-- Phần Orders List (ẩn mặc định) -->
+            <div id="orders-section" class="content-section">
+                <h4>Orders List</h4>
+                <div id="orders-list">
+                    <!-- Danh sách đơn hàng sẽ được hiển thị ở đây -->
+                </div>
+            </div>
+
+            <!-- Phần My Vouchers (ẩn mặc định) -->
+            <div id="vouchers-section" class="content-section">
+                <h4>My Vouchers</h4>
+                <p>Chưa có voucher nào.</p>
+            </div>
+
+            <!-- Phần Notifications (ẩn mặc định) -->
+            <div id="notifications-section" class="content-section">
+                <h4>Notifications</h4>
+                <p>Chưa có thông báo nào.</p>
+            </div>
+
+            <!-- Phần Help (ẩn mặc định) -->
+            <div id="help-section" class="content-section">
+                <h4>Help</h4>
+                <p>Liên hệ hỗ trợ: cskh@SuLi.vn</p>
+            </div>
         </div>
     </div>
 </div>
+
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            function validateField(input, errorElement, pattern, message) {
-                input.addEventListener('blur', function () {
-                    if (!pattern.test(input.value.trim())) {
-                        errorElement.textContent = message;
-                    } else {
-                        errorElement.textContent = "";
+        $(document).ready(function () {
+            // Hiển thị preview ảnh khi chọn file
+            $("#avatarFile").on("change", function (event) {
+                let reader = new FileReader();
+                reader.onload = function () {
+                    $("#previewAvatar").attr("src", reader.result).show();
+                    $("#avatar-error").text("");
+                };
+                if (event.target.files[0]) {
+                    reader.readAsDataURL(event.target.files[0]);
+                }
+            });
+
+            // Ẩn tất cả các section và chỉ hiển thị section được chọn
+            function showSection(target) {
+                $('.content-section').removeClass('active');
+                $('#' + target + '-section').addClass('active');
+
+                $('.menu-item').removeClass('text-danger');
+                $(`.menu-item[data-target="${target}"]`).addClass('text-danger');
+            }
+
+            // Xử lý khi nhấp vào menu item
+            $('.menu-item').click(function (e) {
+                e.preventDefault();
+                var target = $(this).data('target');
+                showSection(target);
+
+                if (target === 'orders') {
+                    fetchOrders();
+                }
+            });
+
+            // Hàm lấy danh sách đơn hàng
+            function fetchOrders() {
+                $('#orders-list').html('<p>Đang tải đơn hàng...</p>');
+                $.ajax({
+                    url: '@Url.Action("GetOrders", "TaiKhoan")',
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.success) {
+                            displayOrders(response.orders);
+                        } else {
+                            $('#orders-list').html('<p>' + response.message + '</p>');
+                        }
+                    },
+                    error: function () {
+                        $('#orders-list').html('<p>Có lỗi xảy ra khi lấy danh sách đơn hàng!</p>');
                     }
                 });
             }
 
+            // Hàm hiển thị danh sách đơn hàng
+            function displayOrders(orders) {
+                if (orders.length === 0) {
+                    $('#orders-list').html('<p>Bạn chưa có đơn hàng nào.</p>');
+                    return;
+                }
+
+                var html = '<table class="table table-bordered">';
+                html += '<thead><tr><th>Order ID</th><th>Order Date</th><th>Total Amount</th><th>Payment Method</th><th>Status</th><th>Details</th></tr></thead>';
+                html += '<tbody>';
+
+                orders.forEach(function (order) {
+                    var orderDate = new Date(order.OrderDate);
+                    var formattedDate = isNaN(orderDate.getTime()) ? "Ngày không hợp lệ" : orderDate.toLocaleString('en-US', {
+                        month: 'numeric',
+                        day: 'numeric',
+                        year: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        second: 'numeric',
+                        hour12: true
+                    });
+
+                    html += '<tr>';
+                    html += '<td>' + order.OrderId + '</td>';
+                    html += '<td>' + formattedDate + '</td>';
+                    html += '<td>' + order.TotalAmount.toLocaleString('vi-VN') + ' ₫</td>';
+                    html += '<td>' + order.PaymentMethod + '</td>';
+                    html += '<td>' + order.Status + '</td>';
+                    html += '<td>';
+                    html += '<ul>';
+                    order.OrderDetails.forEach(function (detail) {
+                        html += '<li>';
+                        html += detail.FoodName;
+                        if (detail.SizeName) {
+                            html += ' (' + detail.SizeName + ')';
+                        }
+                        if (detail.ToppingName) {
+                            html += ' - Topping: ' + detail.ToppingName;
+                        }
+                        html += ' - Số lượng: ' + detail.Quantity;
+                        html += ' - Giá: ' + detail.Price.toLocaleString('vi-VN') + ' ₫';
+                        html += '</li>';
+                    });
+                    html += '</ul>';
+                    html += '</td>';
+                    html += '</tr>';
+                });
+
+                html += '</tbody></table>';
+                $('#orders-list').html(html);
+            }
+
+            // Hàm kiểm tra giá trị đầu vào
+            function validateField(input, errorElement, pattern, message) {
+                $(input).on('blur', function () {
+                    if (!pattern.test($(this).val().trim())) {
+                        $(errorElement).text(message);
+                    } else {
+                        $(errorElement).text("");
+                    }
+                });
+            }
+
+            // Áp dụng kiểm tra cho các trường
             validateField(
-                document.getElementById('username'),
-                document.getElementById('username-error'),
+                $('#username'),
+                $('#username-error'),
                 /^[a-zA-Z0-9]{3,20}$/,
                 "Username phải từ 3-20 ký tự, chỉ chứa chữ và số."
             );
 
             validateField(
-                document.getElementById('fullname'),
-                document.getElementById('fullname-error'),
-                /\S+/,
-                "Vui lòng nhập họ tên."
+                $('#fullname'),
+                $('#fullname-error'),
+                /^(?!\s*$).{3,}$/,
+                "Tên phải từ 3 ký tự trở lên và không được chỉ chứa khoảng trắng."
             );
 
             validateField(
-                document.getElementById('email'),
-                document.getElementById('email-error'),
+                $('#email'),
+                $('#email-error'),
                 /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                 "Email không hợp lệ."
             );
 
             validateField(
-                document.getElementById('phone'),
-                document.getElementById('phone-error'),
+                $('#phone'),
+                $('#phone-error'),
                 /^(0[3|5|7|8|9])[0-9]{8}$/,
-                "Số điện thoại không hợp lệ!"
+                "Số điện thoại không hợp lệ! Phải bắt đầu bằng 03, 05, 07, 08, 09 và có 10 chữ số."
             );
 
             validateField(
-                document.getElementById('address'),
-                document.getElementById('address-error'),
+                $('#address'),
+                $('#address-error'),
                 /\S+/,
                 "Vui lòng nhập địa chỉ."
             );
 
-            document.getElementById('profile-form').addEventListener('submit', function (event) {
+            // Kiểm tra file ảnh
+            function validateAvatar() {
+                let fileInput = $("#avatarFile")[0];
+                if (fileInput.files.length > 0) {
+                    let file = fileInput.files[0];
+                    let allowedExtensions = ["png", "jpg", "jpeg", "gif", "webp"];
+                    let fileExt = file.name.split('.').pop().toLowerCase();
+
+                    if (!allowedExtensions.includes(fileExt)) {
+                        $("#avatar-error").text("Chỉ chấp nhận file ảnh (.png, .jpg, .jpeg, .gif, .webp).");
+                        return false;
+                    } else {
+                        $("#avatar-error").text("");
+                        return true;
+                    }
+                }
+                return true; // Nếu không chọn file mới, bỏ qua kiểm tra
+            }
+
+            // Xử lý form cập nhật thông tin
+            $('#profile-form').on('submit', function (event) {
                 event.preventDefault();
 
                 let id = @Model.Id;
-                let username = document.getElementById('username').value.trim();
-                let fullName = document.getElementById('fullname').value.trim();
-                let email = document.getElementById('email').value.trim();
-                let phone = document.getElementById('phone').value.trim();
-                let address = document.getElementById('address').value.trim();
+                let username = $('#username').val().trim();
+                let fullName = $('#fullname').val().trim();
+                let email = $('#email').val().trim();
+                let phone = $('#phone').val().trim();
+                let address = $('#address').val().trim();
+                let avatarFile = $('#avatarFile')[0].files[0];
+
+                // Kiểm tra lại tất cả các trường trước khi gửi
+                let validations = [
+                    {
+                        value: username,
+                        pattern: /^[a-zA-Z0-9]{3,20}$/,
+                        errorElement: $('#username-error'),
+                        message: "Username phải từ 3-20 ký tự, chỉ chứa chữ và số."
+                    },
+                    {
+                        value: fullName,
+                        pattern: /^(?!\s*$).{3,}$/,
+                        errorElement: $('#fullname-error'),
+                        message: "Tên phải từ 3 ký tự trở lên và không được chỉ chứa khoảng trắng."
+                    },
+                    {
+                        value: email,
+                        pattern: /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                        errorElement: $('#email-error'),
+                        message: "Email không hợp lệ."
+                    },
+                    {
+                        value: phone,
+                        pattern: /^(0[3|5|7|8|9])[0-9]{8}$/,
+                        errorElement: $('#phone-error'),
+                        message: "Số điện thoại không hợp lệ! Phải bắt đầu bằng 03, 05, 07, 08, 09 và có 10 chữ số."
+                    },
+                    {
+                        value: address,
+                        pattern: /\S+/,
+                        errorElement: $('#address-error'),
+                        message: "Vui lòng nhập địa chỉ."
+                    }
+                ];
+
+                let hasError = false;
+                validations.forEach(validation => {
+                    if (!validation.pattern.test(validation.value)) {
+                        validation.errorElement.text(validation.message);
+                        hasError = true;
+                    } else {
+                        validation.errorElement.text("");
+                    }
+                });
+
+                if (!validateAvatar()) {
+                    hasError = true;
+                }
+
+                if (hasError) {
+                    alert("Vui lòng nhập đúng thông tin trước khi cập nhật!");
+                    return;
+                }
 
                 let updates = [
                     { field: "Username", value: username },
@@ -142,56 +358,23 @@
                     { field: "Address", value: address }
                 ];
 
-                let hasError = false;
-                document.querySelectorAll('span.text-danger').forEach(function (error) {
-                    if (error.textContent !== "") hasError = true;
-                });
-
-                if (hasError) {
-                    alert("Vui lòng nhập đúng thông tin trước khi cập nhật!");
-                    return;
-                }
-
-                console.log("Dữ liệu gửi đi:", updates);
-
                 // Tách riêng request cho Username
                 let usernameUpdate = updates.find(update => update.field === "Username");
                 let otherUpdates = updates.filter(update => update.field !== "Username");
 
                 // Kiểm tra xem Username có thay đổi không
-                let originalUsername = '@Model.Username'; // Lấy Username ban đầu từ Model
-                if (usernameUpdate.value !== originalUsername) {
-                    // Gửi request cho Username trước
-                    $.ajax({
-                        url: '@Url.Action("UpdateUser", "TaiKhoan")',
-                        type: 'POST',
-                        data: { id: id, field: usernameUpdate.field, value: usernameUpdate.value },
-                        success: function (response) {
-                            console.log(`Phản hồi từ ${usernameUpdate.field}:`, response);
-                            if (response.success) {
-                                alert("Username đã được cập nhật. Vui lòng đăng nhập lại!");
-                                window.location.href = '@Url.Action("Login", "Login")'; // Chuyển hướng đến trang đăng nhập
-                            } else {
-                                alert("Cập nhật Username thất bại: " + response.message);
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error(`Lỗi khi gửi ${usernameUpdate.field}:`, error);
-                            alert("Có lỗi xảy ra khi cập nhật Username!");
-                        }
-                    });
-                } else {
-                    // Nếu Username không thay đổi, gửi các request còn lại
+                let originalUsername = '@Model.Username';
+                let updateProfile = function () {
                     let ajaxRequests = otherUpdates.map(update => {
                         return $.ajax({
                             url: '@Url.Action("UpdateUser", "TaiKhoan")',
                             type: 'POST',
                             data: { id: id, field: update.field, value: update.value },
                             success: function (response) {
-                                console.log(`Phản hồi từ ${update.field}:`, response);
+                                return response;
                             },
                             error: function (xhr, status, error) {
-                                console.error(`Lỗi khi gửi ${update.field}:`, error);
+                                return { success: false, message: `Lỗi khi gửi ${update.field}: ${error}` };
                             }
                         });
                     });
@@ -199,18 +382,146 @@
                     Promise.all(ajaxRequests).then((responses) => {
                         let allSuccess = responses.every(r => r.success);
                         if (allSuccess) {
-                            alert("Cập nhật thành công!");
+                            alert("Cập nhật thông tin thành công!");
                             location.reload();
                         } else {
-                            let errorMessages = responses.filter(r => !r.success).map(r => r.message).join("\n");
-                            alert("Cập nhật thất bại:\n" + errorMessages);
+                            let errorMessages = responses
+                                .filter(r => !r.success)
+                                .map(r => r.message)
+                                .join("\n");
+                            alert("Cập nhật thông tin thất bại:\n" + errorMessages);
                         }
                     }).catch((error) => {
                         console.error("Lỗi Promise:", error);
-                        alert("Có lỗi xảy ra khi cập nhật!");
+                        alert("Có lỗi xảy ra khi cập nhật thông tin!");
                     });
+                };
+
+                // Gửi request cho Avatar nếu có file
+                if (avatarFile) {
+                    let formData = new FormData();
+                    formData.append("id", id);
+                    formData.append("AvatarFile", avatarFile);
+
+                    console.log("Sending avatar update request..."); // Debug
+                    $.ajax({
+                        url: '@Url.Action("UpdateAvatar", "TaiKhoan")',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
+                            console.log("Avatar update response:", response); // Debug
+                            if (response.success) {
+                                $("#sidebarAvatar").attr("src", response.avatarUrl);
+                                $("#previewAvatar").attr("src", response.avatarUrl);
+                                updateProfile();
+                            } else {
+                                alert("Cập nhật ảnh đại diện thất bại: " + response.message);
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Avatar update error:", status, error); // Debug
+                            alert("Có lỗi xảy ra khi cập nhật ảnh đại diện!");
+                        }
+                    });
+                } else {
+                    updateProfile();
                 }
             });
         });
     </script>
 }
+
+<style>
+    /* Ẩn tất cả section mặc định */
+    .content-section {
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+        /* Hiển thị section được chọn */
+        .content-section.active {
+            display: block;
+            opacity: 1;
+        }
+
+    /* Định dạng bảng đơn hàng */
+    #orders-list table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 40px;
+        background-color: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        table-layout: fixed; /* Đảm bảo các cột có kích thước cố định */
+    }
+
+    /* Header */
+    #orders-list th {
+        background-color: #f7f7f7;
+        padding: 12px 10px;
+        text-align: left;
+        color: #333;
+        font-weight: 600;
+        font-size: 14px;
+        border-bottom: 1px solid #e0e0e0;
+        text-transform: uppercase;
+    }
+
+    /* Cell */
+    #orders-list td {
+        padding: 12px 10px;
+        color: #555;
+        font-size: 14px;
+        border-bottom: 1px solid #f1f1f1;
+        vertical-align: top;
+    }
+
+        /* Định kích thước cố định cho các cột */
+        #orders-list th:nth-child(1), #orders-list td:nth-child(1) { /* Order ID */
+            width: 20%;
+        }
+
+        #orders-list th:nth-child(2), #orders-list td:nth-child(2) { /* Order Date */
+            width: 20%;
+        }
+
+        #orders-list th:nth-child(3), #orders-list td:nth-child(3) { /* Total Amount */
+            width: 25%;
+        }
+
+        #orders-list th:nth-child(4), #orders-list td:nth-child(4) { /* Payment Method */
+            width: 25%;
+        }
+
+        #orders-list th:nth-child(5), #orders-list td:nth-child(5) { /* Status */
+            width: 20%;
+        }
+
+        #orders-list th:nth-child(6), #orders-list td:nth-child(6) { /* Details */
+            width: 25%;
+        }
+
+    /* Hover effect */
+    #orders-list tr:hover {
+        background-color: #f9f9f9;
+        transition: background-color 0.2s ease;
+    }
+
+    /* Chi tiết đơn hàng - danh sách */
+    #orders-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    #orders-list li {
+        padding: 4px 0;
+        color: #444;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+</style>

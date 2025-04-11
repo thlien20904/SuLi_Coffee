@@ -77,7 +77,7 @@
                                         <p class="price" style="color: #C19A6B; font-weight: bold;">@item.Price.ToString("N0")đ</p>
 
                                         <p class="sold">Đã bán: @item.TotalSold</p>
-                                        <a href="@Url.Action("Info", "SanPhamAdmin", new { id = item.FoodId })" class="btn-buy">
+                                        <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.FoodId })" class="btn-buy">
                                             Xem chi tiết
                                         </a>
                                     </div>

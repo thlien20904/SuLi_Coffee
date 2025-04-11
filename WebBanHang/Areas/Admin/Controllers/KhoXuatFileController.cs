@@ -8,7 +8,7 @@ using WebBanHang.Models;
 
 public class KhoXuatFileController : Controller
 {
-    private WebAppDBEntities3 db = new WebAppDBEntities3();
+    private WebAppDBEntities4 db = new WebAppDBEntities4();
 
     // Hiển thị danh sách nguyên liệu
     public ActionResult Index()

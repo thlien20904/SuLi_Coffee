@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
-using ClosedXML.Excel;
 using WebBanHang.Models;
 
 namespace WebBanHang.Areas.Admin.Controllers
 {
     public class BaoCaoController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // 🏆 Hiển thị trang tổng hợp báo cáo
         public ActionResult BaoCao()
@@ -18,69 +17,100 @@ namespace WebBanHang.Areas.Admin.Controllers
             return View();
         }
 
-        // 📌 Hiển thị danh sách Hóa Đơn
-        public ActionResult HoaDon(DateTime? startDate, DateTime? endDate)
+      
+        public ActionResult DoanhThu(int? year)
         {
-            var hoaDons = db.Invoices.AsQueryable();
+            // Nếu không có năm được chọn, mặc định là năm hiện tại
+            int selectedYear = year ?? DateTime.Now.Year;
 
-            if (startDate.HasValue && endDate.HasValue)
-            {
-                hoaDons = hoaDons.Where(h => h.DateCheckIn >= startDate.Value
-                    && (h.DateCheckOut == null || h.DateCheckOut <= endDate.Value)); // Xử lý DateCheckOut NULL
-            }
+            // 1. Doanh thu theo tháng trong năm được chọn
+            var monthlyRevenue = db.OrderDetails
+                .Include(od => od.Order)
+                .Where(od => od.Order.OrderDate.Year == selectedYear)
+                .GroupBy(od => od.Order.OrderDate.Month)
+                .Select(g => new MonthlyRevenue
+                {
+                    Month = g.Key,
+                    TotalRevenue = g.Sum(od => od.Price * od.Quantity)
+                })
+                .OrderBy(g => g.Month)
+                .ToList();
 
-            var list = hoaDons.ToList();
-            System.Diagnostics.Debug.WriteLine("Số hóa đơn lấy được: " + list.Count);
+            // Tạo danh sách doanh thu cho 12 tháng (nếu không có dữ liệu thì là 0)
+            var monthlyRevenueList = Enumerable.Range(1, 12)
+                .Select(m => new MonthlyRevenue
+                {
+                    Month = m,
+                    TotalRevenue = monthlyRevenue.FirstOrDefault(x => x.Month == m)?.TotalRevenue ?? 0
+                })
+                .ToList();
 
-            // Debug chi tiết dữ liệu lấy được
-            foreach (var hd in list)
-            {
-                System.Diagnostics.Debug.WriteLine($"InvoiceId: {hd.InvoiceId}, TableId: {hd.TableId}, DateCheckIn: {hd.DateCheckIn}, DateCheckOut: {hd.DateCheckOut}, TrangThai: {hd.TrangThai}");
-            }
+            // 2. Số lượng sản phẩm bán được theo tháng trong năm được chọn
+            var productSales = db.OrderDetails
+                .Include(od => od.Order)
+                .Include(od => od.Food)
+                .Where(od => od.Order.OrderDate.Year == selectedYear)
+                .GroupBy(od => new { od.FoodId, od.Food.FoodName, od.Food.ImageURL })
+                .Select(g => new ProductSales
+                {
+                    FoodName = g.Key.FoodName,
+                    ImageURL = g.Key.ImageURL,
+                    SalesByMonth = g.GroupBy(x => x.Order.OrderDate.Month)
+                                    .Select(m => new MonthlySalesReport
+                                    {
+                                        Month = m.Key,
+                                        Quantity = m.Sum(x => x.Quantity)
+                                    })
+                                    .ToList(),
+                    TotalSold = g.Sum(x => x.Quantity)
+                })
+                .OrderByDescending(g => g.TotalSold)
+                .Take(3) // Lấy 3 sản phẩm bán chạy nhất
+                .ToList();
 
-            // ✅ Nếu là request AJAX, trả về PartialView để cập nhật bảng dữ liệu
-            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
-            {
-                return PartialView("_HoaDonTable", list);
-            }
+            // 3. Doanh thu 5 năm gần nhất
+            int currentYear = DateTime.Now.Year;
+            var yearlyRevenue = db.OrderDetails
+                .Include(od => od.Order)
+                .Where(od => od.Order.OrderDate.Year >= currentYear - 4 && od.Order.OrderDate.Year <= currentYear)
+                .GroupBy(od => od.Order.OrderDate.Year)
+                .Select(g => new YearlyRevenue
+                {
+                    Year = g.Key,
+                    TotalRevenue = g.Sum(od => od.Price * od.Quantity)
+                })
+                .OrderBy(g => g.Year)
+                .ToList();
 
-            // ✅ Nếu là request bình thường, trả về cả giao diện
-            return View(list);
-        }
-        public ActionResult ChiTietHoaDon(int invoiceId)
-        {
-            var chiTiet = db.InvoiceDetails
-                           .Where(c => c.InvoiceId == invoiceId)
-                           .ToList();
+            // Tạo danh sách doanh thu cho 5 năm (nếu không có dữ liệu thì là 0)
+            var yearlyRevenueList = Enumerable.Range(currentYear - 4, 5)
+                .Select(y => new YearlyRevenue
+                {
+                    Year = y,
+                    TotalRevenue = yearlyRevenue.FirstOrDefault(x => x.Year == y)?.TotalRevenue ?? 0
+                })
+                .ToList();
 
-            if (!chiTiet.Any())
-            {
-                return Content("<tr><td colspan='3' style='color: red;'>⚠️ Không có dữ liệu</td></tr>");
-            }
+            // Truyền dữ liệu vào ViewBag
+            ViewBag.SelectedYear = selectedYear;
+            ViewBag.MonthlyRevenue = monthlyRevenueList;
+            ViewBag.ProductSales = productSales;
+            ViewBag.YearlyRevenue = yearlyRevenueList;
 
-            return PartialView("_ChiTietHoaDon", chiTiet);
-        }
-
-
-
-        // 💰 Hiển thị Doanh Thu
-        public ActionResult DoanhThu()
-        {
-            decimal tongDoanhThu = db.InvoiceDetails.Sum(d => (decimal?)d.Price) ?? 0;
-            ViewBag.TongDoanhThu = tongDoanhThu;
             return View();
         }
+
         public ActionResult BanChay()
         {
-            var bestSellers = db.InvoiceDetails
+            var bestSellers = db.OrderDetails
                 .GroupBy(d => d.FoodId)
                 .Select(g => new
                 {
                     FoodId = g.Key,
-                    TotalSold = g.Sum(d => d.SoLuong)
+                    TotalSold = g.Sum(d => d.Quantity)
                 })
                 .OrderByDescending(g => g.TotalSold)
-                .Take(8) // Giới hạn 8 sản phẩm bán chạy
+                .Take(8)
                 .ToList();
 
             var danhSachBanChay = bestSellers
@@ -104,64 +134,8 @@ namespace WebBanHang.Areas.Admin.Controllers
             else
             {
                 ViewBag.ErrorMessage = "Không có sản phẩm bán chạy.";
-                return View(new List<WebBanHang.Models.BanChayModel>()); // Trả về danh sách rỗng nhưng không null
+                return View(new List<WebBanHang.Models.BanChayModel>());
             }
         }
-
-
-        public ActionResult ExportToExcel()
-        {
-            var matHangBanChay = db.InvoiceDetails
-                .GroupBy(d => d.FoodId)
-                .Select(g => new
-                {
-                    FoodId = g.Key,
-                    TotalSold = g.Sum(d => d.SoLuong)
-                })
-                .OrderByDescending(g => g.TotalSold)
-                .Take(10)
-                .ToList();
-
-            // Join với bảng Foods để lấy thông tin sản phẩm
-            var products = matHangBanChay
-                .Join(db.Foods, sold => sold.FoodId, food => food.FoodId, (sold, food) => new
-                {
-                    food.FoodId,
-                    food.FoodName,
-                    food.Price,
-                    TotalSold = sold.TotalSold
-                })
-                .ToList();
-
-            using (var workbook = new XLWorkbook())  // ✅ ClosedXML
-            {
-                var worksheet = workbook.Worksheets.Add("SanPhamBanChay");
-
-                // Tiêu đề cột
-                worksheet.Cell("A1").Value = "ID";
-                worksheet.Cell("B1").Value = "Tên sản phẩm";
-                worksheet.Cell("C1").Value = "Giá";
-                worksheet.Cell("D1").Value = "Đã bán";
-
-                int row = 2;
-                foreach (var item in products)
-                {
-                    worksheet.Cell(row, 1).Value = item.FoodId;
-                    worksheet.Cell(row, 2).Value = item.FoodName;
-                    worksheet.Cell(row, 3).Value = item.Price;
-                    worksheet.Cell(row, 4).Value = item.TotalSold;
-                    row++;
-                }
-
-                using (var stream = new MemoryStream())
-                {
-                    workbook.SaveAs(stream);
-                    var content = stream.ToArray();
-                    return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "SanPhamBanChay.xlsx");
-                }
-            }
-        }
-
-
     }
 }

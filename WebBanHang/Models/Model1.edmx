@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="WebAppDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="WebAppDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Account">
           <Key>
             <PropertyRef Name="AccountId" />
@@ -56,6 +56,25 @@
           <Property Name="IngredientId" Type="int" />
           <Property Name="Quantity" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="GioHang">
+          <Key>
+            <PropertyRef Name="GioHangID" />
+          </Key>
+          <Property Name="GioHangID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="FoodId" Type="int" Nullable="false" />
+          <Property Name="SoLuong" Type="int" Nullable="false" />
+          <Property Name="SizeID" Type="int" />
+          <Property Name="TotalPrice" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="GioHang_Topping">
+          <Key>
+            <PropertyRef Name="GioHangToppingID" />
+          </Key>
+          <Property Name="GioHangToppingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GioHangID" Type="int" Nullable="false" />
+          <Property Name="ToppingID" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Ingredient">
           <Key>
             <PropertyRef Name="IngredientId" />
@@ -87,6 +106,51 @@
           <Property Name="SoLuong" Type="int" Nullable="false" />
           <Property Name="Price" Type="decimal" Precision="18" Scale="3" Nullable="false" />
         </EntityType>
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderDetailId" />
+          </Key>
+          <Property Name="OrderDetailId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OrderId" Type="int" Nullable="false" />
+          <Property Name="FoodId" Type="int" Nullable="false" />
+          <Property Name="SizeId" Type="int" />
+          <Property Name="ToppingId" Type="int" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="int" Nullable="false" />
+          <Property Name="OrderDate" Type="datetime" Nullable="false" />
+          <Property Name="TotalAmount" Type="decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="int" Nullable="false" />
+          <Property Name="StatusId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrderStatus">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Name="StatusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PhuongThucThanhToan">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TenPhuongThuc" Type="nvarchar" MaxLength="255" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Size">
+          <Key>
+            <PropertyRef Name="SizeID" />
+          </Key>
+          <Property Name="SizeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SizeName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ExtraPrice" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Staff">
           <Key>
             <PropertyRef Name="StaffId" />
@@ -107,6 +171,14 @@
           <Property Name="TableId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TableName" Type="nvarchar" MaxLength="100" />
           <Property Name="TrangThai" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="Topping">
+          <Key>
+            <PropertyRef Name="ToppingID" />
+          </Key>
+          <Property Name="ToppingID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ToppingName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="ToppingPrice" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Users">
           <Key>
@@ -136,7 +208,7 @@
           <Property Name="SoLuong" Type="int" Nullable="false" />
           <Property Name="DateUpdate" Type="date" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Food__CategoryId__1E05700A">
+        <Association Name="FK__Food__CategoryId__5D80D6A1">
           <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
           <End Role="Food" Type="Self.Food" Multiplicity="*" />
           <ReferentialConstraint>
@@ -148,7 +220,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Food__Ingredient__1EF99443">
+        <Association Name="FK__Food__Ingredient__5E74FADA">
           <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="0..1" />
           <End Role="Food" Type="Self.Food" Multiplicity="*" />
           <ReferentialConstraint>
@@ -160,7 +232,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FoodIngre__FoodI__33008CF0">
+        <Association Name="FK__FoodIngre__FoodI__12E8C319">
           <End Role="Food" Type="Self.Food" Multiplicity="0..1" />
           <End Role="FoodIngredient" Type="Self.FoodIngredient" Multiplicity="*" />
           <ReferentialConstraint>
@@ -172,7 +244,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FoodIngre__Ingre__33F4B129">
+        <Association Name="FK__FoodIngre__Ingre__13DCE752">
           <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="0..1" />
           <End Role="FoodIngredient" Type="Self.FoodIngredient" Multiplicity="*" />
           <ReferentialConstraint>
@@ -184,7 +256,71 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Invoice__TableId__22CA2527">
+        <Association Name="FK__GioHang__FoodId__67FE6514">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodId" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GioHang__Id__670A40DB">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GioHang__SizeID__68F2894D">
+          <End Role="Size" Type="Self.Size" Multiplicity="0..1" />
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Size">
+              <PropertyRef Name="SizeID" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="SizeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GioHang_T__GioHa__6BCEF5F8">
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GioHang_Topping" Type="Self.GioHang_Topping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GioHang">
+              <PropertyRef Name="GioHangID" />
+            </Principal>
+            <Dependent Role="GioHang_Topping">
+              <PropertyRef Name="GioHangID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GioHang_T__Toppi__6CC31A31">
+          <End Role="Topping" Type="Self.Topping" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GioHang_Topping" Type="Self.GioHang_Topping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Topping">
+              <PropertyRef Name="ToppingID" />
+            </Principal>
+            <Dependent Role="GioHang_Topping">
+              <PropertyRef Name="ToppingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Invoice__TableId__02B25B50">
           <End Role="TableFood" Type="Self.TableFood" Multiplicity="0..1" />
           <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
           <ReferentialConstraint>
@@ -196,7 +332,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__InvoiceDe__FoodI__278EDA44">
+        <Association Name="FK__InvoiceDe__FoodI__0777106D">
           <End Role="Food" Type="Self.Food" Multiplicity="0..1" />
           <End Role="InvoiceDetail" Type="Self.InvoiceDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -208,7 +344,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__InvoiceDe__Invoi__269AB60B">
+        <Association Name="FK__InvoiceDe__Invoi__0682EC34">
           <End Role="Invoice" Type="Self.Invoice" Multiplicity="0..1" />
           <End Role="InvoiceDetail" Type="Self.InvoiceDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -220,7 +356,93 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Staff__AccountId__2A6B46EF">
+        <Association Name="FK__OrderDeta__FoodI__7CF981FA">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodId" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__Order__7C055DC1">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__SizeI__7DEDA633">
+          <End Role="Size" Type="Self.Size" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Size">
+              <PropertyRef Name="SizeID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="SizeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__Toppi__7EE1CA6C">
+          <End Role="Topping" Type="Self.Topping" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Topping">
+              <PropertyRef Name="ToppingID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ToppingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__PaymentM__764C846B">
+          <End Role="PhuongThucThanhToan" Type="Self.PhuongThucThanhToan" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PhuongThucThanhToan">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__StatusId__7740A8A4">
+          <End Role="OrderStatus" Type="Self.OrderStatus" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderStatus">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__UserId__75586032">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Staff__AccountId__0A537D18">
           <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
           <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
           <ReferentialConstraint>
@@ -232,7 +454,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Staff__RoleId__2B5F6B28">
+        <Association Name="FK__Staff__RoleId__0B47A151">
           <End Role="AccRole" Type="Self.AccRole" Multiplicity="0..1" />
           <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
           <ReferentialConstraint>
@@ -244,7 +466,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Warehouse__Ingre__30242045">
+        <Association Name="FK__Warehouse__Ingre__100C566E">
           <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="0..1" />
           <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="*" />
           <ReferentialConstraint>
@@ -262,55 +484,112 @@
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Food" EntityType="Self.Food" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FoodIngredient" EntityType="Self.FoodIngredient" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GioHang" EntityType="Self.GioHang" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GioHang_Topping" EntityType="Self.GioHang_Topping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ingredient" EntityType="Self.Ingredient" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Invoice" EntityType="Self.Invoice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InvoiceDetail" EntityType="Self.InvoiceDetail" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderStatus" EntityType="Self.OrderStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PhuongThucThanhToan" EntityType="Self.PhuongThucThanhToan" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Size" EntityType="Self.Size" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Staff" EntityType="Self.Staff" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TableFood" EntityType="Self.TableFood" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Topping" EntityType="Self.Topping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Food__CategoryId__1E05700A" Association="Self.FK__Food__CategoryId__1E05700A">
+          <AssociationSet Name="FK__Food__CategoryId__5D80D6A1" Association="Self.FK__Food__CategoryId__5D80D6A1">
             <End Role="Category" EntitySet="Category" />
             <End Role="Food" EntitySet="Food" />
           </AssociationSet>
-          <AssociationSet Name="FK__Food__Ingredient__1EF99443" Association="Self.FK__Food__Ingredient__1EF99443">
+          <AssociationSet Name="FK__Food__Ingredient__5E74FADA" Association="Self.FK__Food__Ingredient__5E74FADA">
             <End Role="Ingredient" EntitySet="Ingredient" />
             <End Role="Food" EntitySet="Food" />
           </AssociationSet>
-          <AssociationSet Name="FK__FoodIngre__FoodI__33008CF0" Association="Self.FK__FoodIngre__FoodI__33008CF0">
+          <AssociationSet Name="FK__FoodIngre__FoodI__12E8C319" Association="Self.FK__FoodIngre__FoodI__12E8C319">
             <End Role="Food" EntitySet="Food" />
             <End Role="FoodIngredient" EntitySet="FoodIngredient" />
           </AssociationSet>
-          <AssociationSet Name="FK__FoodIngre__Ingre__33F4B129" Association="Self.FK__FoodIngre__Ingre__33F4B129">
+          <AssociationSet Name="FK__FoodIngre__Ingre__13DCE752" Association="Self.FK__FoodIngre__Ingre__13DCE752">
             <End Role="Ingredient" EntitySet="Ingredient" />
             <End Role="FoodIngredient" EntitySet="FoodIngredient" />
           </AssociationSet>
-          <AssociationSet Name="FK__Invoice__TableId__22CA2527" Association="Self.FK__Invoice__TableId__22CA2527">
+          <AssociationSet Name="FK__GioHang__FoodId__67FE6514" Association="Self.FK__GioHang__FoodId__67FE6514">
+            <End Role="Food" EntitySet="Food" />
+            <End Role="GioHang" EntitySet="GioHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GioHang__Id__670A40DB" Association="Self.FK__GioHang__Id__670A40DB">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="GioHang" EntitySet="GioHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GioHang__SizeID__68F2894D" Association="Self.FK__GioHang__SizeID__68F2894D">
+            <End Role="Size" EntitySet="Size" />
+            <End Role="GioHang" EntitySet="GioHang" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GioHang_T__GioHa__6BCEF5F8" Association="Self.FK__GioHang_T__GioHa__6BCEF5F8">
+            <End Role="GioHang" EntitySet="GioHang" />
+            <End Role="GioHang_Topping" EntitySet="GioHang_Topping" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GioHang_T__Toppi__6CC31A31" Association="Self.FK__GioHang_T__Toppi__6CC31A31">
+            <End Role="Topping" EntitySet="Topping" />
+            <End Role="GioHang_Topping" EntitySet="GioHang_Topping" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Invoice__TableId__02B25B50" Association="Self.FK__Invoice__TableId__02B25B50">
             <End Role="TableFood" EntitySet="TableFood" />
             <End Role="Invoice" EntitySet="Invoice" />
           </AssociationSet>
-          <AssociationSet Name="FK__InvoiceDe__FoodI__278EDA44" Association="Self.FK__InvoiceDe__FoodI__278EDA44">
+          <AssociationSet Name="FK__InvoiceDe__FoodI__0777106D" Association="Self.FK__InvoiceDe__FoodI__0777106D">
             <End Role="Food" EntitySet="Food" />
             <End Role="InvoiceDetail" EntitySet="InvoiceDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK__InvoiceDe__Invoi__269AB60B" Association="Self.FK__InvoiceDe__Invoi__269AB60B">
+          <AssociationSet Name="FK__InvoiceDe__Invoi__0682EC34" Association="Self.FK__InvoiceDe__Invoi__0682EC34">
             <End Role="Invoice" EntitySet="Invoice" />
             <End Role="InvoiceDetail" EntitySet="InvoiceDetail" />
           </AssociationSet>
-          <AssociationSet Name="FK__Staff__AccountId__2A6B46EF" Association="Self.FK__Staff__AccountId__2A6B46EF">
+          <AssociationSet Name="FK__OrderDeta__FoodI__7CF981FA" Association="Self.FK__OrderDeta__FoodI__7CF981FA">
+            <End Role="Food" EntitySet="Food" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__Order__7C055DC1" Association="Self.FK__OrderDeta__Order__7C055DC1">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__SizeI__7DEDA633" Association="Self.FK__OrderDeta__SizeI__7DEDA633">
+            <End Role="Size" EntitySet="Size" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__Toppi__7EE1CA6C" Association="Self.FK__OrderDeta__Toppi__7EE1CA6C">
+            <End Role="Topping" EntitySet="Topping" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__PaymentM__764C846B" Association="Self.FK__Orders__PaymentM__764C846B">
+            <End Role="PhuongThucThanhToan" EntitySet="PhuongThucThanhToan" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__StatusId__7740A8A4" Association="Self.FK__Orders__StatusId__7740A8A4">
+            <End Role="OrderStatus" EntitySet="OrderStatus" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__UserId__75586032" Association="Self.FK__Orders__UserId__75586032">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Staff__AccountId__0A537D18" Association="Self.FK__Staff__AccountId__0A537D18">
             <End Role="Account" EntitySet="Account" />
             <End Role="Staff" EntitySet="Staff" />
           </AssociationSet>
-          <AssociationSet Name="FK__Staff__RoleId__2B5F6B28" Association="Self.FK__Staff__RoleId__2B5F6B28">
+          <AssociationSet Name="FK__Staff__RoleId__0B47A151" Association="Self.FK__Staff__RoleId__0B47A151">
             <End Role="AccRole" EntitySet="AccRole" />
             <End Role="Staff" EntitySet="Staff" />
           </AssociationSet>
-          <AssociationSet Name="FK__Warehouse__Ingre__30242045" Association="Self.FK__Warehouse__Ingre__30242045">
+          <AssociationSet Name="FK__Warehouse__Ingre__100C566E" Association="Self.FK__Warehouse__Ingre__100C566E">
             <End Role="Ingredient" EntitySet="Ingredient" />
             <End Role="Warehouse" EntitySet="Warehouse" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="WebAppDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -323,7 +602,7 @@
           <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PassWord" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Staffs" Relationship="Self.FK__Staff__AccountId__2A6B46EF" FromRole="Account" ToRole="Staff" />
+          <NavigationProperty Name="Staffs" Relationship="Self.FK__Staff__AccountId__0A537D18" FromRole="Account" ToRole="Staff" />
         </EntityType>
         <EntityType Name="AccRole">
           <Key>
@@ -331,7 +610,7 @@
           </Key>
           <Property Name="RoleId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="RoleName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Staffs" Relationship="Self.FK__Staff__RoleId__2B5F6B28" FromRole="AccRole" ToRole="Staff" />
+          <NavigationProperty Name="Staffs" Relationship="Self.FK__Staff__RoleId__0B47A151" FromRole="AccRole" ToRole="Staff" />
         </EntityType>
         <EntityType Name="Category">
           <Key>
@@ -339,7 +618,7 @@
           </Key>
           <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Foods" Relationship="Self.FK__Food__CategoryId__1E05700A" FromRole="Category" ToRole="Food" />
+          <NavigationProperty Name="Foods" Relationship="Self.FK__Food__CategoryId__5D80D6A1" FromRole="Category" ToRole="Food" />
         </EntityType>
         <EntityType Name="Food">
           <Key>
@@ -358,10 +637,12 @@
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
           <Property Name="UpdatedDate" Type="DateTime" Precision="3" />
           <Property Name="Status" Type="Boolean" />
-          <NavigationProperty Name="Category" Relationship="Self.FK__Food__CategoryId__1E05700A" FromRole="Food" ToRole="Category" />
-          <NavigationProperty Name="Ingredient" Relationship="Self.FK__Food__Ingredient__1EF99443" FromRole="Food" ToRole="Ingredient" />
-          <NavigationProperty Name="FoodIngredients" Relationship="Self.FK__FoodIngre__FoodI__33008CF0" FromRole="Food" ToRole="FoodIngredient" />
-          <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK__InvoiceDe__FoodI__278EDA44" FromRole="Food" ToRole="InvoiceDetail" />
+          <NavigationProperty Name="Category" Relationship="Self.FK__Food__CategoryId__5D80D6A1" FromRole="Food" ToRole="Category" />
+          <NavigationProperty Name="Ingredient" Relationship="Self.FK__Food__Ingredient__5E74FADA" FromRole="Food" ToRole="Ingredient" />
+          <NavigationProperty Name="FoodIngredients" Relationship="Self.FK__FoodIngre__FoodI__12E8C319" FromRole="Food" ToRole="FoodIngredient" />
+          <NavigationProperty Name="GioHangs" Relationship="Self.FK__GioHang__FoodId__67FE6514" FromRole="Food" ToRole="GioHang" />
+          <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK__InvoiceDe__FoodI__0777106D" FromRole="Food" ToRole="InvoiceDetail" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__FoodI__7CF981FA" FromRole="Food" ToRole="OrderDetails" />
         </EntityType>
         <EntityType Name="FoodIngredient">
           <Key>
@@ -371,8 +652,33 @@
           <Property Name="FoodId" Type="Int32" />
           <Property Name="IngredientId" Type="Int32" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Food" Relationship="Self.FK__FoodIngre__FoodI__33008CF0" FromRole="FoodIngredient" ToRole="Food" />
-          <NavigationProperty Name="Ingredient" Relationship="Self.FK__FoodIngre__Ingre__33F4B129" FromRole="FoodIngredient" ToRole="Ingredient" />
+          <NavigationProperty Name="Food" Relationship="Self.FK__FoodIngre__FoodI__12E8C319" FromRole="FoodIngredient" ToRole="Food" />
+          <NavigationProperty Name="Ingredient" Relationship="Self.FK__FoodIngre__Ingre__13DCE752" FromRole="FoodIngredient" ToRole="Ingredient" />
+        </EntityType>
+        <EntityType Name="GioHang">
+          <Key>
+            <PropertyRef Name="GioHangID" />
+          </Key>
+          <Property Name="GioHangID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="FoodId" Type="Int32" Nullable="false" />
+          <Property Name="SoLuong" Type="Int32" Nullable="false" />
+          <Property Name="SizeID" Type="Int32" />
+          <Property Name="TotalPrice" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <NavigationProperty Name="Food" Relationship="Self.FK__GioHang__FoodId__67FE6514" FromRole="GioHang" ToRole="Food" />
+          <NavigationProperty Name="User" Relationship="Self.FK__GioHang__Id__670A40DB" FromRole="GioHang" ToRole="Users" />
+          <NavigationProperty Name="Size" Relationship="Self.FK__GioHang__SizeID__68F2894D" FromRole="GioHang" ToRole="Size" />
+          <NavigationProperty Name="GioHang_Topping" Relationship="Self.FK__GioHang_T__GioHa__6BCEF5F8" FromRole="GioHang" ToRole="GioHang_Topping" />
+        </EntityType>
+        <EntityType Name="GioHang_Topping">
+          <Key>
+            <PropertyRef Name="GioHangToppingID" />
+          </Key>
+          <Property Name="GioHangToppingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GioHangID" Type="Int32" Nullable="false" />
+          <Property Name="ToppingID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GioHang" Relationship="Self.FK__GioHang_T__GioHa__6BCEF5F8" FromRole="GioHang_Topping" ToRole="GioHang" />
+          <NavigationProperty Name="Topping" Relationship="Self.FK__GioHang_T__Toppi__6CC31A31" FromRole="GioHang_Topping" ToRole="Topping" />
         </EntityType>
         <EntityType Name="Ingredient">
           <Key>
@@ -384,9 +690,9 @@
           <Property Name="PhanLoai" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ImageURL" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Foods" Relationship="Self.FK__Food__Ingredient__1EF99443" FromRole="Ingredient" ToRole="Food" />
-          <NavigationProperty Name="FoodIngredients" Relationship="Self.FK__FoodIngre__Ingre__33F4B129" FromRole="Ingredient" ToRole="FoodIngredient" />
-          <NavigationProperty Name="Warehouses" Relationship="Self.FK__Warehouse__Ingre__30242045" FromRole="Ingredient" ToRole="Warehouse" />
+          <NavigationProperty Name="Foods" Relationship="Self.FK__Food__Ingredient__5E74FADA" FromRole="Ingredient" ToRole="Food" />
+          <NavigationProperty Name="FoodIngredients" Relationship="Self.FK__FoodIngre__Ingre__13DCE752" FromRole="Ingredient" ToRole="FoodIngredient" />
+          <NavigationProperty Name="Warehouses" Relationship="Self.FK__Warehouse__Ingre__100C566E" FromRole="Ingredient" ToRole="Warehouse" />
         </EntityType>
         <EntityType Name="Invoice">
           <Key>
@@ -397,8 +703,8 @@
           <Property Name="DateCheckIn" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="DateCheckOut" Type="DateTime" Precision="0" />
           <Property Name="TrangThai" Type="Int32" />
-          <NavigationProperty Name="TableFood" Relationship="Self.FK__Invoice__TableId__22CA2527" FromRole="Invoice" ToRole="TableFood" />
-          <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK__InvoiceDe__Invoi__269AB60B" FromRole="Invoice" ToRole="InvoiceDetail" />
+          <NavigationProperty Name="TableFood" Relationship="Self.FK__Invoice__TableId__02B25B50" FromRole="Invoice" ToRole="TableFood" />
+          <NavigationProperty Name="InvoiceDetails" Relationship="Self.FK__InvoiceDe__Invoi__0682EC34" FromRole="Invoice" ToRole="InvoiceDetail" />
         </EntityType>
         <EntityType Name="InvoiceDetail">
           <Key>
@@ -409,8 +715,65 @@
           <Property Name="FoodId" Type="Int32" />
           <Property Name="SoLuong" Type="Int32" Nullable="false" />
           <Property Name="Price" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
-          <NavigationProperty Name="Food" Relationship="Self.FK__InvoiceDe__FoodI__278EDA44" FromRole="InvoiceDetail" ToRole="Food" />
-          <NavigationProperty Name="Invoice" Relationship="Self.FK__InvoiceDe__Invoi__269AB60B" FromRole="InvoiceDetail" ToRole="Invoice" />
+          <NavigationProperty Name="Food" Relationship="Self.FK__InvoiceDe__FoodI__0777106D" FromRole="InvoiceDetail" ToRole="Food" />
+          <NavigationProperty Name="Invoice" Relationship="Self.FK__InvoiceDe__Invoi__0682EC34" FromRole="InvoiceDetail" ToRole="Invoice" />
+        </EntityType>
+        <EntityType Name="OrderDetail">
+          <Key>
+            <PropertyRef Name="OrderDetailId" />
+          </Key>
+          <Property Name="OrderDetailId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderId" Type="Int32" Nullable="false" />
+          <Property Name="FoodId" Type="Int32" Nullable="false" />
+          <Property Name="SizeId" Type="Int32" />
+          <Property Name="ToppingId" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <NavigationProperty Name="Food" Relationship="Self.FK__OrderDeta__FoodI__7CF981FA" FromRole="OrderDetails" ToRole="Food" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__OrderDeta__Order__7C055DC1" FromRole="OrderDetails" ToRole="Orders" />
+          <NavigationProperty Name="Size" Relationship="Self.FK__OrderDeta__SizeI__7DEDA633" FromRole="OrderDetails" ToRole="Size" />
+          <NavigationProperty Name="Topping" Relationship="Self.FK__OrderDeta__Toppi__7EE1CA6C" FromRole="OrderDetails" ToRole="Topping" />
+        </EntityType>
+        <EntityType Name="Order">
+          <Key>
+            <PropertyRef Name="OrderId" />
+          </Key>
+          <Property Name="OrderId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserId" Type="Int32" Nullable="false" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TotalAmount" Type="Decimal" Precision="18" Scale="3" Nullable="false" />
+          <Property Name="PaymentMethodId" Type="Int32" Nullable="false" />
+          <Property Name="StatusId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Order__7C055DC1" FromRole="Orders" ToRole="OrderDetails" />
+          <NavigationProperty Name="PhuongThucThanhToan" Relationship="Self.FK__Orders__PaymentM__764C846B" FromRole="Orders" ToRole="PhuongThucThanhToan" />
+          <NavigationProperty Name="OrderStatu" Relationship="Self.FK__Orders__StatusId__7740A8A4" FromRole="Orders" ToRole="OrderStatus" />
+          <NavigationProperty Name="User" Relationship="Self.FK__Orders__UserId__75586032" FromRole="Orders" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="OrderStatu">
+          <Key>
+            <PropertyRef Name="StatusId" />
+          </Key>
+          <Property Name="StatusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__StatusId__7740A8A4" FromRole="OrderStatus" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="PhuongThucThanhToan">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TenPhuongThuc" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__PaymentM__764C846B" FromRole="PhuongThucThanhToan" ToRole="Orders" />
+        </EntityType>
+        <EntityType Name="Size">
+          <Key>
+            <PropertyRef Name="SizeID" />
+          </Key>
+          <Property Name="SizeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SizeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ExtraPrice" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GioHangs" Relationship="Self.FK__GioHang__SizeID__68F2894D" FromRole="Size" ToRole="GioHang" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__SizeI__7DEDA633" FromRole="Size" ToRole="OrderDetails" />
         </EntityType>
         <EntityType Name="Staff">
           <Key>
@@ -424,8 +787,8 @@
           <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AccountId" Type="Int32" />
           <Property Name="RoleId" Type="Int32" />
-          <NavigationProperty Name="Account" Relationship="Self.FK__Staff__AccountId__2A6B46EF" FromRole="Staff" ToRole="Account" />
-          <NavigationProperty Name="AccRole" Relationship="Self.FK__Staff__RoleId__2B5F6B28" FromRole="Staff" ToRole="AccRole" />
+          <NavigationProperty Name="Account" Relationship="Self.FK__Staff__AccountId__0A537D18" FromRole="Staff" ToRole="Account" />
+          <NavigationProperty Name="AccRole" Relationship="Self.FK__Staff__RoleId__0B47A151" FromRole="Staff" ToRole="AccRole" />
         </EntityType>
         <EntityType Name="TableFood">
           <Key>
@@ -434,7 +797,17 @@
           <Property Name="TableId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TableName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="TrangThai" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Invoices" Relationship="Self.FK__Invoice__TableId__22CA2527" FromRole="TableFood" ToRole="Invoice" />
+          <NavigationProperty Name="Invoices" Relationship="Self.FK__Invoice__TableId__02B25B50" FromRole="TableFood" ToRole="Invoice" />
+        </EntityType>
+        <EntityType Name="Topping">
+          <Key>
+            <PropertyRef Name="ToppingID" />
+          </Key>
+          <Property Name="ToppingID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ToppingName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ToppingPrice" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GioHang_Topping" Relationship="Self.FK__GioHang_T__Toppi__6CC31A31" FromRole="Topping" ToRole="GioHang_Topping" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Toppi__7EE1CA6C" FromRole="Topping" ToRole="OrderDetails" />
         </EntityType>
         <EntityType Name="User">
           <Key>
@@ -454,6 +827,8 @@
           <Property Name="ResetTokenExpiry" Type="DateTime" Precision="3" />
           <Property Name="AvatarUrl" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="GioHangs" Relationship="Self.FK__GioHang__Id__670A40DB" FromRole="Users" ToRole="GioHang" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__UserId__75586032" FromRole="Users" ToRole="Orders" />
         </EntityType>
         <EntityType Name="Warehouse">
           <Key>
@@ -463,9 +838,9 @@
           <Property Name="IngredientId" Type="Int32" />
           <Property Name="SoLuong" Type="Int32" Nullable="false" />
           <Property Name="DateUpdate" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="Ingredient" Relationship="Self.FK__Warehouse__Ingre__30242045" FromRole="Warehouse" ToRole="Ingredient" />
+          <NavigationProperty Name="Ingredient" Relationship="Self.FK__Warehouse__Ingre__100C566E" FromRole="Warehouse" ToRole="Ingredient" />
         </EntityType>
-        <Association Name="FK__Staff__AccountId__2A6B46EF">
+        <Association Name="FK__Staff__AccountId__0A537D18">
           <End Role="Account" Type="Self.Account" Multiplicity="0..1" />
           <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
           <ReferentialConstraint>
@@ -477,7 +852,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Staff__RoleId__2B5F6B28">
+        <Association Name="FK__Staff__RoleId__0B47A151">
           <End Role="AccRole" Type="Self.AccRole" Multiplicity="0..1" />
           <End Role="Staff" Type="Self.Staff" Multiplicity="*" />
           <ReferentialConstraint>
@@ -489,7 +864,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Food__CategoryId__1E05700A">
+        <Association Name="FK__Food__CategoryId__5D80D6A1">
           <End Role="Category" Type="Self.Category" Multiplicity="0..1" />
           <End Role="Food" Type="Self.Food" Multiplicity="*" />
           <ReferentialConstraint>
@@ -501,7 +876,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Food__Ingredient__1EF99443">
+        <Association Name="FK__Food__Ingredient__5E74FADA">
           <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="0..1" />
           <End Role="Food" Type="Self.Food" Multiplicity="*" />
           <ReferentialConstraint>
@@ -513,7 +888,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FoodIngre__FoodI__33008CF0">
+        <Association Name="FK__FoodIngre__FoodI__12E8C319">
           <End Role="Food" Type="Self.Food" Multiplicity="0..1" />
           <End Role="FoodIngredient" Type="Self.FoodIngredient" Multiplicity="*" />
           <ReferentialConstraint>
@@ -525,7 +900,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__InvoiceDe__FoodI__278EDA44">
+        <Association Name="FK__GioHang__FoodId__67FE6514">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodId" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__InvoiceDe__FoodI__0777106D">
           <End Role="Food" Type="Self.Food" Multiplicity="0..1" />
           <End Role="InvoiceDetail" Type="Self.InvoiceDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -537,7 +924,19 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__FoodIngre__Ingre__33F4B129">
+        <Association Name="FK__OrderDeta__FoodI__7CF981FA">
+          <End Role="Food" Type="Self.Food" Multiplicity="1" />
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Food">
+              <PropertyRef Name="FoodId" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="FoodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__FoodIngre__Ingre__13DCE752">
           <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="0..1" />
           <End Role="FoodIngredient" Type="Self.FoodIngredient" Multiplicity="*" />
           <ReferentialConstraint>
@@ -549,7 +948,59 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Warehouse__Ingre__30242045">
+        <Association Name="FK__GioHang__Id__670A40DB">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="Id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GioHang__SizeID__68F2894D">
+          <End Role="Size" Type="Self.Size" Multiplicity="0..1" />
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Size">
+              <PropertyRef Name="SizeID" />
+            </Principal>
+            <Dependent Role="GioHang">
+              <PropertyRef Name="SizeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GioHang_T__GioHa__6BCEF5F8">
+          <End Role="GioHang" Type="Self.GioHang" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GioHang_Topping" Type="Self.GioHang_Topping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="GioHang">
+              <PropertyRef Name="GioHangID" />
+            </Principal>
+            <Dependent Role="GioHang_Topping">
+              <PropertyRef Name="GioHangID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__GioHang_T__Toppi__6CC31A31">
+          <End Role="Topping" Type="Self.Topping" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="GioHang_Topping" Type="Self.GioHang_Topping" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Topping">
+              <PropertyRef Name="ToppingID" />
+            </Principal>
+            <Dependent Role="GioHang_Topping">
+              <PropertyRef Name="ToppingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Warehouse__Ingre__100C566E">
           <End Role="Ingredient" Type="Self.Ingredient" Multiplicity="0..1" />
           <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="*" />
           <ReferentialConstraint>
@@ -561,7 +1012,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Invoice__TableId__22CA2527">
+        <Association Name="FK__Invoice__TableId__02B25B50">
           <End Role="TableFood" Type="Self.TableFood" Multiplicity="0..1" />
           <End Role="Invoice" Type="Self.Invoice" Multiplicity="*" />
           <ReferentialConstraint>
@@ -573,7 +1024,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__InvoiceDe__Invoi__269AB60B">
+        <Association Name="FK__InvoiceDe__Invoi__0682EC34">
           <End Role="Invoice" Type="Self.Invoice" Multiplicity="0..1" />
           <End Role="InvoiceDetail" Type="Self.InvoiceDetail" Multiplicity="*" />
           <ReferentialConstraint>
@@ -585,58 +1036,188 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="WebAppDBEntities3" annotation:LazyLoadingEnabled="true">
+        <Association Name="FK__OrderDeta__Order__7C055DC1">
+          <End Role="Orders" Type="Self.Order" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Orders">
+              <PropertyRef Name="OrderId" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="OrderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__SizeI__7DEDA633">
+          <End Role="Size" Type="Self.Size" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Size">
+              <PropertyRef Name="SizeID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="SizeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__OrderDeta__Toppi__7EE1CA6C">
+          <End Role="Topping" Type="Self.Topping" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Topping">
+              <PropertyRef Name="ToppingID" />
+            </Principal>
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="ToppingId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__PaymentM__764C846B">
+          <End Role="PhuongThucThanhToan" Type="Self.PhuongThucThanhToan" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PhuongThucThanhToan">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="PaymentMethodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__StatusId__7740A8A4">
+          <End Role="OrderStatus" Type="Self.OrderStatu" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrderStatus">
+              <PropertyRef Name="StatusId" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="StatusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Orders__UserId__75586032">
+          <End Role="Users" Type="Self.User" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Order" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Orders">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="WebAppDBEntities4" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Accounts" EntityType="Self.Account" />
           <EntitySet Name="AccRoles" EntityType="Self.AccRole" />
           <EntitySet Name="Categories" EntityType="Self.Category" />
           <EntitySet Name="Foods" EntityType="Self.Food" />
           <EntitySet Name="FoodIngredients" EntityType="Self.FoodIngredient" />
+          <EntitySet Name="GioHangs" EntityType="Self.GioHang" />
+          <EntitySet Name="GioHang_Topping" EntityType="Self.GioHang_Topping" />
           <EntitySet Name="Ingredients" EntityType="Self.Ingredient" />
           <EntitySet Name="Invoices" EntityType="Self.Invoice" />
           <EntitySet Name="InvoiceDetails" EntityType="Self.InvoiceDetail" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetail" />
+          <EntitySet Name="Orders" EntityType="Self.Order" />
+          <EntitySet Name="OrderStatus" EntityType="Self.OrderStatu" />
+          <EntitySet Name="PhuongThucThanhToans" EntityType="Self.PhuongThucThanhToan" />
+          <EntitySet Name="Sizes" EntityType="Self.Size" />
           <EntitySet Name="Staffs" EntityType="Self.Staff" />
           <EntitySet Name="TableFoods" EntityType="Self.TableFood" />
+          <EntitySet Name="Toppings" EntityType="Self.Topping" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <EntitySet Name="Warehouses" EntityType="Self.Warehouse" />
-          <AssociationSet Name="FK__Staff__AccountId__2A6B46EF" Association="Self.FK__Staff__AccountId__2A6B46EF">
+          <AssociationSet Name="FK__Staff__AccountId__0A537D18" Association="Self.FK__Staff__AccountId__0A537D18">
             <End Role="Account" EntitySet="Accounts" />
             <End Role="Staff" EntitySet="Staffs" />
           </AssociationSet>
-          <AssociationSet Name="FK__Staff__RoleId__2B5F6B28" Association="Self.FK__Staff__RoleId__2B5F6B28">
+          <AssociationSet Name="FK__Staff__RoleId__0B47A151" Association="Self.FK__Staff__RoleId__0B47A151">
             <End Role="AccRole" EntitySet="AccRoles" />
             <End Role="Staff" EntitySet="Staffs" />
           </AssociationSet>
-          <AssociationSet Name="FK__Food__CategoryId__1E05700A" Association="Self.FK__Food__CategoryId__1E05700A">
+          <AssociationSet Name="FK__Food__CategoryId__5D80D6A1" Association="Self.FK__Food__CategoryId__5D80D6A1">
             <End Role="Category" EntitySet="Categories" />
             <End Role="Food" EntitySet="Foods" />
           </AssociationSet>
-          <AssociationSet Name="FK__Food__Ingredient__1EF99443" Association="Self.FK__Food__Ingredient__1EF99443">
+          <AssociationSet Name="FK__Food__Ingredient__5E74FADA" Association="Self.FK__Food__Ingredient__5E74FADA">
             <End Role="Ingredient" EntitySet="Ingredients" />
             <End Role="Food" EntitySet="Foods" />
           </AssociationSet>
-          <AssociationSet Name="FK__FoodIngre__FoodI__33008CF0" Association="Self.FK__FoodIngre__FoodI__33008CF0">
+          <AssociationSet Name="FK__FoodIngre__FoodI__12E8C319" Association="Self.FK__FoodIngre__FoodI__12E8C319">
             <End Role="Food" EntitySet="Foods" />
             <End Role="FoodIngredient" EntitySet="FoodIngredients" />
           </AssociationSet>
-          <AssociationSet Name="FK__InvoiceDe__FoodI__278EDA44" Association="Self.FK__InvoiceDe__FoodI__278EDA44">
+          <AssociationSet Name="FK__GioHang__FoodId__67FE6514" Association="Self.FK__GioHang__FoodId__67FE6514">
+            <End Role="Food" EntitySet="Foods" />
+            <End Role="GioHang" EntitySet="GioHangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__InvoiceDe__FoodI__0777106D" Association="Self.FK__InvoiceDe__FoodI__0777106D">
             <End Role="Food" EntitySet="Foods" />
             <End Role="InvoiceDetail" EntitySet="InvoiceDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__FoodIngre__Ingre__33F4B129" Association="Self.FK__FoodIngre__Ingre__33F4B129">
+          <AssociationSet Name="FK__OrderDeta__FoodI__7CF981FA" Association="Self.FK__OrderDeta__FoodI__7CF981FA">
+            <End Role="Food" EntitySet="Foods" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__FoodIngre__Ingre__13DCE752" Association="Self.FK__FoodIngre__Ingre__13DCE752">
             <End Role="Ingredient" EntitySet="Ingredients" />
             <End Role="FoodIngredient" EntitySet="FoodIngredients" />
           </AssociationSet>
-          <AssociationSet Name="FK__Warehouse__Ingre__30242045" Association="Self.FK__Warehouse__Ingre__30242045">
+          <AssociationSet Name="FK__GioHang__Id__670A40DB" Association="Self.FK__GioHang__Id__670A40DB">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="GioHang" EntitySet="GioHangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GioHang__SizeID__68F2894D" Association="Self.FK__GioHang__SizeID__68F2894D">
+            <End Role="Size" EntitySet="Sizes" />
+            <End Role="GioHang" EntitySet="GioHangs" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GioHang_T__GioHa__6BCEF5F8" Association="Self.FK__GioHang_T__GioHa__6BCEF5F8">
+            <End Role="GioHang" EntitySet="GioHangs" />
+            <End Role="GioHang_Topping" EntitySet="GioHang_Topping" />
+          </AssociationSet>
+          <AssociationSet Name="FK__GioHang_T__Toppi__6CC31A31" Association="Self.FK__GioHang_T__Toppi__6CC31A31">
+            <End Role="Topping" EntitySet="Toppings" />
+            <End Role="GioHang_Topping" EntitySet="GioHang_Topping" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Warehouse__Ingre__100C566E" Association="Self.FK__Warehouse__Ingre__100C566E">
             <End Role="Ingredient" EntitySet="Ingredients" />
             <End Role="Warehouse" EntitySet="Warehouses" />
           </AssociationSet>
-          <AssociationSet Name="FK__Invoice__TableId__22CA2527" Association="Self.FK__Invoice__TableId__22CA2527">
+          <AssociationSet Name="FK__Invoice__TableId__02B25B50" Association="Self.FK__Invoice__TableId__02B25B50">
             <End Role="TableFood" EntitySet="TableFoods" />
             <End Role="Invoice" EntitySet="Invoices" />
           </AssociationSet>
-          <AssociationSet Name="FK__InvoiceDe__Invoi__269AB60B" Association="Self.FK__InvoiceDe__Invoi__269AB60B">
+          <AssociationSet Name="FK__InvoiceDe__Invoi__0682EC34" Association="Self.FK__InvoiceDe__Invoi__0682EC34">
             <End Role="Invoice" EntitySet="Invoices" />
             <End Role="InvoiceDetail" EntitySet="InvoiceDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__Order__7C055DC1" Association="Self.FK__OrderDeta__Order__7C055DC1">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__SizeI__7DEDA633" Association="Self.FK__OrderDeta__SizeI__7DEDA633">
+            <End Role="Size" EntitySet="Sizes" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__OrderDeta__Toppi__7EE1CA6C" Association="Self.FK__OrderDeta__Toppi__7EE1CA6C">
+            <End Role="Topping" EntitySet="Toppings" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__PaymentM__764C846B" Association="Self.FK__Orders__PaymentM__764C846B">
+            <End Role="PhuongThucThanhToan" EntitySet="PhuongThucThanhToans" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__StatusId__7740A8A4" Association="Self.FK__Orders__StatusId__7740A8A4">
+            <End Role="OrderStatus" EntitySet="OrderStatus" />
+            <End Role="Orders" EntitySet="Orders" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Orders__UserId__75586032" Association="Self.FK__Orders__UserId__75586032">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -644,7 +1225,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="WebAppDBModelStoreContainer" CdmEntityContainer="WebAppDBEntities3">
+        <EntityContainerMapping StorageEntityContainer="WebAppDBModelStoreContainer" CdmEntityContainer="WebAppDBEntities4">
           <EntitySetMapping Name="Accounts">
             <EntityTypeMapping TypeName="WebAppDBModel.Account">
               <MappingFragment StoreEntitySet="Account">
@@ -701,6 +1282,27 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="GioHangs">
+            <EntityTypeMapping TypeName="WebAppDBModel.GioHang">
+              <MappingFragment StoreEntitySet="GioHang">
+                <ScalarProperty Name="GioHangID" ColumnName="GioHangID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+                <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
+                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+                <ScalarProperty Name="TotalPrice" ColumnName="TotalPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GioHang_Topping">
+            <EntityTypeMapping TypeName="WebAppDBModel.GioHang_Topping">
+              <MappingFragment StoreEntitySet="GioHang_Topping">
+                <ScalarProperty Name="GioHangToppingID" ColumnName="GioHangToppingID" />
+                <ScalarProperty Name="GioHangID" ColumnName="GioHangID" />
+                <ScalarProperty Name="ToppingID" ColumnName="ToppingID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Ingredients">
             <EntityTypeMapping TypeName="WebAppDBModel.Ingredient">
               <MappingFragment StoreEntitySet="Ingredient">
@@ -735,6 +1337,56 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="WebAppDBModel.OrderDetail">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="OrderDetailId" ColumnName="OrderDetailId" />
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="FoodId" ColumnName="FoodId" />
+                <ScalarProperty Name="SizeId" ColumnName="SizeId" />
+                <ScalarProperty Name="ToppingId" ColumnName="ToppingId" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="WebAppDBModel.Order">
+              <MappingFragment StoreEntitySet="Orders">
+                <ScalarProperty Name="OrderId" ColumnName="OrderId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="PaymentMethodId" ColumnName="PaymentMethodId" />
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrderStatus">
+            <EntityTypeMapping TypeName="WebAppDBModel.OrderStatu">
+              <MappingFragment StoreEntitySet="OrderStatus">
+                <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PhuongThucThanhToans">
+            <EntityTypeMapping TypeName="WebAppDBModel.PhuongThucThanhToan">
+              <MappingFragment StoreEntitySet="PhuongThucThanhToan">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TenPhuongThuc" ColumnName="TenPhuongThuc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Sizes">
+            <EntityTypeMapping TypeName="WebAppDBModel.Size">
+              <MappingFragment StoreEntitySet="Size">
+                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+                <ScalarProperty Name="SizeName" ColumnName="SizeName" />
+                <ScalarProperty Name="ExtraPrice" ColumnName="ExtraPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Staffs">
             <EntityTypeMapping TypeName="WebAppDBModel.Staff">
               <MappingFragment StoreEntitySet="Staff">
@@ -758,11 +1410,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Toppings">
+            <EntityTypeMapping TypeName="WebAppDBModel.Topping">
+              <MappingFragment StoreEntitySet="Topping">
+                <ScalarProperty Name="ToppingID" ColumnName="ToppingID" />
+                <ScalarProperty Name="ToppingName" ColumnName="ToppingName" />
+                <ScalarProperty Name="ToppingPrice" ColumnName="ToppingPrice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="WebAppDBModel.User">
               <MappingFragment StoreEntitySet="Users">
-                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
-                <ScalarProperty Name="AvatarUrl" ColumnName="AvatarUrl" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -775,6 +1434,8 @@
                 <ScalarProperty Name="OTPExpiry" ColumnName="OTPExpiry" />
                 <ScalarProperty Name="ResetToken" ColumnName="ResetToken" />
                 <ScalarProperty Name="ResetTokenExpiry" ColumnName="ResetTokenExpiry" />
+                <ScalarProperty Name="AvatarUrl" ColumnName="AvatarUrl" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

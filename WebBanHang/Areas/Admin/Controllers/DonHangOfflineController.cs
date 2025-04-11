@@ -3,18 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using WebBanHang.Models;
-using System.Data.Entity; // thêm dòng này để dùng Include trong EF6
+using System.Data.Entity;
 
 namespace WebBanHang.Areas.Admin.Controllers
 {
-
-    public class DonHangController : Controller
+    public class DonHangOfflineController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         public ActionResult Index()
         {
-            TempData["ErrorMessage"] = null;
             return View();
         }
 
@@ -59,7 +57,7 @@ namespace WebBanHang.Areas.Admin.Controllers
                 }
                 else
                 {
-                    return Json(new { success = false, message = "Không còn bàn nào để xóa" });
+                    return Json(new { success = false, message = "Không còn bàn để xóa" });
                 }
             }
             catch
@@ -67,6 +65,7 @@ namespace WebBanHang.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Lỗi xóa bàn" });
             }
         }
+
         [HttpPost]
         public ActionResult TraBan(int tableId)
         {
@@ -85,6 +84,7 @@ namespace WebBanHang.Areas.Admin.Controllers
             var danhSachLoai = db.Categories.ToList();
             return PartialView("_DanhSachLoaiSanPhamPartial", danhSachLoai);
         }
+
         public ActionResult DanhSachSanPham(int? categoryId)
         {
             try
@@ -105,6 +105,7 @@ namespace WebBanHang.Areas.Admin.Controllers
                 return Content("Lỗi: " + ex.Message + " - " + ex.StackTrace);
             }
         }
+
         [HttpGet]
         public JsonResult GetFoodByCategory(int categoryId)
         {
@@ -114,7 +115,6 @@ namespace WebBanHang.Areas.Admin.Controllers
             return Json(foods, JsonRequestBehavior.AllowGet);
         }
 
-        // NEW: load hóa đơn cho từng bàn (có thể dùng sau này)
         [HttpGet]
         public JsonResult GetHoaDonByBan(int tableId)
         {
@@ -147,8 +147,7 @@ namespace WebBanHang.Areas.Admin.Controllers
                 var ban = db.TableFoods.Find(tableId);
                 if (ban != null)
                 {
-                    ban.TrangThai = "False"; // đồng bộ với cshtml
-                                             // Reset trạng thái bàn về "Trống" sau khi thanh toán
+                    ban.TrangThai = "False";
                     db.SaveChanges();
                 }
 
@@ -159,6 +158,7 @@ namespace WebBanHang.Areas.Admin.Controllers
                 return Json(new { success = false, message = "Lỗi: " + ex.Message });
             }
         }
+
         public ActionResult GetInvoicesByTableId(int tableId)
         {
             var invoice = db.Invoices
@@ -173,5 +173,13 @@ namespace WebBanHang.Areas.Admin.Controllers
             return PartialView("_InvoicePartial", invoice);
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
     }
 }

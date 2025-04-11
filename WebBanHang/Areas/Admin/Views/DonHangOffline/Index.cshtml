@@ -6,18 +6,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <div class="page-container">
-    <!-- Tabs chọn loại đơn -->
-    <div class="tabs-container">
-        <button class="tab-btn active" data-target="dung-tai-ban">Dùng tại bàn</button>
-        <button class="tab-btn" data-target="don-online">Đơn Online</button>
-    </div>
-
     <div class="order-container">
         <!-- CỘT TRÁI: Danh sách bàn -->
         <div class="left-panel">
             <div class="tab-content dung-tai-ban active">
                 <div id="tableListContainer">
-                    @Html.Action("DanhSachBan", "DonHang", new { area = "Admin" })
+                    @Html.Action("DanhSachBan", "DonHangOffline", new { area = "Admin" })
                 </div>
                 <div class="actions mt-2">
                     <button class="btn btn-primary btn-add-table">Thêm bàn</button>
@@ -25,14 +19,11 @@
                     <button class="btn btn-warning btn-return-table">Trả bàn</button>
                 </div>
             </div>
-
-            <div class="tab-content don-online" style="display:none;">
-                <p>Đơn Online không cần chọn bàn.</p>
-            </div>
         </div>
-        <div class="tab-content dung-tai-ban active">
+
+        <div class="right-panel">
             <!-- Load dropdown chọn loại + chọn món -->
-            @Html.Action("DanhSachLoaiSanPham", "DonHang", new { area = "Admin" })
+            @Html.Action("DanhSachLoaiSanPham", "DonHangOffline", new { area = "Admin" })
 
             <!-- Khu vực chọn món -->
             <div id="productSection" class="mt-3"></div>
@@ -44,38 +35,23 @@
                 <button class="btn btn-success btn-pay mt-3">Thanh toán hóa đơn</button>
             </div>
         </div>
-
     </div>
 </div>
 
 <script>
     $(document).ready(function () {
-        const urlThemBan = '@Url.Action("ThemBan", "DonHang", new { area = "Admin" })';
-        const urlXoaBan = '@Url.Action("XoaBan", "DonHang", new { area = "Admin" })';
-        const urlDanhSachBan = '@Url.Action("DanhSachBan", "DonHang", new { area = "Admin" })';
-        const urlDanhSachSanPham = '@Url.Action("DanhSachSanPham", "DonHang", new { area = "Admin" })';
-        const urlGetInvoice = '@Url.Action("GetInvoicesByTableId", "DonHang", new { area = "Admin" })';
-        const urlThanhToan = '@Url.Action("ThanhToan", "DonHang", new { area = "Admin" })';
+        const urlThemBan = '@Url.Action("ThemBan", "DonHangOffline", new { area = "Admin" })';
+        const urlXoaBan = '@Url.Action("XoaBan", "DonHangOffline", new { area = "Admin" })';
+        const urlDanhSachBan = '@Url.Action("DanhSachBan", "DonHangOffline", new { area = "Admin" })';
+        const urlDanhSachSanPham = '@Url.Action("DanhSachSanPham", "DonHangOffline", new { area = "Admin" })';
+        const urlGetInvoice = '@Url.Action("GetInvoicesByTableId", "DonHangOffline", new { area = "Admin" })';
+        const urlThanhToan = '@Url.Action("ThanhToan", "DonHangOffline", new { area = "Admin" })';
         let selectedTableId = null;
-
-        $('.tab-btn').click(function () {
-            $('.tab-btn').removeClass('active');
-            $(this).addClass('active');
-            const target = $(this).data('target');
-            $('.tab-content').hide();
-            $('.' + target).show();
-
-            selectedTableId = null;
-            $('.table-item').removeClass('selected');
-            $('#invoiceContainer').html('');
-            $('#productSection').html('');
-            $('#categorySelect').val('');
-        });
 
         $(document).on('change', '#categorySelect', function () {
             const categoryId = $(this).val();
             if (categoryId) {
-                $.getJSON('@Url.Action("GetFoodByCategory", "DonHang", new { area = "Admin" })', { categoryId: categoryId }, function (data) {
+                $.getJSON('@Url.Action("GetFoodByCategory", "DonHangOffline", new { area = "Admin" })', { categoryId: categoryId }, function (data) {
                     let html = '';
                     data.forEach(item => {
                         html += `
@@ -89,7 +65,6 @@
                 $("#productSection").html('');
             }
         });
-
 
         $(document).on('click', '.btn-add-table', function () {
             $.post(urlThemBan, {}, function (res) {
@@ -151,10 +126,8 @@
             selectedTableId = null;
             $("#invoiceContainer").html('');
         });
-
     });
 </script>
-
 
 <style>
     .order-container {
@@ -214,31 +187,13 @@
         cursor: pointer;
     }
 
-    .tabs-container {
-        margin-bottom: 15px;
-    }
-
-    .tab-btn {
-        padding: 10px 20px;
-        background: #eee;
-        border: none;
-        margin-right: 5px;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-
-        .tab-btn.active {
-            background: #d32f2f;
-            color: white;
-        }
-
     .table-item.empty-table {
-        background-color: #e0f7fa; /* Màu xanh nhạt */
+        background-color: #e0f7fa;
         border: 1px solid #00acc1;
     }
 
     .table-item.has-customer {
-        background-color: #ffcdd2; /* Màu đỏ nhạt */
+        background-color: #ffcdd2;
         border: 1px solid #e53935;
     }
 </style>

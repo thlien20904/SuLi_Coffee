@@ -1,0 +1,226 @@
+﻿@model WebBanHang.Models.Food
+
+@{
+    ViewBag.Title = @Model.FoodName;
+    var isLoggedIn = User.Identity.IsAuthenticated;
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-5 text-center">
+            <img src="@Url.Content(Model.ImageURL)" alt="@Model.FoodName" class="product-image">
+        </div>
+        <div class="col-md-6">
+            <h2 class="product-name">@Model.FoodName</h2>
+
+            <p class="product-price">@String.Format("{0:N0} ₫", Model.Price)</p>
+
+            <!-- Chỉ hiển thị phần chọn size và topping nếu không phải danh mục "Bánh & Snack" (CategoryId != 4) -->
+            @if (Model.CategoryId != 4)
+            {
+                <!-- Chọn Size -->
+                <p>Chọn size (bắt buộc):</p>
+                <div class="d-flex flex-wrap mb-3">
+                    @if (ViewBag.Sizes != null && ViewBag.Sizes.Count > 0)
+                    {
+                        var firstSize = ViewBag.Sizes[0]; // Lấy size đầu tiên làm mặc định
+
+                        foreach (var size in ViewBag.Sizes)
+                        {
+                            <button class="size-option @(size.SizeID == firstSize.SizeID ? "active" : "")"
+                                    data-size="@size.SizeID">
+                                @size.SizeName (+ @String.Format("{0:N0} ₫", size.ExtraPrice))
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <p>Không có size nào khả dụng.</p>
+                    }
+                </div>
+
+                <!-- Chọn Topping -->
+                <p class="mt-3">Topping:</p>
+                <div class="d-flex flex-wrap mb-3">
+                    @if (ViewBag.Toppings != null)
+                    {
+                        foreach (var topping in ViewBag.Toppings)
+                        {
+                            <button class="topping-option" data-topping="@topping.ToppingID">
+                                @topping.ToppingName (+ @String.Format("{0:N0} ₫", topping.ToppingPrice))
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <p>Không có topping nào khả dụng.</p>
+                    }
+                </div>
+            }
+
+            <div class="quantity-container mb-3">
+                <label for="quantity">Số lượng:</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input">
+            </div>
+
+            <div class="btn-group">
+                <button onclick="muaNgay()" class="btn btn-success">Mua ngay</button>
+                <button onclick="themVaoGioHang()" class="btn btn-primary">Thêm vào giỏ hàng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid bg-light mt-5 py-4">
+    <div class="text-center">
+        <h2>Mô tả sản phẩm</h2>
+        <p>@Model.Description</p>
+    </div>
+</div>
+
+<div class="container-fluid bg-white py-4">
+    <div class="text-center">
+        <h2>Sản phẩm liên quan</h2>
+        <div class="d-flex justify-content-center flex-wrap">
+            @if (ViewBag.SanPhamlienquan != null && ((IEnumerable<WebBanHang.Models.Food>)ViewBag.SanPhamlienquan).Any())
+            {
+                foreach (var item in (IEnumerable<WebBanHang.Models.Food>)ViewBag.SanPhamlienquan)
+                {
+                    <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.FoodId })" class="related-item p-2 m-2" style="width: 150px; text-decoration: none; color: inherit;">
+                        <img src="@Url.Content(item.ImageURL)" alt="@item.FoodName" class="related-image rounded">
+                        <p class="related-name mt-2">@item.FoodName</p>
+                        <p class="related-price text-muted">@String.Format("{0:N0} ₫", item.Price)</p>
+                    </a>
+                }
+            }
+            else
+            {
+                <p>Không có sản phẩm liên quan.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Hàm kiểm tra lựa chọn
+        function validateSelection() {
+            var categoryId = @Model.CategoryId; // Lấy CategoryId từ Model
+            var selectedSize = document.querySelector(".size-option.active");
+            var quantity = parseInt(document.getElementById("quantity").value);
+
+            // Chỉ yêu cầu chọn size nếu không phải danh mục "Bánh & Snack" (CategoryId != 4)
+            if (categoryId != 4 && !selectedSize) {
+                alert("Vui lòng chọn Size!");
+                return false;
+            }
+
+            if (quantity < 1) {
+                alert("Số lượng phải lớn hơn 0!");
+                return false;
+            }
+
+            return true;
+        }
+
+        // Hàm lấy thông tin sản phẩm đã chọn
+        function getProductInfo() {
+            var categoryId = @Model.CategoryId; // Lấy CategoryId từ Model
+            var foodId = @Model.FoodId;
+            var quantity = parseInt(document.getElementById("quantity").value);
+            var selectedSize = document.querySelector(".size-option.active");
+            var selectedToppings = document.querySelectorAll(".topping-option.active");
+
+            var sizeId = (categoryId != 4 && selectedSize) ? selectedSize.getAttribute("data-size") : null; // Nếu CategoryId = 4, không cần size
+            var toppingIds = (categoryId != 4) ? Array.from(selectedToppings).map(t => t.getAttribute("data-topping")) : []; // Nếu CategoryId = 4, không cần topping
+
+            return {
+                foodId: foodId,
+                soLuong: quantity,
+                sizeId: sizeId,
+                toppingIds: toppingIds
+            };
+        }
+
+        // Mua ngay: Thêm sản phẩm mới và chuyển thẳng đến trang thanh toán
+        function muaNgay() {
+            if (!validateSelection()) return;
+
+            var productInfo = getProductInfo();
+
+            fetch('/ThanhToan/MuaNgay', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productInfo)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert("Lỗi: " + (data.message || "Có lỗi xảy ra, vui lòng thử lại."));
+                } else {
+                    // Cập nhật số lượng giỏ hàng trên biểu tượng
+                    if (data.cartCount !== undefined) {
+                        updateCartCount(data.cartCount);
+                    }
+
+                    // Chuyển thẳng đến trang thanh toán
+                    window.location.href = data.redirectUrl || "/ThanhToan/ThanhToan";
+                }
+            })
+            .catch(error => {
+                console.error("Lỗi Fetch:", error);
+                alert("Lỗi khi gửi yêu cầu đến server! Vui lòng thử lại.");
+            });
+        }
+
+        // Thêm vào giỏ hàng: Chỉ thêm vào giỏ và hiển thị thông báo
+        function themVaoGioHang() {
+            if (!validateSelection()) return;
+
+            var productInfo = getProductInfo();
+
+            fetch('/GioHang/ThemVaoGio', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productInfo)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert("Lỗi: " + (data.message || "Có lỗi xảy ra, vui lòng thử lại."));
+                } else {
+                    // Cập nhật số lượng giỏ hàng trên biểu tượng
+                    if (data.cartCount !== undefined) {
+                        updateCartCount(data.cartCount);
+                    }
+
+                    // Hiển thị thông báo
+                    alert("Đã thêm vào giỏ hàng!");
+                }
+            })
+            .catch(error => {
+                console.error("Lỗi Fetch:", error);
+                alert("Lỗi khi gửi yêu cầu đến server! Vui lòng thử lại.");
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Chỉ thêm sự kiện cho size và topping nếu không phải danh mục "Bánh & Snack"
+            var categoryId = @Model.CategoryId;
+            if (categoryId != 4) {
+                document.querySelectorAll(".size-option").forEach(button => {
+                    button.addEventListener("click", function () {
+                        document.querySelectorAll(".size-option").forEach(btn => btn.classList.remove("active"));
+                        this.classList.add("active");
+                    });
+                });
+
+                document.querySelectorAll(".topping-option").forEach(button => {
+                    button.addEventListener("click", function () {
+                        this.classList.toggle("active");
+                    });
+                });
+            }
+        });
+    </script>
+}

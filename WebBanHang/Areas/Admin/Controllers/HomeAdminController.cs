@@ -8,7 +8,7 @@ namespace WebBanHang.Controllers
 {
     public class HomeAdminController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
@@ -21,25 +21,70 @@ namespace WebBanHang.Controllers
 
         public ActionResult HomeAdmin()
         {
-            // Lấy tổng số sản phẩm & nguyên liệu
+            // 1. Tổng số sản phẩm & nguyên liệu
             ViewBag.TotalProducts = db.Foods.Count();
             ViewBag.TotalIngredients = db.Ingredients.Count();
 
-            // Tính toán sản phẩm bán chạy từ InvoiceDetail
-            var bestSellers = db.InvoiceDetails
-                .Where(id => id.FoodId != null) // Bỏ qua giá trị null (nếu có)
-                .GroupBy(id => id.FoodId)
-                .Select(g => new
+            // 2. Thống kê đơn hàng
+            // Lấy StatusId từ OrderStatus
+            var placedStatus = db.OrderStatus.FirstOrDefault(s => s.StatusName == "Đặt hàng thành công");
+            var preparingStatus = db.OrderStatus.FirstOrDefault(s => s.StatusName == "Đang chuẩn bị đơn hàng");
+            var shippingStatus = db.OrderStatus.FirstOrDefault(s => s.StatusName == "Đang giao hàng");
+            var completedStatus = db.OrderStatus.FirstOrDefault(s => s.StatusName == "Giao hàng thành công");
+
+            ViewBag.PlacedOrders = placedStatus != null ? db.Orders.Count(o => o.StatusId == placedStatus.StatusId) : 0;
+            ViewBag.PreparingOrders = preparingStatus != null ? db.Orders.Count(o => o.StatusId == preparingStatus.StatusId) : 0;
+            ViewBag.ShippingOrders = shippingStatus != null ? db.Orders.Count(o => o.StatusId == shippingStatus.StatusId) : 0;
+            ViewBag.CompletedOrders = completedStatus != null ? db.Orders.Count(o => o.StatusId == completedStatus.StatusId) : 0;
+            ViewBag.TotalOrders = db.Orders.Count();
+            ViewBag.TotalSales = db.Orders.Any() ? db.Orders.Sum(o => o.TotalAmount) : 0m;
+
+            // 3. Doanh thu theo tháng (sử dụng lớp Monthly)
+            var monthlySales = db.Orders
+                .Where(o => o.OrderDate.Year == DateTime.Now.Year)
+                .GroupBy(o => o.OrderDate.Month)
+                .Select(g => new Monthly
                 {
-                    FoodId = g.Key.Value, // Vì FoodId là Nullable<int>, cần lấy giá trị thật
-                    TotalSold = g.Sum(id => id.SoLuong),
-                    Food = db.Foods.FirstOrDefault(f => f.FoodId == g.Key.Value)
+                    Month = g.Key,
+                    TotalRevenue = g.Sum(o => o.TotalAmount)
                 })
-                .OrderByDescending(g => g.TotalSold)
-                .Take(8)
+                .OrderBy(g => g.Month)
                 .ToList();
 
-            // Chuyển dữ liệu vào ViewBag dưới dạng `BanChayModel`
+            ViewBag.MonthlySales = Enumerable.Range(1, 12)
+                .Select(m =>
+                {
+                    var sale = monthlySales.FirstOrDefault(x => x.Month == m);
+                    return new Monthly
+                    {
+                        Month = m,
+                        TotalRevenue = sale != null ? sale.TotalRevenue : 0m
+                    };
+                })
+                .ToList();
+
+            ViewBag.MonthlyBudget = Enumerable.Range(1, 12)
+                .Select(m => new MonthlyBudget
+                {
+                    Month = m,
+                    Budget = 3000000m + (m * 500000m)
+                })
+                .ToList();
+
+            // 4. Sản phẩm bán chạy
+            var bestSellers = db.OrderDetails
+                .Where(od => od.FoodId != null)
+                .GroupBy(od => od.FoodId)
+                .Select(g => new
+                {
+                    FoodId = g.Key,
+                    TotalSold = g.Sum(od => od.Quantity),
+                    Food = db.Foods.FirstOrDefault(f => f.FoodId == g.Key)
+                })
+                .OrderByDescending(g => g.TotalSold)
+                .Take(3)
+                .ToList();
+
             ViewBag.BanChay = bestSellers.Select(b => new BanChayModel
             {
                 FoodId = b.FoodId,
@@ -49,14 +94,58 @@ namespace WebBanHang.Controllers
                 TotalSold = b.TotalSold
             }).ToList();
 
-            // Lấy danh sách nguyên liệu sắp hết
+            // 5. Nguyên liệu sắp hết
             ViewBag.LowStockIngredients = db.Ingredients
                 .Where(i => i.SoLuong < 10)
                 .ToList();
 
+            // 6. Top Countries (dựa trên Address của Users)
+            var topCountries = db.Orders
+                .Join(db.Users, o => o.UserId, u => u.Id, (o, u) => new { o, u })
+                .GroupBy(x => x.u.Address ?? "Unknown")
+                .Select(g => new TopCountryModel
+                {
+                    Country = g.Key,
+                    OrderCount = g.Count()
+                })
+                .OrderByDescending(g => g.OrderCount)
+                .Take(5)
+                .ToList();
+
+            ViewBag.TopCountries = topCountries;
+
+            // 7. Đơn hàng gần đây
+            var recentOrders = db.Orders
+                .OrderByDescending(o => o.OrderDate)
+                .Take(5)
+                .ToList()
+                .Select(o =>
+                {
+                    var user = db.Users.FirstOrDefault(u => u.Id == o.UserId);
+                    var status = db.OrderStatus.FirstOrDefault(s => s.StatusId == o.StatusId);
+                    return new RecentOrderModel
+                    {
+                        OrderId = o.OrderId,
+                        FullName = user != null ? user.FullName : "Unknown",
+                        Status = status != null ? status.StatusName : "Unknown",
+                        OrderDate = o.OrderDate,
+                        TotalAmount = o.TotalAmount
+                    };
+                })
+                .ToList();
+
+            ViewBag.RecentOrders = recentOrders;
+
+            // 8. Giả lập danh sách khách hàng cần hỗ trợ
+            ViewBag.CustomersNeedHelp = new List<dynamic>
+            {
+                new { CustomerName = "Laila Tazkiah", Message = "My order hasn't arrived yet", TimeAgo = "1 min ago" },
+                new { CustomerName = "Rizal Fakhri", Message = "Please cancel my order", TimeAgo = "2 hours ago" },
+                new { CustomerName = "Syahdan Ubaidillah", Message = "Do you see my mother?", TimeAgo = "6 hours ago" }
+            };
+
             return View();
         }
-
 
         [HttpGet]
         public ActionResult GlobalSearch(string query, string filterType)

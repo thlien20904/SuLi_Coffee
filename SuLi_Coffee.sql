@@ -17,10 +17,11 @@ CREATE TABLE Users (
     OTPExpiry DATETIME NULL,
     ResetToken NVARCHAR(100) NULL,
     ResetTokenExpiry DATETIME NULL,
-    AvatarUrl NVARCHAR(255) NULL, 
+	AvatarUrl NVARCHAR(255) NULL, 
     CreatedDate DATETIME DEFAULT GETDATE()
 );
-select *from food;
+GO
+ select *from users
 -- Table: TableFood
 CREATE TABLE TableFood(
     TableId INT IDENTITY PRIMARY KEY,
@@ -85,6 +86,88 @@ CREATE TABLE Food (
     FOREIGN KEY (IngredientId) REFERENCES Ingredient(IngredientId)
 );
 
+-- Bảng Size (Giữ nguyên)
+CREATE TABLE Size (
+    SizeID INT IDENTITY(1,1) PRIMARY KEY,
+    SizeName NVARCHAR(50) NOT NULL,
+    ExtraPrice INT NOT NULL
+);
+GO
+
+-- Bảng Topping (Giữ nguyên)
+CREATE TABLE Topping (
+    ToppingID INT IDENTITY(1,1) PRIMARY KEY,
+    ToppingName NVARCHAR(100) NOT NULL,
+    ToppingPrice INT NOT NULL
+);
+GO
+
+-- Bảng GioHang (Cập nhật)
+CREATE TABLE GioHang (
+    GioHangID INT PRIMARY KEY IDENTITY, 
+    Id INT NOT NULL, -- ID của User
+    FoodId INT NOT NULL, -- ID của món ăn
+    SoLuong INT NOT NULL DEFAULT 1 CHECK (SoLuong > 0), -- Số lượng sản phẩm
+    SizeID INT NULL, -- Kích thước (Size)
+    TotalPrice DECIMAL(18,3) NOT NULL, -- Tổng giá tiền
+    
+    FOREIGN KEY (Id) REFERENCES Users(Id),
+    FOREIGN KEY (FoodId) REFERENCES Food(FoodId),
+    FOREIGN KEY (SizeID) REFERENCES Size(SizeID),
+
+);
+GO
+
+
+-- Bảng trung gian GioHang_Topping để lưu nhiều topping cho 1 sản phẩm trong giỏ hàng
+CREATE TABLE GioHang_Topping (
+    GioHangToppingID INT PRIMARY KEY IDENTITY,
+    GioHangID INT NOT NULL, -- ID giỏ hàng
+    ToppingID INT NOT NULL, -- ID topping
+
+    FOREIGN KEY (GioHangID) REFERENCES GioHang(GioHangID) ON DELETE CASCADE,
+    FOREIGN KEY (ToppingID) REFERENCES Topping(ToppingID) ON DELETE CASCADE
+);
+GO
+
+CREATE TABLE PhuongThucThanhToan (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    TenPhuongThuc NVARCHAR(255) NOT NULL
+);
+
+CREATE TABLE OrderStatus (
+    StatusId INT PRIMARY KEY IDENTITY(1,1),
+    StatusName NVARCHAR(50) NOT NULL UNIQUE
+);
+SELECT * FROM OrderStatus;
+-- Bảng Orders
+CREATE TABLE Orders (
+    OrderId INT PRIMARY KEY IDENTITY(1,1),
+    UserId INT NOT NULL,
+    OrderDate DATETIME NOT NULL DEFAULT GETDATE(),
+    TotalAmount DECIMAL(18, 3) NOT NULL,
+    PaymentMethodId INT NOT NULL,
+    StatusId INT NOT NULL,
+    FOREIGN KEY (UserId) REFERENCES Users(Id),
+    FOREIGN KEY (PaymentMethodId) REFERENCES PhuongThucThanhToan(Id),
+    FOREIGN KEY (StatusId) REFERENCES OrderStatus(StatusId)
+);
+
+-- Bảng OrderDetails
+CREATE TABLE OrderDetails (
+    OrderDetailId INT PRIMARY KEY IDENTITY(1,1),
+    OrderId INT NOT NULL,
+    FoodId INT NOT NULL,
+    SizeId INT NULL,
+    ToppingId INT NULL,
+    Quantity INT NOT NULL DEFAULT 1 CHECK (Quantity > 0),
+    Price DECIMAL(18, 3) NOT NULL,
+    FOREIGN KEY (OrderId) REFERENCES Orders(OrderId) ON DELETE CASCADE,
+    FOREIGN KEY (FoodId) REFERENCES Food(FoodId),
+    FOREIGN KEY (SizeId) REFERENCES Size(SizeID),
+    FOREIGN KEY (ToppingId) REFERENCES Topping(ToppingID)
+);
+
 -- Table: Invoice
 CREATE TABLE Invoice (
     InvoiceId INT PRIMARY KEY IDENTITY,
@@ -92,11 +175,10 @@ CREATE TABLE Invoice (
     DateCheckIn DATE NOT NULL DEFAULT GETDATE(),
     DateCheckOut DATE,
     TrangThai INT, -- 1 là thanh toán, 0 là chưa thanh toán
-
     FOREIGN KEY (TableId) REFERENCES TableFood(TableId)
 );
 GO
--- Kiểm tra bảng hóa đơn có hóa đơn nào chưa thanh toán không
+
 
 -- Table: InvoiceDetail
 CREATE TABLE InvoiceDetail(
@@ -134,7 +216,6 @@ END
 
 
 
-
 -- Table: Warehouse
 CREATE TABLE Warehouse (
     WarehouseId INT PRIMARY KEY IDENTITY,
@@ -164,7 +245,6 @@ VALUES
 ('user2', 'example2@gmail.com', '1', N'Nguyễn Văn A', '0901122334', N'Đà Nẵng', 'User', NULL),
 ('user3', 'example3@gmail.com', '1', N'Lê Thị B', '0905678999', N'Cần Thơ', 'User', NULL);
 GO
-
 INSERT INTO TableFood (TableName, TrangThai)
 VALUES
 ('Table 1', N'Đã có khách'),
@@ -284,6 +364,27 @@ VALUES
 (N'Trà yuzu kombucha', 5, 5, 50000, 5, 20, N'Trà Yuzu Nhật Bản kết hợp Kombucha', '/images/ttc/yuzu_kombucha.png', GETDATE(), NULL, 1);
 
 
+INSERT INTO Size (SizeName, ExtraPrice)
+VALUES 
+    (N'Nhỏ', 0),
+    (N'Vừa', 6000),
+    (N'Lớn', 16000);
+GO
+
+INSERT INTO Topping (ToppingName, ToppingPrice)
+VALUES 
+    (N'Thạch Sương Sáo', 10000),
+    (N'Thạch Kim Quất', 10000),
+    (N'Thạch Cà Phê', 10000),
+    (N'Foam Phô Mai', 10000),
+    (N'Shot Espresso', 10000),
+    (N'Sốt Caramel', 10000),
+    (N'Trân châu trắng', 10000),
+    (N'Đá miếng', 5000),
+    (N'Hạt sen', 10000),
+    (N'Trái vải', 10000),
+    (N'Kem phô mai Macchiato', 10000);
+GO
 -- Ingredients for Trà xanh espresso marble
 INSERT INTO FoodIngredient (FoodId, IngredientId, Quantity)
 VALUES 
@@ -559,6 +660,25 @@ VALUES
 (2, 50, GETDATE()),
 (3, 200, GETDATE()),
 (4, 75, GETDATE());
+
+INSERT INTO PhuongThucThanhToan (TenPhuongThuc)
+VALUES 
+(N'VN Pay'),
+(N'COD');
+INSERT INTO OrderStatus (StatusName)
+VALUES 
+    (N'Đặt hàng thành công'),
+    (N'Đang chuẩn bị đơn hàng'),
+    (N'Đang giao hàng'),
+    (N'Giao hàng thành công');
+
+
+
+
+select *from OrderDetails 
+
+
+
 
 
 DECLARE @sql NVARCHAR(MAX) = '';

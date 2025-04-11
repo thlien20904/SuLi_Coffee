@@ -1,4 +1,16 @@
-﻿* {
+﻿
+
+/* Đảm bảo bảng không vượt ra ngoài khung */
+.profile-content {
+    width: 1000px;
+    padding: 25px;
+    border-radius: 10px;
+    background: #fff;
+    overflow-x: auto; /* Thêm thanh cuộn ngang nếu nội dung vượt khung */
+}
+
+/* Các phần CSS khác giữ nguyên */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -77,7 +89,7 @@ body {
 
     .profile-header img {
         border-radius: 50%;
-        width: 100px; /* Tăng kích thước ảnh giống ảnh mẫu */
+        width: 100px;
         height: 100px;
         object-fit: cover;
         border: 2px solid #ddd;
@@ -91,7 +103,7 @@ body {
 
     .profile-info h5 {
         margin: 0;
-        font-size: 20px; /* Tăng kích thước chữ Username */
+        font-size: 20px;
         font-weight: bold;
         align-items: center;
         color: #333;
@@ -148,57 +160,50 @@ body {
             }
 
 /* Profile Content */
-.profile-content {
-    width: 500px;
-    padding: 25px;
-    border-radius: 10px;
-    background: #fff;
+.profile-content h4 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    color: #333;
 }
 
-    .profile-content h4 {
-        font-size: 22px;
-        margin-bottom: 15px;
-        font-weight: bold;
-        color: #333;
+.profile-content label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+    font-size: 14px;
+}
+
+.profile-content input,
+.profile-content textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+    .profile-content input:focus,
+    .profile-content textarea:focus {
+        border-color: #007bff;
+        box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
+        outline: none;
     }
 
-    .profile-content label {
-        font-weight: bold;
-        margin-top: 10px;
-        display: block;
-        font-size: 14px;
+.profile-content button {
+    margin-top: 15px;
+    background: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s;
+}
+
+    .profile-content button:hover {
+        background: #0056b3;
     }
-
-    .profile-content input,
-    .profile-content textarea {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 14px;
-        transition: 0.3s;
-    }
-
-        .profile-content input:focus,
-        .profile-content textarea:focus {
-            border-color: #007bff;
-            box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.5);
-            outline: none;
-        }
-
-    .profile-content button {
-        margin-top: 15px;
-        background: #007bff;
-        color: white;
-        padding: 10px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: 0.3s;
-    }
-
-        .profile-content button:hover {
-            background: #0056b3;
-        }

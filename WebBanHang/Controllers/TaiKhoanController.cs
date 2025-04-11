@@ -2,12 +2,15 @@
 using System.Linq;
 using System.Web.Mvc;
 using WebBanHang.Models;
+using System.Data.Entity;
+using System.IO;
+using System.Web;
 
 namespace WebBanHang.Controllers
 {
     public class TaiKhoanController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         public ActionResult TaiKhoan()
         {
@@ -26,6 +29,7 @@ namespace WebBanHang.Controllers
 
             return View(user);
         }
+
         [HttpPost]
         public JsonResult UpdateUser(int id, string field, string value)
         {
@@ -106,6 +110,143 @@ namespace WebBanHang.Controllers
                 System.Diagnostics.Debug.WriteLine($"Lỗi khi cập nhật {field}: {ex.Message}");
                 return Json(new { success = false, message = "Có lỗi xảy ra khi cập nhật. Vui lòng thử lại!" });
             }
+        }
+
+        [HttpPost]
+        public JsonResult UpdateAvatar(int id, HttpPostedFileBase AvatarFile)
+        {
+            if (Session["Username"] == null)
+            {
+                return Json(new { success = false, message = "Bạn chưa đăng nhập!" });
+            }
+
+            var user = db.Users.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy người dùng!" });
+            }
+
+            string currentUsername = Session["Username"].ToString();
+            string currentRole = Session["UserRole"]?.ToString() ?? "";
+
+            if (currentRole != "Admin" && currentUsername != user.Username)
+            {
+                return Json(new { success = false, message = "Bạn không có quyền chỉnh sửa!" });
+            }
+
+            try
+            {
+                if (AvatarFile != null && AvatarFile.ContentLength > 0)
+                {
+                    string fileExt = Path.GetExtension(AvatarFile.FileName).ToLower();
+                    string[] allowedExts = { ".png", ".jpg", ".jpeg", ".gif", ".webp" };
+
+                    if (!allowedExts.Contains(fileExt))
+                    {
+                        return Json(new { success = false, message = "Chỉ chấp nhận file ảnh (.png, .jpg, .jpeg, .gif, .webp)." });
+                    }
+
+                    if (!string.IsNullOrEmpty(user.AvatarUrl))
+                    {
+                        string oldFilePath = Server.MapPath(user.AvatarUrl);
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                    }
+
+                    string newFileName = Guid.NewGuid().ToString() + fileExt;
+                    string filePath = Path.Combine(Server.MapPath("~/Images/"), newFileName);
+                    AvatarFile.SaveAs(filePath);
+                    user.AvatarUrl = "/Images/" + newFileName;
+
+                    db.SaveChanges();
+                    return Json(new { success = true, message = "Cập nhật ảnh đại diện thành công!", avatarUrl = user.AvatarUrl });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "Vui lòng chọn một file ảnh!" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Lỗi khi cập nhật ảnh đại diện: " + ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetOrders()
+        {
+            if (Session["Username"] == null)
+            {
+                return Json(new { success = false, message = "Bạn chưa đăng nhập!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            string username = Session["Username"].ToString();
+            var user = db.Users.FirstOrDefault(u => u.Username == username);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy người dùng!" }, JsonRequestBehavior.AllowGet);
+            }
+
+            try
+            {
+                var ordersQuery = db.Orders
+                    .Include("PhuongThucThanhToan")
+                    .Include("OrderDetails.Food")
+                    .Include("OrderDetails.Size")
+                    .Include("OrderDetails.Topping")
+                    .Where(o => o.UserId == user.Id)
+                    .Select(o => new
+                    {
+                        OrderId = o.OrderId,
+                        OrderDate = o.OrderDate,
+                        TotalAmount = o.TotalAmount,
+                        StatusId = o.StatusId,
+                        PaymentMethod = o.PhuongThucThanhToan != null ? o.PhuongThucThanhToan.TenPhuongThuc : "Không xác định",
+                        OrderDetails = o.OrderDetails.Select(od => new
+                        {
+                            FoodName = od.Food != null ? od.Food.FoodName : "Không xác định",
+                            SizeName = od.Size != null ? od.Size.SizeName : null,
+                            ToppingName = od.Topping != null ? od.Topping.ToppingName : null,
+                            Quantity = od.Quantity,
+                            Price = od.Price
+                        }).ToList()
+                    })
+                    .OrderByDescending(o => o.OrderDate);
+
+                var ordersList = ordersQuery.ToList();
+
+                var orders = ordersList.Select(o =>
+                {
+                    var status = db.Database.SqlQuery<OrderStatu>("SELECT * FROM OrderStatus WHERE StatusId = @p0", o.StatusId).FirstOrDefault();
+                    return new
+                    {
+                        OrderId = o.OrderId,
+                        OrderDate = o.OrderDate.ToString("o"),
+                        TotalAmount = o.TotalAmount,
+                        Status = status != null ? status.StatusName : "Unknown",
+                        PaymentMethod = o.PaymentMethod,
+                        OrderDetails = o.OrderDetails
+                    };
+                }).ToList();
+
+                return Json(new { success = true, orders = orders }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Lỗi khi lấy danh sách đơn hàng: {ex.Message}\nStackTrace: {ex.StackTrace}");
+                return Json(new { success = false, message = "Có lỗi xảy ra khi lấy danh sách đơn hàng: " + ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }

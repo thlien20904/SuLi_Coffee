@@ -13,10 +13,10 @@ namespace WebBanHang.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class WebAppDBEntities3 : DbContext
+    public partial class WebAppDBEntities4 : DbContext
     {
-        public WebAppDBEntities3()
-            : base("name=WebAppDBEntities3")
+        public WebAppDBEntities4()
+            : base("name=WebAppDBEntities4")
         {
         }
     
@@ -30,11 +30,19 @@ namespace WebBanHang.Models
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Food> Foods { get; set; }
         public virtual DbSet<FoodIngredient> FoodIngredients { get; set; }
+        public virtual DbSet<GioHang> GioHangs { get; set; }
+        public virtual DbSet<GioHang_Topping> GioHang_Topping { get; set; }
         public virtual DbSet<Ingredient> Ingredients { get; set; }
         public virtual DbSet<Invoice> Invoices { get; set; }
         public virtual DbSet<InvoiceDetail> InvoiceDetails { get; set; }
+        public virtual DbSet<OrderDetail> OrderDetails { get; set; }
+        public virtual DbSet<Order> Orders { get; set; }
+        public virtual DbSet<OrderStatu> OrderStatus { get; set; }
+        public virtual DbSet<PhuongThucThanhToan> PhuongThucThanhToans { get; set; }
+        public virtual DbSet<Size> Sizes { get; set; }
         public virtual DbSet<Staff> Staffs { get; set; }
         public virtual DbSet<TableFood> TableFoods { get; set; }
+        public virtual DbSet<Topping> Toppings { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
     }

@@ -14,6 +14,13 @@ namespace WebBanHang.Models
     
     public partial class User
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public User()
+        {
+            this.GioHangs = new HashSet<GioHang>();
+            this.Orders = new HashSet<Order>();
+        }
+    
         public int Id { get; set; }
         public string Username { get; set; }
         public string Email { get; set; }
@@ -28,5 +35,10 @@ namespace WebBanHang.Models
         public Nullable<System.DateTime> ResetTokenExpiry { get; set; }
         public string AvatarUrl { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<GioHang> GioHangs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Order> Orders { get; set; }
     }
 }

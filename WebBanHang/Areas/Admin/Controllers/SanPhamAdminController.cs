@@ -11,7 +11,7 @@ namespace WebBanHang.Controllers
 {
     public class SanPhamAdminController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // Danh sách món ăn
         public ActionResult Info()

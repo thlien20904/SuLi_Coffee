@@ -1,0 +1,20 @@
+﻿@model IEnumerable<WebBanHang.Models.OrderDetail>
+
+<!-- Dòng "Xem chi tiết" gộp 7 cột -->
+<tr class="detail-header">
+    <td colspan="7" style="text-align: center; font-weight: bold;">Xem chi tiết</td>
+</tr>
+
+<!-- Dữ liệu chi tiết -->
+@foreach (var item in Model)
+{
+    <tr class="detail-row">
+        <td></td> <!-- Cột "Mã Hóa Đơn" - để trống -->
+        <td>@(item.Food != null ? item.Food.FoodName : "Không xác định")</td> <!-- Cột "Mã Người Dùng" - hiển thị Tên Món -->
+        <td>@(item.Size != null ? item.Size.SizeName : "Không có")</td> <!-- Cột "Ngày Đặt Hàng" - hiển thị Kích Thước -->
+        <td>@(item.Topping != null ? item.Topping.ToppingName : "Không có")</td> <!-- Cột "Tổng Tiền" - hiển thị Topping -->
+        <td>@item.Quantity</td> <!-- Cột "Phương Thức Thanh Toán" - hiển thị Số Lượng -->
+        <td>@item.Price.ToString("N0") đ</td> <!-- Cột "Trạng Thái" - hiển thị Giá -->
+        <td></td> <!-- Cột "Chi Tiết" - để trống -->
+    </tr>
+}

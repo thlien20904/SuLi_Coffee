@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -9,7 +8,7 @@ namespace WebBanHang.Areas.Admin.Controllers
 {
     public class DanhMucSPController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // Hiển thị danh sách danh mục
         public ActionResult DanhMucSP()
@@ -29,6 +28,13 @@ namespace WebBanHang.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Add(Category category)
         {
+            // Kiểm tra trùng tên danh mục
+            if (db.Categories.Any(c => c.CategoryName.ToLower() == category.CategoryName.ToLower()))
+            {
+                TempData["ErrorMessage"] = "Tên danh mục đã tồn tại. Vui lòng chọn tên khác.";
+                return View(category);
+            }
+
             if (ModelState.IsValid)
             {
                 db.Categories.Add(category);
@@ -57,6 +63,13 @@ namespace WebBanHang.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit(Category category)
         {
+            // Kiểm tra trùng tên (trừ chính danh mục đang chỉnh sửa)
+            if (db.Categories.Any(c => c.CategoryName.ToLower() == category.CategoryName.ToLower() && c.CategoryId != category.CategoryId))
+            {
+                TempData["ErrorMessage"] = "Tên danh mục đã tồn tại. Vui lòng chọn tên khác.";
+                return View(category);
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(category).State = System.Data.Entity.EntityState.Modified;
@@ -69,6 +82,7 @@ namespace WebBanHang.Areas.Admin.Controllers
             return View(category);
         }
 
+        // Xóa danh mục - GET
         public ActionResult Delete(int? id)
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -79,6 +93,7 @@ namespace WebBanHang.Areas.Admin.Controllers
             return View(category);
         }
 
+        // Xóa danh mục - POST
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -95,6 +110,14 @@ namespace WebBanHang.Areas.Admin.Controllers
 
             TempData["SuccessMessage"] = "Xóa danh mục thành công!";
             return RedirectToAction("DanhMucSP");
+        }
+
+        // Action để kiểm tra trùng tên danh mục qua AJAX
+        [HttpGet]
+        public JsonResult CheckCategoryName(string categoryName)
+        {
+            bool isExist = db.Categories.Any(c => c.CategoryName.ToLower() == categoryName.ToLower());
+            return Json(!isExist, JsonRequestBehavior.AllowGet);
         }
 
         protected override void Dispose(bool disposing)

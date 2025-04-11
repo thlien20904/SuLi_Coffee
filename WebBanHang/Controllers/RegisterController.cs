@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using WebBanHang.Models;
-
+using BCrypt.Net; // Thêm namespace cho BCrypt
 
 namespace WebTrangSuc.Controllers
 {
     public class RegisterController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // GET: Register
         public ActionResult Register()
@@ -39,12 +38,15 @@ namespace WebTrangSuc.Controllers
                 return View();
             }
 
+            // Mã hóa mật khẩu bằng BCrypt
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(Password);
+
             // Save vào DB
             User user = new User()
             {
                 Username = Username,
                 Email = Email,
-                PasswordHash = Password,
+                PasswordHash = hashedPassword, // Lưu mật khẩu đã băm
                 FullName = FullName,
                 Phone = Phone,
                 Address = Address,
@@ -64,6 +66,5 @@ namespace WebTrangSuc.Controllers
                 return View();
             }
         }
-
     }
 }

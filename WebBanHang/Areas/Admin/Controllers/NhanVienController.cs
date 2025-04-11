@@ -7,7 +7,7 @@ namespace WebBanHang.Areas.Admin.Controllers
 {
     public class NhanVienController : Controller
     {
-        private WebAppDBEntities3 db = new WebAppDBEntities3();
+        private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // Hiển thị danh sách Staff
         public ActionResult NhanVien()

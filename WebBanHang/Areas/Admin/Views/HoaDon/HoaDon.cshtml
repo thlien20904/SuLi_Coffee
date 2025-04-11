@@ -1,0 +1,399 @@
+﻿@model IEnumerable<WebBanHang.Models.Order>
+@{
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.Title = "Danh sách hóa đơn";
+}
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+<div class="page-container">
+    <div class="category-header">
+        <h2 class="category-title">Danh sách hóa đơn</h2>
+    </div>
+
+    <div class="top-actions">
+        <div class="row">
+            <div class="col-md-4">
+                <label for="startDate"><b>Ngày bắt đầu</b></label>
+                <input type="date" id="startDate" class="form-control" title="Chọn ngày bắt đầu" />
+            </div>
+            <div class="col-md-4">
+                <label for="endDate"><b>Ngày kết thúc</b></label>
+                <input type="date" id="endDate" class="form-control" title="Chọn ngày kết thúc" />
+            </div>
+            <div class="col-md-4">
+                <br />
+                <button id="btnThongKe" class="btn btn-primary">📊 Thống Kê</button>
+            </div>
+        </div>
+        <div class="search-container">
+            <input type="text" id="searchBox" placeholder="Search" onkeyup="searchHoaDon()">
+            <button class="search-btn">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+    <div id="customControls" style="display: flex; align-items: center; gap: 10px;">
+        <div id="dataTables_length"></div> <!-- DataTables render "Show entries" -->
+        <button id="sortButton" type="button" class="btn btn-primary">
+            <svg id="sortIcon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M7 10l5-5 5 5H7zm0 4h10l-5 5-5-5z" />
+            </svg>
+            Sort
+        </button>
+    </div>
+
+    <table class="table table-bordered table-striped category-table" id="hoaDonTable">
+        <thead class="thead-dark">
+            <tr>
+                <!-- Bỏ cột mở rộng -->
+                <th>Mã Hóa Đơn</th>
+                <th>Mã Người Dùng</th>
+                <th>Ngày Đặt Hàng</th>
+                <th>Tổng Tiền</th>
+                <th>Phương Thức Thanh Toán</th>
+                <th>Trạng Thái</th>
+                <th>Chi Tiết</th>
+            </tr>
+        </thead>
+        <tbody>
+            @Html.Partial("_HoaDonTable", Model) <!-- Load dữ liệu ban đầu -->
+        </tbody>
+    </table>
+</div>
+<script>
+$(document).ready(function () {
+    var table = $('#hoaDonTable').DataTable({
+        "paging": true,
+        "lengthMenu": [5, 10, 25, 50],
+        "pageLength": 10,
+        "ordering": true,
+        "info": true,
+        "searching": false, // Tắt tìm kiếm mặc định của DataTables để dùng tìm kiếm tùy chỉnh
+        "destroy": true,  // Tránh lỗi DataTable bị khởi tạo lại
+        "columnDefs": [
+            { "orderable": false, "targets": [0, 1, 3, 4, 5, 6] }, // Chỉ cho phép sắp xếp cột "Ngày Đặt Hàng" (index 2)
+        ],
+        "language": {
+            "lengthMenu": "Show _MENU_ ",
+            "zeroRecords": "Không tìm thấy hóa đơn nào",
+            "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ hóa đơn",
+            "infoEmpty": "Không có dữ liệu để hiển thị",
+            "infoFiltered": "(lọc từ _MAX_ hóa đơn)",
+            "paginate": {
+                "first": "Đầu",
+                "last": "Cuối",
+                "next": "Tiếp",
+                "previous": "Trước"
+            }
+        },
+        "drawCallback": function () {
+            $("#hoaDonTable_length").appendTo("#dataTables_length"); // Di chuyển phần "Show entries"
+        }
+    });
+
+    // Toggle sắp xếp khi nhấn nút Sort (chỉ sắp xếp cột "Ngày Đặt Hàng" - index 2)
+    var sortDirection = 'asc';
+
+    $("#sortButton").on("click", function () {
+        let icon = $("#sortIcon");
+
+        // Thực hiện sắp xếp
+        table.order([2, sortDirection]).draw();
+
+        // Đảo ngược hướng sắp xếp
+        sortDirection = (sortDirection === 'asc') ? 'desc' : 'asc';
+
+        // Đổi icon mũi tên
+        icon.html(sortDirection === "asc"
+            ? '<path d="M7 10l5-5 5 5H7zm0 4h10l-5 5-5-5z"/>'
+            : '<path d="M7 14l5 5 5-5H7zm0-4h10l-5-5-5 5z"/>'
+        );
+    });
+
+    // Xử lý sự kiện khi nhấn "Xem chi tiết"
+    $('#hoaDonTable tbody').on('click', '.btnChiTiet', function () {
+        var tr = $(this).closest('tr');
+        var orderId = $(this).data('id');
+        console.log("Order ID:", orderId);
+
+        // Kiểm tra nếu dòng chi tiết đã được hiển thị
+        if (tr.hasClass('shown')) {
+            // Xóa các dòng chi tiết (bao gồm cả detail-header và detail-row)
+            tr.nextUntil(':not(.detail-header, .detail-row)').remove();
+            tr.removeClass('shown');
+        } else {
+            var url = "@Url.Action("ChiTietHoaDon", "HoaDon", new { area = "Admin" })";
+            console.log("URL:", url);
+            $.ajax({
+                url: url,
+                type: "GET",
+                data: { orderId: orderId },
+                success: function (data) {
+                    console.log("Data received:", data);
+                    if (data && data.trim() !== '' && !data.includes('Lỗi')) {
+                        // Chèn các dòng chi tiết (bao gồm cả detail-header) ngay bên dưới dòng hiện tại
+                        $(data).insertAfter(tr);
+                        tr.addClass('shown');
+                    } else {
+                        var errorRow = '<tr class="detail-header"><td colspan="7" style="color: red; text-align: center;">⚠️ Không có chi tiết hoặc lỗi khi tải dữ liệu</td></tr>';
+                        $(errorRow).insertAfter(tr);
+                        tr.addClass('shown');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("AJAX error:", error);
+                    var errorRow = '<tr class="detail-header"><td colspan="7" style="color: red; text-align: center;">⚠️ Lỗi khi tải dữ liệu!</td></tr>';
+                    $(errorRow).insertAfter(tr);
+                    tr.addClass('shown');
+                }
+            });
+        }
+    });
+
+    // Xử lý khi click "Thống Kê"
+    $("#btnThongKe").click(function () {
+        var start = $("#startDate").val();
+        var end = $("#endDate").val();
+
+        $.ajax({
+            url: "@Url.Action("HoaDon", "HoaDon", new { area = "Admin" })",
+            type: "GET",
+            data: { startDate: start, endDate: end },
+            success: function (data) {
+                table.clear().draw(); // Xóa dữ liệu cũ
+                table.rows.add($(data)).draw(); // Thêm dữ liệu mới
+            },
+            error: function () {
+                table.clear().draw();
+                table.rows.add($('<tr><td colspan="7" style="color: red;">⚠️ Lỗi khi tải dữ liệu!</td></tr>')).draw();
+            }
+        });
+    });
+});
+
+// Tìm kiếm trong bảng
+function searchHoaDon() {
+    var input, filter, table, tr, tdArray, i, txtValue, foundCount = 0;
+    input = document.getElementById("searchBox");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("hoaDonTable");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 1; i < tr.length; i++) {
+        // Bỏ qua các dòng chi tiết và dòng tiêu đề chi tiết
+        if (tr[i].classList.contains('detail-header') || tr[i].classList.contains('detail-row')) continue;
+
+        tdArray = tr[i].getElementsByTagName("td");
+        let found = false;
+        for (let td of tdArray) {
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    found = true;
+                    break;
+                }
+            }
+        }
+        tr[i].style.display = found ? "" : "none";
+        if (found) foundCount++;
+    }
+
+    let alertBox = document.getElementById("noResultAlert");
+    if (!foundCount) {
+        if (!alertBox) {
+            let newAlert = document.createElement("p");
+            newAlert.id = "noResultAlert";
+            newAlert.className = "alert alert-warning";
+            newAlert.innerText = "Không tìm thấy kết quả.";
+            table.parentNode.insertBefore(newAlert, table);
+        }
+    } else {
+        if (alertBox) alertBox.remove();
+    }
+}
+</script>
+<style>
+    .dataTables_wrapper th,
+    .dataTables_wrapper td {
+        border: 1px solid #ddd !important;
+    }
+
+    table {
+        width: 100%;
+        table-layout: auto; /* Thay fixed thành auto */
+        border-collapse: collapse;
+        border: none !important;
+    }
+    #customControls {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        gap: 10px; /* Khoảng cách giữa các phần tử */
+    }
+
+    #dataTables_length select {
+        height: 40px; /* Đặt cùng chiều cao với nút Sort */
+        padding: 8px 16px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background-color: white;
+        cursor: pointer;
+    }
+
+    #sortButton {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #f3e8ff; /* Màu tím nhạt */
+        color: #7c3aed; /* Màu tím */
+        font-weight: bold;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+        height: 40px; /* Cùng chiều cao với select */
+    }
+
+        #sortButton:hover {
+            background-color: #e9d5ff;
+        }
+
+    #sortIcon {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Ẩn mũi tên sort trên tiêu đề bảng */
+    .dataTables_wrapper th {
+        pointer-events: none; /* Không cho click vào cột */
+    }
+
+        .dataTables_wrapper th::after,
+        .dataTables_wrapper th::before {
+            display: none !important; /* Ẩn mũi tên */
+        }
+
+    .category-header {
+        background-color: #ffff;
+        padding: 20px 30px;
+        border-radius: 0 25px 25px 0;
+        margin-bottom: 20px;
+    }
+
+    .category-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .top-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .search-container {
+        position: relative;
+        width: 250px;
+    }
+
+        .search-container input {
+            width: 100%;
+            padding: 8px 35px 8px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+    .search-btn {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: #007bff;
+        font-size: 16px;
+    }
+
+    .category-table th, .category-table td {
+        padding: 4px 8px;
+        border: 1px solid #ddd;
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    table td {
+        vertical-align: middle !important; /* Căn giữa theo chiều dọc */
+        text-align: center; /* Căn giữa nội dung theo chiều ngang */
+    }
+
+    .table td:last-child {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+    }
+
+
+
+    th:last-child, td:last-child {
+        min-width: 140px; /* Cột rộng tối thiểu 140px */
+        text-align: center;
+    }
+
+    td.action-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px; /* Khoảng cách giữa nút */
+        height: 100%;
+    }
+
+        td.action-buttons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            border-radius: 5px;
+        }
+
+    td {
+        vertical-align: middle !important;
+    }
+
+    .btn-info {
+        padding: 6px 12px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+        width: 120px;
+        height: 40px;
+    }
+
+    .details-control {
+        cursor: pointer;
+        background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+        width: 20px;
+    }
+
+    tr.shown td.details-control {
+        background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+    }
+</style>

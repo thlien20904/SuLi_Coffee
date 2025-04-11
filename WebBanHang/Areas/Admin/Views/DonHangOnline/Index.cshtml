@@ -1,0 +1,145 @@
+﻿@{
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="page-container">
+    <div class="order-container">
+        <!-- Recent Orders -->
+        <section class="recent-orders container mt-4">
+            <h3 class="text-center">Đơn hàng Online gần đây</h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Người dùng</th>
+                        <th>Trạng thái</th>
+                        <th>Cập nhật trạng thái</th>
+                        <th>Ngày đặt</th>
+                        <th>Tổng tiền</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (ViewBag.RecentOrders is List<WebBanHang.Models.RecentOrderModel> recentOrdersList && recentOrdersList.Any())
+                    {
+                        var orders = ViewBag.RecentOrders as List<WebBanHang.Models.RecentOrderModel>;
+                        var db = new WebBanHang.Models.WebAppDBEntities4();
+                        foreach (var order in orders)
+                        {
+                            var orderEntity = db.Orders.FirstOrDefault(o => o.OrderId == order.OrderId); // Lấy Order để truy cập StatusId
+                            var currentStatusId = orderEntity?.StatusId ?? 0;
+                            <tr>
+                                <td>@order.OrderId</td>
+                                <td>@order.FullName</td>
+                                <td>@order.Status</td>
+                                <td>
+                                    <select class="status-select" data-order-id="@order.OrderId">
+                                        @foreach (var status in ViewBag.OrderStatuses as List<WebBanHang.Models.OrderStatu>)
+                                        {
+                                            if (status.StatusId == currentStatusId)
+                                            {
+                                                <option value="@status.StatusId" selected>@status.StatusName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@status.StatusId">@status.StatusName</option>
+                                            }
+                                        }
+                                    </select>
+                                    <button class="btn btn-primary btn-update-status" data-order-id="@order.OrderId">Cập nhật</button>
+                                </td>
+                                <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>@order.TotalAmount.ToString("N0")đ</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">Không có dữ liệu</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('.btn-update-status').click(function () {
+            var orderId = $(this).data('order-id');
+            var statusId = $(this).siblings('.status-select').val();
+
+            $.ajax({
+                url: '@Url.Action("UpdateOrderStatus", "DonHangOnline", new { area = "Admin" })',
+                type: 'POST',
+                data: { orderId: orderId, statusId: statusId },
+                success: function (res) {
+                    if (res.success) {
+                        alert(res.message);
+                        // Cập nhật trạng thái trên giao diện
+                        var row = $('button[data-order-id="' + orderId + '"]').closest('tr');
+                        row.find('td:nth-child(3)').text(res.newStatus);
+                    } else {
+                        alert(res.message);
+                    }
+                },
+                error: function () {
+                    alert('Đã có lỗi xảy ra khi cập nhật trạng thái!');
+                }
+            });
+        });
+    });
+</script>
+
+<style>
+    .order-container {
+        display: flex;
+        gap: 20px;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f8f9fa;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(odd) {
+        background-color: white;
+    }
+
+    .status-select {
+        margin-right: 10px;
+        padding: 5px;
+    }
+
+    .btn-update-status {
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .btn-update-status:hover {
+            background-color: #0056b3;
+        }
+</style>

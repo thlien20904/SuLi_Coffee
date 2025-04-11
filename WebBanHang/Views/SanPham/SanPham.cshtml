@@ -1,20 +1,68 @@
 ﻿@model IEnumerable<WebBanHang.Models.Food>
 @{
-    ViewBag.Title = "Danh sách món ăn";
+    ViewBag.Title = "Menu SuLi Coffee";
 }
 <link rel="stylesheet" href="~/Content/SanPham.css" />
 
-<h2 style="margin: 20px 0;">Danh sách món ăn</h2>
 
-<div class="product-container">
-    @foreach (var item in Model)
-    {
-        <div class="product-card">
-            <img src="@Url.Content("~/" + item.ImageURL)" alt="@item.FoodName" />
-            <h4 class="product-title">@item.FoodName</h4>
-            <p class="price">
-                @String.Format("{0:N0} ₫", item.Price)
-            </p>
+<!-- Banner Section with Bootstrap Carousel -->
+<section class="banner">
+    <div id="carouselBanner" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <!-- Slide 1: Video -->
+            <div class="carousel-item active">
+                <video autoplay muted loop class="d-block w-100 banner-video">
+                    <source src="@Url.Content("~/video/vd6.mp4")" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
         </div>
-    }
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselBanner" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselBanner" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+<h2 style="margin: 20px 0;">Menu SuLi Coffee</h2>
+
+<!-- Main Content with Category and Products -->
+<div class="product-page">
+    <!-- Danh mục bên trái -->
+    <div class="category-menu-vertical">
+        <ul class="list-group">
+            <li class="list-group-item active"><a href="@Url.Action("SanPham", "SanPham")">Tất cả</a></li>
+            <li class="list-group-item"><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 1 })">Cà Phê</a></li>
+            <li class="list-group-item"><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 2 })">Trà Sữa</a></li>
+            <li class="list-group-item"><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 3 })">Thức uống đá xay</a></li>
+            <li class="list-group-item"><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 4 })">Bánh & Snack</a></li>
+            <li class="list-group-item"><a href="@Url.Action("SanPham", "SanPham", new { categoryId = 5 })">Trà trái cây</a></li>
+        </ul>
+    </div>
+
+    <!-- Danh sách sản phẩm bên phải -->
+    <div class="product-container">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="product-card">
+                    <a href="@Url.Action("ChiTiet", "SanPham", new { id = item.FoodId })">
+                        <img src="@Url.Content(item.ImageURL)" alt="@item.FoodName" class="product-image" />
+                        <h4 class="product-title">@item.FoodName</h4>
+                        <p class="price">@String.Format("{0:N0} ₫", item.Price)</p>
+                    </a>
+                </div>
+            }
+        }
+        else
+        {
+            <p class="text-muted">Không có sản phẩm nào phù hợp với tìm kiếm của bạn.</p>
+        }
+    </div>
 </div>

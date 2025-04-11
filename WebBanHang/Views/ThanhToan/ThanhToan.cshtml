@@ -1,0 +1,394 @@
+﻿@model WebBanHang.Models.User
+@using WebBanHang.Models
+@{
+    ViewBag.Title = "Billing details";
+    var cartItems = ViewBag.CartItems as List<GioHang>;
+    var totalAmount = ViewBag.TotalAmount;
+    var orderDate = ViewBag.OrderDate ?? DateTime.Now;
+}
+
+<div class="billing-details">
+    <div class="container">
+       
+
+        <div class="row">
+            <!-- Form thông tin khách hàng và cập nhật -->
+            <div class="col-md-6">
+                <form id="profile-form" method="post" action="@Url.Action("UpdateUser", "ThanhToan")" class="billing-form">
+                    <div class="form-group">
+                        <label>Username*</label>
+                        <input type="text" id="username" class="form-control" value="@Model.Username" readonly />
+                        <span id="username-error" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>FullName*</label>
+                        <input type="text" id="fullname" class="form-control" name="FullName" value="@Model.FullName" required />
+                        <span id="fullname-error" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email*</label>
+                        <input type="email" id="email" class="form-control" name="Email" value="@Model.Email" required />
+                        <span id="email-error" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Phone Number*</label>
+                        <input type="text" id="phone" class="form-control" name="Phone" value="@Model.Phone" required />
+                        <span id="phone-error" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address*</label>
+                        <input type="text" id="address" class="form-control" name="Address" value="@Model.Address" required />
+                        <span id="address-error" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary billing-button">Cập nhật</button>
+                </form>
+
+                <!-- Form phương thức thanh toán và đặt hàng -->
+                <form action="@Url.Action("ThanhToan", "ThanhToan")" method="post" style="margin-top: 20px;" class="billing-form">
+                    <div class="form-group">
+                        <label>Địa chỉ giao hàng*</label>
+                        <input type="text" class="form-control" name="address" value="@Model.Address" required />
+                    </div>
+
+                    <div class="form-group payment-methods">
+                        <h4>Phương thức thanh toán*</h4>
+                        @if (ViewBag.PaymentMethods != null)
+                        {
+                            foreach (var pm in ViewBag.PaymentMethods)
+                            {
+                                <div class="form-check">
+                                    <input type="radio" name="paymentMethodId" value="@pm.Id"
+                                           @(pm.Id == 1 ? "checked" : "") />
+                                    <label>@pm.TenPhuongThuc</label>
+                                </div>
+                            }
+                        }
+                    </div>
+
+                    <button type="submit" class="btn btn-primary billing-button">PLACE ORDER</button>
+                </form>
+
+                @if (TempData["Error"] != null)
+                {
+                    <div class="alert alert-danger mt-3">@TempData["Error"]</div>
+                }
+            </div>
+
+            <!-- Slidebar chứa danh sách sản phẩm và thông tin tổng cộng -->
+            <div class="col-md-6 sidebar-checkout">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Products</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in cartItems)
+                        {
+                            <tr>
+                                <td><img src="@item.Food.ImageURL" width="50" alt="@item.Food.FoodName" /></td>
+                                <td>@item.Food.FoodName @(item.Size != null ? $"({item.Size.SizeName})" : "")</td>
+                                <td>@((item.TotalPrice / item.SoLuong).ToString("N0")) đ</td>
+                                <td>@item.SoLuong</td>
+                                <td>@item.TotalPrice.ToString("N0") đ</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="summary">
+                    <p>Subtotal: @totalAmount.ToString("N0") đ</p>
+                    <p>Shipping: 20,000 đ</p>
+                    <p>Discount: 0 đ</p>
+                    <h4>TOTAL: <span class="text-danger">@((totalAmount + 20000).ToString("N0")) đ</span></h4>
+                </div>
+
+                <a href="@Url.Action("GioHang", "GioHang")" class="btn btn-outline-secondary">BACK TO CART</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Hàm validate một trường
+            function validateField(input, errorElement, pattern, message) {
+                input.addEventListener('blur', function () {
+                    if (!pattern.test(input.value.trim())) {
+                        errorElement.textContent = message;
+                    } else {
+                        errorElement.textContent = "";
+                    }
+                });
+            }
+
+            // Validation phía client
+            validateField(
+                document.getElementById('fullname'),
+                document.getElementById('fullname-error'),
+                /^(?!\s*$).{3,}$/,
+                "Tên phải từ 3 ký tự trở lên và không được chỉ chứa khoảng trắng."
+            );
+
+            validateField(
+                document.getElementById('email'),
+                document.getElementById('email-error'),
+                /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                "Email không hợp lệ."
+            );
+
+            validateField(
+                document.getElementById('phone'),
+                document.getElementById('phone-error'),
+                /^(0[3|5|7|8|9])[0-9]{8}$/,
+                "Số điện thoại không hợp lệ! Phải bắt đầu bằng 03, 05, 07, 08, 09 và có 10 chữ số."
+            );
+
+            validateField(
+                document.getElementById('address'),
+                document.getElementById('address-error'),
+                /\S+/,
+                "Vui lòng nhập địa chỉ."
+            );
+
+            // Xử lý form cập nhật thông tin
+            document.getElementById('profile-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                let id = @Model.Id;
+                let fullName = document.getElementById('fullname').value.trim();
+                let email = document.getElementById('email').value.trim();
+                let phone = document.getElementById('phone').value.trim();
+                let address = document.getElementById('address').value.trim();
+
+                // Kiểm tra lại validation trước khi gửi
+                let validations = [
+                    {
+                        value: fullName,
+                        pattern: /^(?!\s*$).{3,}$/,
+                        errorElement: document.getElementById('fullname-error'),
+                        message: "Tên phải từ 3 ký tự trở lên và không được chỉ chứa khoảng trắng."
+                    },
+                    {
+                        value: email,
+                        pattern: /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                        errorElement: document.getElementById('email-error'),
+                        message: "Email không hợp lệ."
+                    },
+                    {
+                        value: phone,
+                        pattern: /^(0[3|5|7|8|9])[0-9]{8}$/,
+                        errorElement: document.getElementById('phone-error'),
+                        message: "Số điện thoại không hợp lệ! Phải bắt đầu bằng 03, 05, 07, 08, 09 và có 10 chữ số."
+                    },
+                    {
+                        value: address,
+                        pattern: /\S+/,
+                        errorElement: document.getElementById('address-error'),
+                        message: "Vui lòng nhập địa chỉ."
+                    }
+                ];
+
+                let hasError = false;
+                validations.forEach(validation => {
+                    if (!validation.pattern.test(validation.value)) {
+                        validation.errorElement.textContent = validation.message;
+                        hasError = true;
+                    } else {
+                        validation.errorElement.textContent = "";
+                    }
+                });
+
+                console.log("Trạng thái lỗi (hasError):", hasError);
+                console.log("Dữ liệu trước khi gửi:", { fullName, email, phone, address });
+
+                if (hasError) {
+                    alert("Vui lòng nhập đúng thông tin trước khi cập nhật!");
+                    return;
+                }
+
+                let updates = [
+                    { field: "FullName", value: fullName },
+                    { field: "Email", value: email },
+                    { field: "Phone", value: phone },
+                    { field: "Address", value: address }
+                ];
+
+                console.log("Dữ liệu gửi đi:", updates);
+
+                let ajaxRequests = updates.map(update => {
+                    return $.ajax({
+                        url: '@Url.Action("UpdateUser", "ThanhToan")',
+                        type: 'POST',
+                        data: { id: id, field: update.field, value: update.value },
+                        success: function (response) {
+                            console.log(`Phản hồi từ ${update.field}:`, response);
+                            return response;
+                        },
+                        error: function (xhr, status, error) {
+                            console.error(`Lỗi khi gửi ${update.field}:`, error);
+                            return { success: false, message: `Lỗi khi gửi ${update.field}: ${error}` };
+                        }
+                    });
+                });
+
+                Promise.all(ajaxRequests).then((responses) => {
+                    let allSuccess = responses.every(r => r.success);
+                    if (allSuccess) {
+                        alert("Cập nhật thành công!");
+                        location.reload();
+                    } else {
+                        let errorMessages = responses
+                            .filter(r => !r.success)
+                            .map(r => r.message)
+                            .join("\n");
+                        alert("Cập nhật thất bại:\n" + errorMessages);
+                    }
+                }).catch((error) => {
+                    console.error("Lỗi Promise:", error);
+                    alert("Có lỗi xảy ra khi cập nhật!");
+                });
+            });
+        });
+    </script>
+}
+<style>
+    /* Container chính để căn giữa nội dung */
+    .billing-details .container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        width: 100%;
+        max-width: 1200px;
+        margin: 50px auto;
+        padding: 20px;
+    }
+
+    /* Wrapper cho form và slidebar */
+    .billing-details .row {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        align-items: stretch;
+    }
+
+    /* Chỉnh lại kích thước để form và sidebar luôn bằng nhau */
+    .billing-details .col-md-6 {
+        width: 48%;
+        padding: 20px;
+        min-height: 450px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Phần form thanh toán (col-md-6) */
+    .billing-details .col-md-6 {
+        width: 48%;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Định dạng form cụ thể trong billing-details */
+    .billing-details .billing-form {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Định dạng input và select trong billing-details */
+    .billing-details input,
+    .billing-details select {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+    }
+
+    /* Phần slidebar (col-md-6 bên phải) */
+    .billing-details .sidebar-checkout {
+        width: 50%;
+        margin-top: 20px;
+        padding: 20px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        max-height: 500px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Định dạng nút trong billing-details */
+    .billing-details .billing-button {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background: #007bff;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 4px;
+        margin-top: 15px;
+    }
+
+        .billing-details .billing-button:hover {
+            background: #0056b3;
+        }
+
+    /* Đảm bảo body có khoảng trống hợp lý */
+    .billing-details body {
+        padding-top: 100px;
+        padding-bottom: 50px;
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Căn trái và làm thẳng hàng radio button */
+    .billing-details .payment-methods {
+        margin-top: 15px;
+    }
+
+    .billing-details .form-check {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .billing-details .form-check input[type="radio"] {
+            margin: 0;
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .billing-details .form-check label {
+            margin: 0;
+            padding: 0;
+            font-size: 16px;
+        }
+</style>
