@@ -7,7 +7,7 @@ namespace WebBanHang.Areas.Admin.Controllers
 {
     public class DonHangOnlineController : Controller
     {
-        private WebAppDBEntities4 db = new WebAppDBEntities4();
+        private WebAppDBEntities4 db = new WebAppDBEntities4(); // Sửa thành WebAppDBEntities
 
         public ActionResult Index()
         {
@@ -21,13 +21,14 @@ namespace WebBanHang.Areas.Admin.Controllers
                 .Select(o =>
                 {
                     var user = db.Users.FirstOrDefault(u => u.Id == o.UserId);
-                    // Truy vấn thủ công để lấy StatusName từ StatusId
-                    var status = db.Database.SqlQuery<OrderStatu>("SELECT * FROM OrderStatus WHERE StatusId = @p0", o.StatusId).FirstOrDefault();
+                    var status = db.OrderStatus.FirstOrDefault(s => s.StatusId == o.StatusId); // Giả định OrderStatu
                     return new RecentOrderModel
                     {
                         OrderId = o.OrderId,
                         FullName = user != null ? user.FullName : "Unknown",
-                        Status = status != null ? status.StatusName : "Unknown"
+                        Status = status != null ? status.StatusName : "Unknown",
+                        OrderDate = o.OrderDate,
+                        TotalAmount = o.TotalAmount // Sửa, loại bỏ ?? 0m
                     };
                 })
                 .ToList();
@@ -35,7 +36,7 @@ namespace WebBanHang.Areas.Admin.Controllers
             ViewBag.RecentOrders = recentOrders;
 
             // Lấy danh sách trạng thái để hiển thị trong dropdown
-            ViewBag.OrderStatuses = db.Database.SqlQuery<OrderStatu>("SELECT * FROM OrderStatus").ToList();
+            ViewBag.OrderStatuses = db.OrderStatus.ToList(); // Giả định OrderStatu
 
             return View();
         }
@@ -51,7 +52,7 @@ namespace WebBanHang.Areas.Admin.Controllers
                     return Json(new { success = false, message = "Không tìm thấy đơn hàng!" });
                 }
 
-                var status = db.Database.SqlQuery<OrderStatu>("SELECT * FROM OrderStatus WHERE StatusId = @p0", statusId).FirstOrDefault();
+                var status = db.OrderStatus.FirstOrDefault(s => s.StatusId == statusId); // Giả định OrderStatu
                 if (status == null)
                 {
                     return Json(new { success = false, message = "Trạng thái không hợp lệ!" });

@@ -4,13 +4,13 @@ using System.Web.Mvc;
 using WebBanHang.Models;
 using BCrypt.Net; // Thêm namespace cho BCrypt
 
-namespace WebTrangSuc.Controllers
+namespace WebBanHang.Controllers
 {
     public class RegisterController : Controller
     {
         private WebAppDBEntities4 db = new WebAppDBEntities4();
 
-        // GET: Register
+        [AllowAnonymous]
         public ActionResult Register()
         {
             return View();

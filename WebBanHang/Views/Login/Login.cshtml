@@ -1,8 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_LoginLayout.cshtml";
     ViewBag.Title = "Login";
-
-    var forgotLink = "<a href='" + Url.Action("Forgot", "Forgot") + "' style='color:#d81b60; text-decoration:none;'>Forgot Password?</a>";
 }
 
 <div class="login-container">
@@ -12,11 +10,16 @@
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success">
-            @TempData["SuccessMessage"]
+            @Html.Encode(TempData["SuccessMessage"])
         </div>
     }
 
-    @using (Html.BeginForm("Login", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+    @if (ViewBag.Message != null)
+    {
+        <p class="error">@ViewBag.Message</p>
+    }
+
+    @using (Html.BeginForm("Login", "Login"))
     {
         @Html.AntiForgeryToken()
         <div class="input-group">
@@ -34,15 +37,10 @@
             <label>
                 <input type="checkbox" name="remember" /> Remember Me
             </label>
-            @Html.Raw(forgotLink)
+            <a href="@Url.Action("Forgot", "Forgot")" style="color:#d81b60; text-decoration:none;">Forgot Password?</a>
         </div>
 
         <input type="submit" class="btn-login" value="Sign In" />
-
-        if (ViewBag.Message != null)
-        {
-            <p class="error">@ViewBag.Message</p>
-        }
     }
 
     <div class="signup">
@@ -63,14 +61,16 @@
     function togglePassword() {
         var passwordField = document.getElementById("password");
         var toggleIcon = document.querySelector(".toggle-password");
-        if (passwordField.type === "password") {
-            passwordField.type = "text";
-            toggleIcon.classList.remove("fa-eye");
-            toggleIcon.classList.add("fa-eye-slash");
-        } else {
-            passwordField.type = "password";
-            toggleIcon.classList.remove("fa-eye-slash");
-            toggleIcon.classList.add("fa-eye");
+        if (passwordField && toggleIcon) {
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                toggleIcon.classList.remove("fa-eye");
+                toggleIcon.classList.add("fa-eye-slash");
+            } else {
+                passwordField.type = "password";
+                toggleIcon.classList.remove("fa-eye-slash");
+                toggleIcon.classList.add("fa-eye");
+            }
         }
     }
 </script>

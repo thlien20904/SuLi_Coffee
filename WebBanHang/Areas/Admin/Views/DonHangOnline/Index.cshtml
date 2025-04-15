@@ -4,13 +4,44 @@
 
 <meta charset="utf-8">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
 <div class="page-container">
     <div class="order-container">
         <!-- Recent Orders -->
         <section class="recent-orders container mt-4">
-            <h3 class="text-center">Đơn hàng Online gần đây</h3>
-            <table class="table table-bordered">
+            <div class="category-header">
+                <h3 class="category-title text-center">Đơn hàng Online gần đây</h3>
+            </div>
+
+            <div class="top-actions">
+                <div class="search-container">
+                    <input type="text" id="searchBox" placeholder="Tìm kiếm đơn hàng" onkeyup="searchOrder()">
+                    <button class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="customControls" style="display: flex; align-items: center; gap: 10px;">
+                <div id="dataTables_length"></div> <!-- DataTables render "Show entries" -->
+                <button id="sortButton" type="button" class="btn btn-primary">
+                    <svg id="sortIcon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                        <path d="M7 10l5-5 5 5H7zm0 4h10l-5 5-5-5z" />
+                    </svg>
+                    Sort
+                </button>
+            </div>
+
+            <table class="table table-bordered table-striped" id="orderTable">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -25,11 +56,8 @@
                     @if (ViewBag.RecentOrders is List<WebBanHang.Models.RecentOrderModel> recentOrdersList && recentOrdersList.Any())
                     {
                         var orders = ViewBag.RecentOrders as List<WebBanHang.Models.RecentOrderModel>;
-                        var db = new WebBanHang.Models.WebAppDBEntities4();
                         foreach (var order in orders)
                         {
-                            var orderEntity = db.Orders.FirstOrDefault(o => o.OrderId == order.OrderId); // Lấy Order để truy cập StatusId
-                            var currentStatusId = orderEntity?.StatusId ?? 0;
                             <tr>
                                 <td>@order.OrderId</td>
                                 <td>@order.FullName</td>
@@ -38,7 +66,7 @@
                                     <select class="status-select" data-order-id="@order.OrderId">
                                         @foreach (var status in ViewBag.OrderStatuses as List<WebBanHang.Models.OrderStatu>)
                                         {
-                                            if (status.StatusId == currentStatusId)
+                                            if (status.StatusId == order.StatusId)
                                             {
                                                 <option value="@status.StatusId" selected>@status.StatusName</option>
                                             }
@@ -50,8 +78,8 @@
                                     </select>
                                     <button class="btn btn-primary btn-update-status" data-order-id="@order.OrderId">Cập nhật</button>
                                 </td>
-                                <td>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>@order.TotalAmount.ToString("N0")đ</td>
+                                <td>@(order.OrderDate != default(DateTime) ? order.OrderDate.ToString("dd/MM/yyyy HH:mm") : "Chưa xác định")</td>
+                                <td>@(order.TotalAmount >= 0 ? order.TotalAmount.ToString("N0") + "đ" : "Chưa xác định")</td>
                             </tr>
                         }
                     }
@@ -69,6 +97,55 @@
 
 <script>
     $(document).ready(function () {
+        var table = $('#orderTable').DataTable({
+            "paging": true,
+            "lengthMenu": [5, 10, 25, 50],
+            "pageLength": 10,
+            "ordering": true,
+            "info": true,
+            "searching": false, // Tắt tìm kiếm mặc định của DataTables để dùng tìm kiếm tùy chỉnh
+            "destroy": true,
+            "columnDefs": [
+                { "orderable": false, "targets": [3, 5] } // Không cho phép sắp xếp cột "Cập nhật trạng thái" và "Tổng tiền"
+            ],
+            "language": {
+                "lengthMenu": "Show _MENU_ ",
+                "zeroRecords": "Không tìm thấy đơn hàng nào",
+                "info": "Show _START_ đến _END_ trong tổng số _TOTAL_ ",
+                "infoEmpty": "Không có dữ liệu để Show",
+                "infoFiltered": "(lọc từ _MAX_ )",
+                "paginate": {
+                    "first": "Đầu",
+                    "last": "Cuối",
+                    "next": "Tiếp",
+                    "previous": "Trước"
+                }
+            },
+            "drawCallback": function () {
+                $("#orderTable_length").appendTo("#dataTables_length"); // Di chuyển phần "Show entries" sau mỗi lần vẽ lại bảng
+            }
+        });
+
+        // Toggle sắp xếp khi nhấn nút Sort (chỉ sắp xếp cột "Người dùng" - index 1)
+        var sortDirection = 'asc';
+
+        $("#sortButton").on("click", function () {
+            let icon = $("#sortIcon");
+
+            // Thực hiện sắp xếp
+            table.order([1, sortDirection]).draw();
+
+            // Đảo ngược hướng sắp xếp
+            sortDirection = (sortDirection === 'asc') ? 'desc' : 'asc';
+
+            // Đổi icon mũi tên
+            icon.html(sortDirection === "asc"
+                ? '<path d="M7 10l5-5 5 5H7zm0 4h10l-5 5-5-5z"/>'
+                : '<path d="M7 14l5 5 5-5H7zm0-4h10l-5-5-5 5z"/>'
+            );
+        });
+
+        // Cập nhật trạng thái đơn hàng
         $('.btn-update-status').click(function () {
             var orderId = $(this).data('order-id');
             var statusId = $(this).siblings('.status-select').val();
@@ -79,20 +156,63 @@
                 data: { orderId: orderId, statusId: statusId },
                 success: function (res) {
                     if (res.success) {
-                        alert(res.message);
-                        // Cập nhật trạng thái trên giao diện
-                        var row = $('button[data-order-id="' + orderId + '"]').closest('tr');
-                        row.find('td:nth-child(3)').text(res.newStatus);
+                        Swal.fire({
+                            icon: 'success',
+                            title: res.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(() => {
+                            var row = $('button[data-order-id="' + orderId + '"]').closest('tr');
+                            row.find('td:nth-child(3)').text(res.newStatus);
+                        });
                     } else {
-                        alert(res.message);
+                        Swal.fire('Lỗi', res.message, 'error');
                     }
                 },
                 error: function () {
-                    alert('Đã có lỗi xảy ra khi cập nhật trạng thái!');
+                    Swal.fire('Lỗi', 'Đã có lỗi xảy ra khi cập nhật trạng thái!', 'error');
                 }
             });
         });
     });
+
+    // Tìm kiếm trong bảng
+    function searchOrder() {
+        var input, filter, table, tr, tdArray, i, txtValue, foundCount = 0;
+        input = document.getElementById("searchBox");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("orderTable");
+        tr = table.getElementsByTagName("tr");
+
+        for (i = 1; i < tr.length; i++) {
+            tdArray = tr[i].getElementsByTagName("td");
+            let found = false;
+            for (let td of tdArray) {
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            tr[i].style.display = found ? "" : "none";
+            if (found) foundCount++;
+        }
+
+        let alertBox = document.getElementById("noResultAlert");
+        if (!foundCount) {
+            if (!alertBox) {
+                let newAlert = document.createElement("p");
+                newAlert.id = "noResultAlert";
+                newAlert.className = "alert alert-warning";
+                newAlert.innerText = "Không tìm thấy kết quả.";
+                table.parentNode.insertBefore(newAlert, table);
+            }
+        } else {
+            if (alertBox) alertBox.remove();
+        }
+    }
 </script>
 
 <style>
@@ -142,4 +262,128 @@
         .btn-update-status:hover {
             background-color: #0056b3;
         }
+    /* Thanh tìm kiếm */
+    .top-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .search-container {
+        position: relative;
+        width: 250px;
+    }
+
+        .search-container input {
+            width: 100%;
+            padding: 8px 35px 8px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+    .search-btn {
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        color: #007bff;
+        font-size: 16px;
+    }
+
+    /* Phân trang và nút sắp xếp */
+    #customControls {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        gap: 10px; /* Khoảng cách giữa các phần tử */
+    }
+
+    #dataTables_length select {
+        height: 40px; /* Đặt cùng chiều cao với nút Sort */
+        padding: 8px 16px;
+        font-size: 16px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background-color: white;
+        cursor: pointer;
+    }
+
+    #sortButton {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background-color: #f3e8ff; /* Màu tím nhạt */
+        color: #7c3aed; /* Màu tím */
+        font-weight: bold;
+        padding: 8px 16px;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+        transition: background 0.3s;
+        height: 40px; /* Cùng chiều cao với select */
+    }
+
+        #sortButton:hover {
+            background-color: #e9d5ff;
+        }
+
+    #sortIcon {
+        width: 16px;
+        height: 16px;
+    }
+
+    /* Ẩn mũi tên sắp xếp mặc định của DataTables */
+    .dataTables_wrapper th {
+        pointer-events: none; /* Không cho click vào cột */
+    }
+
+        .dataTables_wrapper th::after,
+        .dataTables_wrapper th::before {
+            display: none !important; /* Ẩn mũi tên */
+        }
+
+    /* Giao diện bảng và phân trang */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        border: none; /* Loại bỏ viền của bảng */
+    }
+
+    .dataTables_wrapper table {
+        border: none !important;
+    }
+
+    th, td {
+        padding: 8px;
+        text-align: center;
+        vertical-align: middle !important;
+        border: 1px solid #ddd; /* Viền nhẹ cho các ô */
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    tr:nth-child(odd) {
+        background-color: white;
+    }
+
+    /* Định dạng tiêu đề bảng */
+    .category-header {
+        background-color: #ffff;
+        padding: 20px 30px;
+        border-radius: 0 25px 25px 0;
+        margin-bottom: 20px;
+    }
+
+    .category-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin: 0;
+    }
 </style>

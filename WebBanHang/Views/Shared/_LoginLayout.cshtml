@@ -16,17 +16,16 @@
         }
 
         .container {
-            width: 35%; /* thu hẹp lại */
+            width: 35%;
             margin: 30px auto;
             min-height: 600px;
             background: rgba(255, 255, 255, 0.01);
             backdrop-filter: blur(8px);
             border-radius: 40px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            padding: 30px; /* thêm padding vào */
+            padding: 30px;
             box-sizing: border-box;
         }
-
 
         .left, .right {
             flex: 1 1 300px;
@@ -35,10 +34,8 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            min-height: 600px; /* mỗi khối tối thiểu cao 600px */
+            min-height: 600px;
         }
-
-
 
         h2 {
             text-align: center;
@@ -101,7 +98,13 @@
             .options a {
                 color: #d81b60;
                 text-decoration: none;
+                pointer-events: auto; /* Đảm bảo liên kết có thể nhấn */
+                cursor: pointer;
             }
+
+                .options a:hover {
+                    text-decoration: underline;
+                }
 
         .btn-login {
             width: 100%;
@@ -123,7 +126,13 @@
             .signup a {
                 color: #d81b60;
                 text-decoration: none;
+                pointer-events: auto; /* Đảm bảo liên kết có thể nhấn */
+                cursor: pointer;
             }
+
+                .signup a:hover {
+                    text-decoration: underline;
+                }
 
         .or-divider {
             text-align: center;
@@ -180,7 +189,6 @@
             text-align: center;
         }
     </style>
-
 </head>
 <body>
     <div class="container">

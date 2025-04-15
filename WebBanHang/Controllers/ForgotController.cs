@@ -12,7 +12,7 @@ namespace WebBanHang.Controllers
     {
         private WebAppDBEntities4 db = new WebAppDBEntities4();
 
-        // 1. Nhập Email hoặc Phone
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult Forgot()
         {

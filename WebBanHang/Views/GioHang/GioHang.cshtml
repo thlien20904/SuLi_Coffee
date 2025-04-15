@@ -8,8 +8,6 @@
     <h2 class="text-center cart-title">Giỏ hàng của bạn</h2>
 </div>
 
-
-
 <div id="cart-empty-message" class="alert alert-warning text-center" style="@(Model == null || !Model.Any() ? "" : "display: none;")">
     <h4>Giỏ hàng của bạn đang trống!</h4>
     <a href="@Url.Action("Home", "Home")" class="btn btn-primary mt-3">Tiếp tục mua sắm</a>
@@ -101,6 +99,14 @@
 
 @section scripts {
     <script>
+        // Hàm cập nhật số lượng giỏ hàng trên biểu tượng (nếu có)
+        function updateCartCount(count) {
+            var cartCountElement = document.querySelector(".cart-count");
+            if (cartCountElement) {
+                cartCountElement.textContent = count;
+            }
+        }
+
         // Xóa sản phẩm khỏi giỏ hàng
         document.querySelectorAll(".btn-xoa").forEach(button => {
             button.addEventListener("click", function (e) {
@@ -117,8 +123,6 @@
                 if (sizeId === "0" || sizeId === "null") {
                     sizeId = null;
                 }
-
-                console.log("Đang xóa sản phẩm với ID: " + productId + ", SizeID: " + (sizeId || "Không có"));
 
                 if (confirm("Bạn có chắc muốn xóa sản phẩm này?")) {
                     fetch('/GioHang/XoaKhoiGio', {
@@ -144,16 +148,10 @@
                                     totalPriceElement.innerHTML = "<strong>Tổng tiền: " + newTotal.toLocaleString("vi-VN") + " ₫</strong>";
                                 }
 
-                                // Nếu giỏ hàng rỗng, ẩn toàn bộ nội dung giỏ hàng và hiển thị thông báo
+                                // Nếu giỏ hàng rỗng, ẩn nội dung giỏ hàng và hiển thị thông báo
                                 if (document.querySelectorAll("#cart-table tbody tr").length === 0) {
-                                    var cartContent = document.getElementById("cart-content");
-                                    if (cartContent) {
-                                        cartContent.style.display = "none";
-                                    }
-                                    var emptyMessage = document.getElementById("cart-empty-message");
-                                    if (emptyMessage) {
-                                        emptyMessage.style.display = "block";
-                                    }
+                                    document.getElementById("cart-content").style.display = "none";
+                                    document.getElementById("cart-empty-message").style.display = "block";
                                 }
                             } else {
                                 alert(data.message);
@@ -166,31 +164,47 @@
                 }
             });
         });
-
         // Cập nhật số lượng sản phẩm
         document.querySelectorAll(".soLuongInput").forEach(input => {
             input.addEventListener("change", function () {
                 var foodId = this.getAttribute("data-foodid");
                 var sizeId = this.getAttribute("data-sizeid");
                 var soLuong = parseInt(this.value);
+                var inputElement = this;
 
-                if (soLuong < 1) {
+                // Kiểm tra số lượng hợp lệ
+                if (isNaN(soLuong) || soLuong < 1) {
                     alert("Số lượng phải lớn hơn 0!");
-                    this.value = 1;
-                    soLuong = 1;
+                    inputElement.value = 1;
+                    return;
                 }
 
                 // Nếu sizeId là "0" hoặc không có, đặt thành null
-                if (sizeId === "0" || sizeId === "null") {
+                if (sizeId === "0" || sizeId === "null" || !sizeId) {
                     sizeId = null;
                 }
+
+                // Kiểm tra foodId hợp lệ
+                if (!foodId || foodId <= 0) {
+                    alert("Lỗi: Không tìm thấy ID sản phẩm!");
+                    inputElement.value = 1;
+                    return;
+                }
+
+                // Vô hiệu hóa input trong khi xử lý
+                inputElement.disabled = true;
 
                 fetch('/GioHang/CapNhatSoLuong', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ foodId: parseInt(foodId), sizeId: sizeId ? parseInt(sizeId) : null, soLuong: soLuong })
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Lỗi khi gọi API: " + response.statusText);
+                        }
+                        return response.json();
+                    })
                     .then(data => {
                         if (data.success) {
                             // Cập nhật số lượng giỏ hàng trên biểu tượng
@@ -199,8 +213,10 @@
                             }
 
                             // Cập nhật tổng tiền của sản phẩm
-                            var totalPriceCell = this.closest("tr").querySelector(".total-price");
-                            totalPriceCell.innerText = data.newItemTotal.toLocaleString("vi-VN") + " ₫";
+                            var totalPriceCell = inputElement.closest("tr").querySelector(".total-price");
+                            if (totalPriceCell && typeof data.newItemTotal === "number") {
+                                totalPriceCell.textContent = data.newItemTotal.toLocaleString("vi-VN") + " ₫";
+                            }
 
                             // Cập nhật tổng tiền toàn giỏ hàng
                             var totalPriceElement = document.getElementById("total-price");
@@ -208,16 +224,21 @@
                                 totalPriceElement.innerHTML = "<strong>Tổng tiền: " + data.newTotal.toLocaleString("vi-VN") + " ₫</strong>";
                             }
                         } else {
-                            alert(data.message);
+                            alert(data.message || "Lỗi: Không thể cập nhật số lượng!");
+                            inputElement.value = data.currentQuantity || 1; // Khôi phục số lượng cũ
                         }
                     })
                     .catch(error => {
                         console.error("Lỗi Fetch:", error);
-                        alert("Có lỗi xảy ra khi cập nhật số lượng!");
+                        alert("Có lỗi xảy ra khi cập nhật số lượng! Vui lòng thử lại.");
+                        inputElement.value = 1; // Khôi phục số lượng mặc định nếu lỗi
+                    })
+                    .finally(() => {
+                        // Kích hoạt lại input sau khi xử lý
+                        inputElement.disabled = false;
                     });
             });
         });
     </script>
 }
 <style></style>
-
