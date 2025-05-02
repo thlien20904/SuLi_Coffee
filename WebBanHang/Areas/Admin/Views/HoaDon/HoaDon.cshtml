@@ -169,7 +169,8 @@
                 data: { startDate: start, endDate: end },
                 success: function (data) {
                     table.clear().draw();
-                    table.rows.add($(data)).draw();
+                    // Thêm các hàng từ dữ liệu trả về
+                    table.rows.add($(data).filter('tr')).draw();
                 },
                 error: function () {
                     table.clear().draw();
@@ -202,13 +203,11 @@
         }
     }
 </script>
-
 <style>
     .dataTables_wrapper th,
     .dataTables_wrapper td {
         border: 1px solid #ddd !important;
     }
-
     table {
         width: 100%;
         table-layout: auto;

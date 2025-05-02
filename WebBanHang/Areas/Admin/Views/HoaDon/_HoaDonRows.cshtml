@@ -1,0 +1,16 @@
+﻿@model IEnumerable<WebBanHang.Models.Order>
+
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.OrderId</td>
+        <td>@item.UserId</td>
+        <td>@item.OrderDate.ToString("dd/MM/yyyy")</td>
+        <td>@item.TotalAmount</td>
+        <td>@(item.PhuongThucThanhToan?.TenPhuongThuc ?? "N/A")</td>
+        <td>@item.StatusId</td>
+        <td>
+            <button class="btn btn-info btnChiTiet" data-id="@item.OrderId">Xem chi tiết</button>
+        </td>
+    </tr>
+}

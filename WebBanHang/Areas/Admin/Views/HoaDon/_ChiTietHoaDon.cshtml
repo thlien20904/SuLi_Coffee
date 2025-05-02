@@ -5,16 +5,29 @@
     <td colspan="7" style="text-align: center; font-weight: bold;">Xem chi tiết</td>
 </tr>
 
+<!-- Dòng tiêu đề cho các cột chi tiết -->
+<tr class="detail-header">
+    <td>Mã hóa đơn</td> <!-- Tiêu đề cho OrderId -->
+    <td>Tên sản phẩm</td> <!-- Tiêu đề cho FoodName -->
+    <td>Kích thước</td> <!-- Tiêu đề cho SizeName -->
+    <td>Topping</td> <!-- Tiêu đề cho ToppingName -->
+    <td>Số lượng</td> <!-- Tiêu đề cho Quantity -->
+    <td>Giá</td> <!-- Tiêu đề cho Price -->
+    <td>Xuất Excel</td> <!-- Cột cho nút Xuất Excel -->
+</tr>
+
 <!-- Dữ liệu chi tiết -->
 @foreach (var item in Model)
 {
     <tr class="detail-row">
-        <td></td> <!-- Cột "Mã Hóa Đơn" - để trống -->
-        <td>@(item.Food != null ? item.Food.FoodName : "Không xác định")</td> <!-- Cột "Mã Người Dùng" - hiển thị Tên Món -->
-        <td>@(item.Size != null ? item.Size.SizeName : "Không có")</td> <!-- Cột "Ngày Đặt Hàng" - hiển thị Kích Thước -->
-        <td>@(item.Topping != null ? item.Topping.ToppingName : "Không có")</td> <!-- Cột "Tổng Tiền" - hiển thị Topping -->
-        <td>@item.Quantity</td> <!-- Cột "Phương Thức Thanh Toán" - hiển thị Số Lượng -->
-        <td>@item.Price.ToString("N0") đ</td> <!-- Cột "Trạng Thái" - hiển thị Giá -->
-        <td></td> <!-- Cột "Chi Tiết" - để trống -->
+        <td>@item.OrderId</td> <!-- Hiển thị Mã hóa đơn -->
+        <td>@(item.Food != null ? item.Food.FoodName : "Không xác định")</td> <!-- Tên sản phẩm -->
+        <td>@(item.Size != null ? item.Size.SizeName : "Không có")</td> <!-- Kích thước -->
+        <td>@ViewBag.ToppingNames</td> <!-- Sử dụng ViewBag.ToppingNames -->
+        <td>@item.Quantity</td> <!-- Số lượng -->
+        <td>@item.Price.ToString("N0") đ</td> <!-- Giá -->
+        <td>
+            <a href="@Url.Action("ExportChiTietToExcel", "HoaDon", new { area = "Admin", orderId = item.OrderId })" class="btn btn-success btn-sm">Xuất Excel</a>
+        </td> <!-- Nút Xuất Excel -->
     </tr>
 }
