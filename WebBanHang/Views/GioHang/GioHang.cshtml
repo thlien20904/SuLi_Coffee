@@ -10,7 +10,7 @@
 
 <div id="cart-empty-message" class="alert alert-warning text-center" style="@(Model == null || !Model.Any() ? "" : "display: none;")">
     <h4>Giỏ hàng của bạn đang trống!</h4>
-    <a href="@Url.Action("Home", "Home")" class="btn btn-primary mt-3">Tiếp tục mua sắm</a>
+    <a href="@Url.Action("SanPham", "SanPham")" class="btn btn-primary mt-3">Tiếp tục mua sắm</a>
 </div>
 
 @if (Model != null && Model.Any())
@@ -19,6 +19,9 @@
         <table id="cart-table" class="table table-bordered table-striped text-center">
             <thead class="table-dark">
                 <tr>
+                    <th>
+                        <input type="checkbox" id="select-all" /> Chọn
+                    </th>
                     <th>Hình ảnh</th>
                     <th>Tên sản phẩm</th>
                     <th>Size</th>
@@ -33,6 +36,11 @@
                 @foreach (var item in Model)
                 {
                     <tr>
+                        <td>
+                            <input type="checkbox" class="select-item"
+                                   data-giohangid="@item.GioHangID"
+                                   data-totalprice="@item.TotalPrice" />
+                        </td>
                         <td>
                             <img src="@(string.IsNullOrEmpty(item.Food.ImageURL) ? Url.Content("~/images/no-image.png") : Url.Content(item.Food.ImageURL))"
                                  alt="Ảnh sản phẩm" class="img-thumbnail" style="width: 100px; height: 100px;" />
@@ -78,28 +86,89 @@
                 }
             </tbody>
         </table>
-        <h4 id="total-price"><strong>Tổng tiền: @String.Format("{0:N0} ₫", Model.Sum(i => i.TotalPrice))</strong></h4>
+        <h4 id="total-price"><strong>Tổng tiền: 0 ₫</strong></h4>
         <div class="text-right" id="cart-actions">
-            @{
-                decimal tongTien = 0;
-                foreach (var item in Model)
-                {
-                    decimal giaSize = Convert.ToDecimal(item.Size?.ExtraPrice ?? 0);
-                    decimal giaTopping = Convert.ToDecimal(item.GioHang_Topping?.Sum(t => t.Topping.ToppingPrice) ?? 0);
-                    decimal discountPrice = item.Food.DiscountPrice.HasValue ? item.Food.DiscountPrice.Value : item.Food.Price;
-                    decimal thanhTien = item.SoLuong * (discountPrice + giaSize + giaTopping);
-                    tongTien += thanhTien;
-                }
-            }
             <a href="@Url.Action("SanPham", "SanPham")" class="btn btn-secondary">Tiếp tục mua sắm</a>
-            <a href="@Url.Action("ThanhToan", "ThanhToan")" class="btn btn-success">Thanh toán</a>
+            <a href="#" id="btn-thanh-toan" class="btn btn-success">Thanh toán</a>
         </div>
     </div>
 }
 
 @section scripts {
     <script>
-        // Hàm cập nhật số lượng giỏ hàng trên biểu tượng (nếu có)
+        // Hàm tính tổng tiền các mục được chọn
+        function updateSelectedTotal() {
+            var total = 0;
+            document.querySelectorAll(".select-item:checked").forEach(checkbox => {
+                var totalPrice = parseFloat(checkbox.getAttribute("data-totalprice"));
+                total += totalPrice;
+            });
+            var totalPriceElement = document.getElementById("total-price");
+            totalPriceElement.innerHTML = "<strong>Tổng tiền: " + total.toLocaleString("vi-VN") + " ₫</strong>";
+        }
+
+        // Xử lý checkbox "Chọn tất cả"
+        document.getElementById("select-all").addEventListener("change", function () {
+            var isChecked = this.checked;
+            document.querySelectorAll(".select-item").forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+            updateSelectedTotal();
+        });
+
+        // Xử lý checkbox từng mục
+        document.querySelectorAll(".select-item").forEach(checkbox => {
+            checkbox.addEventListener("change", function () {
+                var allCheckboxes = document.querySelectorAll(".select-item");
+                var checkedCheckboxes = document.querySelectorAll(".select-item:checked");
+                document.getElementById("select-all").checked = allCheckboxes.length === checkedCheckboxes.length;
+                updateSelectedTotal();
+            });
+        });
+
+        // Xử lý nút "Thanh toán"
+        document.getElementById("btn-thanh-toan").addEventListener("click", function (e) {
+            e.preventDefault();
+            var selectedItems = [];
+            document.querySelectorAll(".select-item:checked").forEach(checkbox => {
+                var gioHangId = parseInt(checkbox.getAttribute("data-giohangid"));
+                selectedItems.push(gioHangId);
+            });
+
+            if (selectedItems.length === 0) {
+                alert("Vui lòng chọn ít nhất một sản phẩm để thanh toán!");
+                return;
+            }
+
+            fetch('/ThanhToan/PrepareCheckout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ selectedItems: selectedItems })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '@Url.Action("ThanhToan", "ThanhToan")';
+                    } else {
+                        alert(data.message || "Có lỗi xảy ra khi chuẩn bị thanh toán!");
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi Fetch:", error);
+                    alert("Có lỗi xảy ra khi chuẩn bị thanh toán!");
+                });
+        });
+
+        // Khởi tạo tổng tiền khi tải trang (chọn tất cả mặc định)
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".select-item").forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            document.getElementById("select-all").checked = true;
+            updateSelectedTotal();
+        });
+
+        // Hàm cập nhật số lượng giỏ hàng trên biểu tượng
         function updateCartCount(count) {
             var cartCountElement = document.querySelector(".cart-count");
             if (cartCountElement) {
@@ -119,7 +188,6 @@
                     return;
                 }
 
-                // Nếu sizeId là "0" hoặc không có, đặt thành null
                 if (sizeId === "0" || sizeId === "null") {
                     sizeId = null;
                 }
@@ -133,26 +201,18 @@
                         .then(response => response.json())
                         .then(data => {
                             if (data.success) {
-                                // Cập nhật số lượng giỏ hàng trên biểu tượng
                                 if (data.cartCount !== undefined) {
                                     updateCartCount(data.cartCount);
                                 }
 
-                                // Xóa dòng sản phẩm khỏi bảng
                                 this.closest("tr").remove();
 
-                                // Cập nhật tổng tiền
-                                var newTotal = data.newTotal;
-                                var totalPriceElement = document.getElementById("total-price");
-                                if (totalPriceElement && typeof newTotal === "number") {
-                                    totalPriceElement.innerHTML = "<strong>Tổng tiền: " + newTotal.toLocaleString("vi-VN") + " ₫</strong>";
-                                }
-
-                                // Nếu giỏ hàng rỗng, ẩn nội dung giỏ hàng và hiển thị thông báo
                                 if (document.querySelectorAll("#cart-table tbody tr").length === 0) {
                                     document.getElementById("cart-content").style.display = "none";
                                     document.getElementById("cart-empty-message").style.display = "block";
                                 }
+
+                                updateSelectedTotal();
                             } else {
                                 alert(data.message);
                             }
@@ -164,6 +224,7 @@
                 }
             });
         });
+
         // Cập nhật số lượng sản phẩm
         document.querySelectorAll(".soLuongInput").forEach(input => {
             input.addEventListener("change", function () {
@@ -172,26 +233,22 @@
                 var soLuong = parseInt(this.value);
                 var inputElement = this;
 
-                // Kiểm tra số lượng hợp lệ
                 if (isNaN(soLuong) || soLuong < 1) {
                     alert("Số lượng phải lớn hơn 0!");
                     inputElement.value = 1;
                     return;
                 }
 
-                // Nếu sizeId là "0" hoặc không có, đặt thành null
                 if (sizeId === "0" || sizeId === "null" || !sizeId) {
                     sizeId = null;
                 }
 
-                // Kiểm tra foodId hợp lệ
                 if (!foodId || foodId <= 0) {
                     alert("Lỗi: Không tìm thấy ID sản phẩm!");
                     inputElement.value = 1;
                     return;
                 }
 
-                // Vô hiệu hóa input trong khi xử lý
                 inputElement.disabled = true;
 
                 fetch('/GioHang/CapNhatSoLuong', {
@@ -207,38 +264,34 @@
                     })
                     .then(data => {
                         if (data.success) {
-                            // Cập nhật số lượng giỏ hàng trên biểu tượng
                             if (data.cartCount !== undefined) {
                                 updateCartCount(data.cartCount);
                             }
 
-                            // Cập nhật tổng tiền của sản phẩm
                             var totalPriceCell = inputElement.closest("tr").querySelector(".total-price");
                             if (totalPriceCell && typeof data.newItemTotal === "number") {
                                 totalPriceCell.textContent = data.newItemTotal.toLocaleString("vi-VN") + " ₫";
+                                var checkbox = inputElement.closest("tr").querySelector(".select-item");
+                                if (checkbox) {
+                                    checkbox.setAttribute("data-totalprice", data.newItemTotal);
+                                }
                             }
 
-                            // Cập nhật tổng tiền toàn giỏ hàng
-                            var totalPriceElement = document.getElementById("total-price");
-                            if (totalPriceElement && typeof data.newTotal === "number") {
-                                totalPriceElement.innerHTML = "<strong>Tổng tiền: " + data.newTotal.toLocaleString("vi-VN") + " ₫</strong>";
-                            }
+                            updateSelectedTotal();
                         } else {
                             alert(data.message || "Lỗi: Không thể cập nhật số lượng!");
-                            inputElement.value = data.currentQuantity || 1; // Khôi phục số lượng cũ
+                            inputElement.value = data.currentQuantity || 1;
                         }
                     })
                     .catch(error => {
                         console.error("Lỗi Fetch:", error);
                         alert("Có lỗi xảy ra khi cập nhật số lượng! Vui lòng thử lại.");
-                        inputElement.value = 1; // Khôi phục số lượng mặc định nếu lỗi
+                        inputElement.value = 1;
                     })
                     .finally(() => {
-                        // Kích hoạt lại input sau khi xử lý
                         inputElement.disabled = false;
                     });
             });
         });
     </script>
 }
-<style></style>

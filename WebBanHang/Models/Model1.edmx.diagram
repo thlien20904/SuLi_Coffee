@@ -47,6 +47,8 @@
         <AssociationConnector Association="WebAppDBModel.FK__Orders__PaymentM__764C846B" ManuallyRouted="false" />
         <AssociationConnector Association="WebAppDBModel.FK__Orders__StatusId__7740A8A4" ManuallyRouted="false" />
         <AssociationConnector Association="WebAppDBModel.FK__Orders__UserId__75586032" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="WebAppDBModel.DeliveryAddress" Width="1.5" PointX="8.25" PointY="16.75" />
+        <AssociationConnector Association="WebAppDBModel.FK__DeliveryA__UserI__1B48FEF0" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

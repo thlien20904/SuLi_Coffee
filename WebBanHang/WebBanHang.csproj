@@ -205,6 +205,9 @@
     <Compile Include="Models\Category.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DeliveryAddress.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Food.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -255,6 +258,7 @@
     <Compile Include="Models\OrderStatu.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\payments\VnPayLibrary.cs" />
     <Compile Include="Models\PhuongThucThanhToan.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -557,6 +561,7 @@
     <Content Include="Views\ThanhToan\ThanhToan.cshtml" />
     <Content Include="Views\ThanhToan\ThanhCong.cshtml" />
     <Content Include="Views\SanPham\ChiTiet.cshtml" />
+    <Content Include="Views\ThanhToan\VnpayReturn.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

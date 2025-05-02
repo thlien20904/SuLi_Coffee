@@ -19,6 +19,7 @@ namespace WebBanHang.Models
         {
             this.GioHangs = new HashSet<GioHang>();
             this.Orders = new HashSet<Order>();
+            this.DeliveryAddresses = new HashSet<DeliveryAddress>();
         }
     
         public int Id { get; set; }
@@ -40,5 +41,7 @@ namespace WebBanHang.Models
         public virtual ICollection<GioHang> GioHangs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DeliveryAddress> DeliveryAddresses { get; set; }
     }
 }

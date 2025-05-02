@@ -21,7 +21,7 @@ CREATE TABLE Users (
     CreatedDate DATETIME DEFAULT GETDATE()
 );
 GO
- select *from users
+select *from users
 -- Table: TableFood
 CREATE TABLE TableFood(
     TableId INT IDENTITY PRIMARY KEY,
@@ -139,7 +139,18 @@ CREATE TABLE OrderStatus (
     StatusId INT PRIMARY KEY IDENTITY(1,1),
     StatusName NVARCHAR(50) NOT NULL UNIQUE
 );
-SELECT * FROM OrderStatus;
+
+
+CREATE TABLE DeliveryAddresses (
+    AddressId INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT NOT NULL,
+    Address NVARCHAR(255) NOT NULL,
+    IsDefault BIT NOT NULL DEFAULT 0, -- Địa chỉ mặc định
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
+GO
+
 -- Bảng Orders
 CREATE TABLE Orders (
     OrderId INT PRIMARY KEY IDENTITY(1,1),
@@ -148,9 +159,10 @@ CREATE TABLE Orders (
     TotalAmount DECIMAL(18, 3) NOT NULL,
     PaymentMethodId INT NOT NULL,
     StatusId INT NOT NULL,
+    DeliveryAddress NVARCHAR(255) NULL,
     FOREIGN KEY (UserId) REFERENCES Users(Id),
     FOREIGN KEY (PaymentMethodId) REFERENCES PhuongThucThanhToan(Id),
-    FOREIGN KEY (StatusId) REFERENCES OrderStatus(StatusId)
+    FOREIGN KEY (StatusId) REFERENCES OrderStatus(StatusId),
 );
 
 -- Bảng OrderDetails
@@ -167,6 +179,7 @@ CREATE TABLE OrderDetails (
     FOREIGN KEY (SizeId) REFERENCES Size(SizeID),
     FOREIGN KEY (ToppingId) REFERENCES Topping(ToppingID)
 );
+
 
 -- Table: Invoice
 CREATE TABLE Invoice (
@@ -240,10 +253,8 @@ GO
 
 INSERT INTO Users (Username, Email, PasswordHash, FullName, Phone, Address, Role, AvatarUrl)
 VALUES 
-('admin', 'thuylien2k4@gmail.com', '1', N'Thùy Liên', '0366413924', N'Hà Nội', 'Admin','/images/Avatar/a.png'),
-('user1', 'lien@gmail.com', '1', N'Liên Nguyễn', '0987654321', N'Hồ Chí Minh', 'User','/images/Avatar/a.png'),
-('user2', 'example2@gmail.com', '1', N'Nguyễn Văn A', '0901122334', N'Đà Nẵng', 'User', NULL),
-('user3', 'example3@gmail.com', '1', N'Lê Thị B', '0905678999', N'Cần Thơ', 'User', NULL);
+('admin', 'thuylien2k4@gmail.com', '1', N'Thúy Liên', '0366413924', N'Hà Nội', 'Admin','/images/Avatar/a.png'),
+('user', 'lien@gmail.com', '1', N'Thúy Liên', '0987654321', N'Hồ Chí Minh', 'User','/images/Avatar/a.png');
 GO
 INSERT INTO TableFood (TableName, TrangThai)
 VALUES
@@ -670,15 +681,23 @@ VALUES
     (N'Đặt hàng thành công'),
     (N'Đang chuẩn bị đơn hàng'),
     (N'Đang giao hàng'),
-    (N'Giao hàng thành công');
+    (N'Giao hàng thành công'),
+	 (N'Đã hủy');
 
 
 
 
-select *from OrderDetails 
 
 
-
+-- Thêm dữ liệu mẫu
+INSERT INTO DeliveryAddresses (UserId, Address, IsDefault)
+VALUES 
+    (2, N'123 Đường Láng, Đống Đa, Hà Nội', 1),
+    (3, N'456 Nguyễn Trãi, Thanh Xuân, Hà Nội', 0),
+    (2, N'789 Lê Lợi, Quận 1, TP.HCM', 1),
+	(2, N'273 Trần Đăng Ninh, Cầu Giấy, Hà Nội', 1);
+GO
+select *from users
 
 
 DECLARE @sql NVARCHAR(MAX) = '';

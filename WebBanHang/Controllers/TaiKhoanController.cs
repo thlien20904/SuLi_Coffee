@@ -173,9 +173,8 @@ namespace WebBanHang.Controllers
                 return Json(new { success = false, message = "Lỗi khi cập nhật ảnh đại diện: " + ex.Message });
             }
         }
-
         [HttpGet]
-        public JsonResult GetOrders()
+        public JsonResult GetOrders(int page = 1, int pageSize = 5, string tab = "cho-xac-nhan")
         {
             if (Session["Username"] == null)
             {
@@ -196,42 +195,81 @@ namespace WebBanHang.Controllers
                     .Include("OrderDetails.Food")
                     .Include("OrderDetails.Size")
                     .Include("OrderDetails.Topping")
-                    .Where(o => o.UserId == user.Id)
-                    .Select(o => new
-                    {
-                        OrderId = o.OrderId,
-                        OrderDate = o.OrderDate,
-                        TotalAmount = o.TotalAmount,
-                        StatusId = o.StatusId,
-                        PaymentMethod = o.PhuongThucThanhToan != null ? o.PhuongThucThanhToan.TenPhuongThuc : "Không xác định",
-                        OrderDetails = o.OrderDetails.Select(od => new
-                        {
-                            FoodName = od.Food != null ? od.Food.FoodName : "Không xác định",
-                            SizeName = od.Size != null ? od.Size.SizeName : null,
-                            ToppingName = od.Topping != null ? od.Topping.ToppingName : null,
-                            Quantity = od.Quantity,
-                            Price = od.Price
-                        }).ToList()
-                    })
-                    .OrderByDescending(o => o.OrderDate);
+                    .Where(o => o.UserId == user.Id);
 
-                var ordersList = ordersQuery.ToList();
+                // Lọc đơn hàng theo tab
+                switch (tab)
+                {
+                    case "cho-xac-nhan":
+                        ordersQuery = ordersQuery.Where(o => o.StatusId == 1); // Đặt hàng thành công
+                        break;
+                    case "dang-chuan-bi":
+                        ordersQuery = ordersQuery.Where(o => o.StatusId == 2); // Đang chuẩn bị đơn hàng
+                        break;
+                    case "dang-giao-hang":
+                        ordersQuery = ordersQuery.Where(o => o.StatusId == 3); // Đang giao hàng
+                        break;
+                    case "da-giao":
+                        ordersQuery = ordersQuery.Where(o => o.StatusId == 4); // Giao hàng thành công
+                        break;
+                    case "da-huy":
+                        ordersQuery = ordersQuery.Where(o => o.StatusId == 5); // Đã hủy
+                        break;
+                    default:
+                        ordersQuery = ordersQuery.Where(o => o.StatusId == 1);
+                        break;
+                }
+
+                // Tổng số đơn hàng (để tính số trang)
+                int totalOrders = ordersQuery.Count();
+
+                // Áp dụng phân trang
+                ordersQuery = ordersQuery
+                    .OrderByDescending(o => o.OrderDate)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize);
+
+                var ordersList = ordersQuery.Select(o => new
+                {
+                    OrderId = o.OrderId,
+                    OrderDate = o.OrderDate,
+                    TotalAmount = o.TotalAmount,
+                    StatusId = o.StatusId,
+                    PaymentMethod = o.PhuongThucThanhToan != null ? o.PhuongThucThanhToan.TenPhuongThuc : "Không xác định",
+                    OrderDetails = o.OrderDetails.Select(od => new
+                    {
+                        FoodName = od.Food != null ? od.Food.FoodName : "Không xác định",
+                        SizeName = od.Size != null ? od.Size.SizeName : null,
+                        ToppingName = od.Topping != null ? od.Topping.ToppingName : null,
+                        Quantity = od.Quantity,
+                        Price = od.Price
+                    }).ToList()
+                }).ToList();
 
                 var orders = ordersList.Select(o =>
                 {
-                    var status = db.Database.SqlQuery<OrderStatu>("SELECT * FROM OrderStatus WHERE StatusId = @p0", o.StatusId).FirstOrDefault();
+                    var status = db.OrderStatus.FirstOrDefault(s => s.StatusId == o.StatusId);
                     return new
                     {
                         OrderId = o.OrderId,
                         OrderDate = o.OrderDate.ToString("o"),
                         TotalAmount = o.TotalAmount,
+                        StatusId = o.StatusId,
                         Status = status != null ? status.StatusName : "Unknown",
                         PaymentMethod = o.PaymentMethod,
                         OrderDetails = o.OrderDetails
                     };
                 }).ToList();
 
-                return Json(new { success = true, orders = orders }, JsonRequestBehavior.AllowGet);
+                return Json(new
+                {
+                    success = true,
+                    orders = orders,
+                    totalOrders = totalOrders,
+                    currentPage = page,
+                    pageSize = pageSize,
+                    totalPages = (int)Math.Ceiling((double)totalOrders / pageSize)
+                }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
@@ -239,7 +277,45 @@ namespace WebBanHang.Controllers
                 return Json(new { success = false, message = "Có lỗi xảy ra khi lấy danh sách đơn hàng: " + ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+        [HttpPost]
+        public JsonResult CancelOrder(int orderId)
+        {
+            if (Session["Username"] == null)
+            {
+                return Json(new { success = false, message = "Bạn chưa đăng nhập!" });
+            }
 
+            string username = Session["Username"].ToString();
+            var user = db.Users.FirstOrDefault(u => u.Username == username);
+            if (user == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy người dùng!" });
+            }
+
+            var order = db.Orders.FirstOrDefault(o => o.OrderId == orderId && o.UserId == user.Id);
+            if (order == null)
+            {
+                return Json(new { success = false, message = "Không tìm thấy đơn hàng hoặc bạn không có quyền hủy!" });
+            }
+
+            // Chỉ cho phép hủy nếu đơn hàng đang ở trạng thái "Đặt hàng thành công" hoặc "Đang chuẩn bị đơn hàng"
+            if (order.StatusId != 1 && order.StatusId != 2)
+            {
+                return Json(new { success = false, message = "Không thể hủy đơn hàng ở trạng thái hiện tại!" });
+            }
+
+            try
+            {
+                // Cập nhật trạng thái thành "Đã hủy" (StatusId = 5)
+                order.StatusId = 5;
+                db.SaveChanges();
+                return Json(new { success = true, message = "Hủy đơn hàng thành công!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Có lỗi xảy ra khi hủy đơn hàng: " + ex.Message });
+            }
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)

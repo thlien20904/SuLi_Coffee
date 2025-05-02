@@ -13,30 +13,29 @@ namespace WebBanHang.Areas.Admin.Controllers
         {
             TempData["ErrorMessage"] = null;
 
-            // Lấy danh sách 5 đơn hàng gần đây
-            var recentOrders = db.Orders
+            // Lấy tất cả đơn hàng
+            var allOrders = db.Orders
                 .OrderByDescending(o => o.OrderDate)
-                .Take(5)
                 .ToList()
                 .Select(o =>
                 {
                     var user = db.Users.FirstOrDefault(u => u.Id == o.UserId);
-                    var status = db.OrderStatus.FirstOrDefault(s => s.StatusId == o.StatusId); // Giả định OrderStatu
+                    var status = db.OrderStatus.FirstOrDefault(s => s.StatusId == o.StatusId);
                     return new RecentOrderModel
                     {
                         OrderId = o.OrderId,
                         FullName = user != null ? user.FullName : "Unknown",
                         Status = status != null ? status.StatusName : "Unknown",
                         OrderDate = o.OrderDate,
-                        TotalAmount = o.TotalAmount // Sửa, loại bỏ ?? 0m
+                        TotalAmount = o.TotalAmount
                     };
                 })
                 .ToList();
 
-            ViewBag.RecentOrders = recentOrders;
+            ViewBag.AllOrders = allOrders; // Đổi tên để tránh nhầm lẫn với RecentOrders
 
             // Lấy danh sách trạng thái để hiển thị trong dropdown
-            ViewBag.OrderStatuses = db.OrderStatus.ToList(); // Giả định OrderStatu
+            ViewBag.OrderStatuses = db.OrderStatus.ToList();
 
             return View();
         }

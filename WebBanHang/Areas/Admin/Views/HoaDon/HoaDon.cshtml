@@ -13,6 +13,9 @@
 <!-- DataTables JS -->
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
+<!-- Font Awesome for search icon -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 <div class="page-container">
     <div class="category-header">
         <h2 class="category-title">Danh sách hóa đơn</h2>
@@ -30,7 +33,8 @@
             </div>
             <div class="col-md-4">
                 <br />
-                <button id="btnThongKe" class="btn btn-primary">📊 Thống Kê</button>
+                <button id="btnThongKe" class="btn btn-primary custom-btn">📊 Thống Kê</button>
+                <a href="@Url.Action("ExportToExcel", "HoaDon", new { area = "Admin", startDate = ViewBag.StartDate, endDate = ViewBag.EndDate })" class="btn btn-success custom-btn">Xuất Excel</a>
             </div>
         </div>
         <div class="search-container">
@@ -42,8 +46,8 @@
     </div>
 
     <div id="customControls" style="display: flex; align-items: center; gap: 10px;">
-        <div id="dataTables_length"></div> <!-- DataTables render "Show entries" -->
-        <button id="sortButton" type="button" class="btn btn-primary">
+        <div id="dataTables_length"></div>
+        <button id="sortButton" type="button" class="btn btn-primary sort-btn">
             <svg id="sortIcon" xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 fill-current" viewBox="0 0 24 24">
                 <path d="M7 10l5-5 5 5H7zm0 4h10l-5 5-5-5z" />
             </svg>
@@ -54,7 +58,6 @@
     <table class="table table-bordered table-striped category-table" id="hoaDonTable">
         <thead class="thead-dark">
             <tr>
-                <!-- Bỏ cột mở rộng -->
                 <th>Mã Hóa Đơn</th>
                 <th>Mã Người Dùng</th>
                 <th>Ngày Đặt Hàng</th>
@@ -65,162 +68,141 @@
             </tr>
         </thead>
         <tbody>
-            @Html.Partial("_HoaDonTable", Model) <!-- Load dữ liệu ban đầu -->
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.OrderId</td>
+                    <td>@item.UserId</td>
+                    <td>@item.OrderDate.ToString("dd/MM/yyyy")</td>
+                    <td>@item.TotalAmount</td>
+                    <td>@(item.PhuongThucThanhToan?.TenPhuongThuc ?? "N/A")</td>
+                    <td>@item.StatusId</td>
+                    <td>
+                        <button class="btn btn-info btnChiTiet" data-id="@item.OrderId">Xem chi tiết</button>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
+
 <script>
-$(document).ready(function () {
-    var table = $('#hoaDonTable').DataTable({
-        "paging": true,
-        "lengthMenu": [5, 10, 25, 50],
-        "pageLength": 10,
-        "ordering": true,
-        "info": true,
-        "searching": false, // Tắt tìm kiếm mặc định của DataTables để dùng tìm kiếm tùy chỉnh
-        "destroy": true,  // Tránh lỗi DataTable bị khởi tạo lại
-        "columnDefs": [
-            { "orderable": false, "targets": [0, 1, 3, 4, 5, 6] }, // Chỉ cho phép sắp xếp cột "Ngày Đặt Hàng" (index 2)
-        ],
-        "language": {
-            "lengthMenu": "Show _MENU_ ",
-            "zeroRecords": "Không tìm thấy hóa đơn nào",
-            "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ hóa đơn",
-            "infoEmpty": "Không có dữ liệu để hiển thị",
-            "infoFiltered": "(lọc từ _MAX_ hóa đơn)",
-            "paginate": {
-                "first": "Đầu",
-                "last": "Cuối",
-                "next": "Tiếp",
-                "previous": "Trước"
+    $(document).ready(function () {
+        var table = $('#hoaDonTable').DataTable({
+            "paging": true, // Bật phân trang
+            "lengthMenu": [5, 10, 25, 50, -1],
+            "lengthChange": true,
+            "pageLength": 10,
+            "ordering": true,
+            "info": true,
+            "searching": false,
+            "destroy": true,
+            "columnDefs": [
+                { "orderable": false, "targets": [0, 1, 3, 4, 5, 6] },
+            ],
+            "language": {
+                "lengthMenu": "Hiển thị _MENU_ bản ghi",
+                "zeroRecords": "Không tìm thấy hóa đơn nào",
+                "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ hóa đơn",
+                "infoEmpty": "Không có dữ liệu để hiển thị",
+                "infoFiltered": "(lọc từ _MAX_ hóa đơn)",
+                "paginate": {
+                    "first": "Đầu",
+                    "last": "Cuối",
+                    "next": "Tiếp",
+                    "previous": "Trước"
+                }
+            },
+            "drawCallback": function () {
+                $("#hoaDonTable_length").appendTo("#dataTables_length");
             }
-        },
-        "drawCallback": function () {
-            $("#hoaDonTable_length").appendTo("#dataTables_length"); // Di chuyển phần "Show entries"
-        }
-    });
+        });
 
-    // Toggle sắp xếp khi nhấn nút Sort (chỉ sắp xếp cột "Ngày Đặt Hàng" - index 2)
-    var sortDirection = 'asc';
+        var sortDirection = 'asc';
+        $("#sortButton").on("click", function () {
+            let icon = $("#sortIcon");
+            table.order([2, sortDirection]).draw();
+            sortDirection = (sortDirection === 'asc') ? 'desc' : 'asc';
+            icon.html(sortDirection === "asc"
+                ? '<path d="M7 10l5-5 5 5H7zm0 4h10l-5 5-5-5z"/>'
+                : '<path d="M7 14l5 5 5-5H7zm0-4h10l-5-5-5 5z"/>'
+            );
+        });
 
-    $("#sortButton").on("click", function () {
-        let icon = $("#sortIcon");
-
-        // Thực hiện sắp xếp
-        table.order([2, sortDirection]).draw();
-
-        // Đảo ngược hướng sắp xếp
-        sortDirection = (sortDirection === 'asc') ? 'desc' : 'asc';
-
-        // Đổi icon mũi tên
-        icon.html(sortDirection === "asc"
-            ? '<path d="M7 10l5-5 5 5H7zm0 4h10l-5 5-5-5z"/>'
-            : '<path d="M7 14l5 5 5-5H7zm0-4h10l-5-5-5 5z"/>'
-        );
-    });
-
-    // Xử lý sự kiện khi nhấn "Xem chi tiết"
-    $('#hoaDonTable tbody').on('click', '.btnChiTiet', function () {
-        var tr = $(this).closest('tr');
-        var orderId = $(this).data('id');
-        console.log("Order ID:", orderId);
-
-        // Kiểm tra nếu dòng chi tiết đã được hiển thị
-        if (tr.hasClass('shown')) {
-            // Xóa các dòng chi tiết (bao gồm cả detail-header và detail-row)
-            tr.nextUntil(':not(.detail-header, .detail-row)').remove();
-            tr.removeClass('shown');
-        } else {
-            var url = "@Url.Action("ChiTietHoaDon", "HoaDon", new { area = "Admin" })";
-            console.log("URL:", url);
-            $.ajax({
-                url: url,
-                type: "GET",
-                data: { orderId: orderId },
-                success: function (data) {
-                    console.log("Data received:", data);
-                    if (data && data.trim() !== '' && !data.includes('Lỗi')) {
-                        // Chèn các dòng chi tiết (bao gồm cả detail-header) ngay bên dưới dòng hiện tại
-                        $(data).insertAfter(tr);
-                        tr.addClass('shown');
-                    } else {
-                        var errorRow = '<tr class="detail-header"><td colspan="7" style="color: red; text-align: center;">⚠️ Không có chi tiết hoặc lỗi khi tải dữ liệu</td></tr>';
+        $('#hoaDonTable tbody').on('click', '.btnChiTiet', function () {
+            var tr = $(this).closest('tr');
+            var orderId = $(this).data('id');
+            if (tr.hasClass('shown')) {
+                tr.nextUntil(':not(.detail-header, .detail-row)').remove();
+                tr.removeClass('shown');
+            } else {
+                var url = "@Url.Action("ChiTietHoaDon", "HoaDon", new { area = "Admin" })";
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: { orderId: orderId },
+                    success: function (data) {
+                        if (data && data.trim() !== '' && !data.includes('Lỗi')) {
+                            $(data).insertAfter(tr);
+                            tr.addClass('shown');
+                        } else {
+                            var errorRow = '<tr class="detail-header"><td colspan="7" style="color: red; text-align: center;">⚠️ Không có chi tiết hoặc lỗi khi tải dữ liệu</td></tr>';
+                            $(errorRow).insertAfter(tr);
+                            tr.addClass('shown');
+                        }
+                    },
+                    error: function () {
+                        var errorRow = '<tr class="detail-header"><td colspan="7" style="color: red; text-align: center;">⚠️ Lỗi khi tải dữ liệu!</td></tr>';
                         $(errorRow).insertAfter(tr);
                         tr.addClass('shown');
                     }
-                },
-                error: function (xhr, status, error) {
-                    console.log("AJAX error:", error);
-                    var errorRow = '<tr class="detail-header"><td colspan="7" style="color: red; text-align: center;">⚠️ Lỗi khi tải dữ liệu!</td></tr>';
-                    $(errorRow).insertAfter(tr);
-                    tr.addClass('shown');
-                }
-            });
-        }
-    });
-
-    // Xử lý khi click "Thống Kê"
-    $("#btnThongKe").click(function () {
-        var start = $("#startDate").val();
-        var end = $("#endDate").val();
-
-        $.ajax({
-            url: "@Url.Action("HoaDon", "HoaDon", new { area = "Admin" })",
-            type: "GET",
-            data: { startDate: start, endDate: end },
-            success: function (data) {
-                table.clear().draw(); // Xóa dữ liệu cũ
-                table.rows.add($(data)).draw(); // Thêm dữ liệu mới
-            },
-            error: function () {
-                table.clear().draw();
-                table.rows.add($('<tr><td colspan="7" style="color: red;">⚠️ Lỗi khi tải dữ liệu!</td></tr>')).draw();
+                });
             }
         });
+
+        $("#btnThongKe").click(function () {
+            var start = $("#startDate").val();
+            var end = $("#endDate").val();
+            $.ajax({
+                url: "@Url.Action("HoaDon", "HoaDon", new { area = "Admin" })",
+                type: "GET",
+                data: { startDate: start, endDate: end },
+                success: function (data) {
+                    table.clear().draw();
+                    table.rows.add($(data)).draw();
+                },
+                error: function () {
+                    table.clear().draw();
+                    table.rows.add($('<tr><td colspan="7" style="color: red;">⚠️ Lỗi khi tải dữ liệu!</td></tr>')).draw();
+                }
+            });
+        });
     });
-});
 
-// Tìm kiếm trong bảng
-function searchHoaDon() {
-    var input, filter, table, tr, tdArray, i, txtValue, foundCount = 0;
-    input = document.getElementById("searchBox");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("hoaDonTable");
-    tr = table.getElementsByTagName("tr");
+    function searchHoaDon() {
+        var input = document.getElementById("searchBox");
+        var filter = input.value.toUpperCase();
+        var table = document.getElementById("hoaDonTable");
+        var tr = table.getElementsByTagName("tr");
 
-    for (i = 1; i < tr.length; i++) {
-        // Bỏ qua các dòng chi tiết và dòng tiêu đề chi tiết
-        if (tr[i].classList.contains('detail-header') || tr[i].classList.contains('detail-row')) continue;
-
-        tdArray = tr[i].getElementsByTagName("td");
-        let found = false;
-        for (let td of tdArray) {
-            if (td) {
-                txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                    found = true;
-                    break;
+        for (var i = 1; i < tr.length; i++) {
+            if (tr[i].classList.contains('detail-header') || tr[i].classList.contains('detail-row')) continue;
+            var tdArray = tr[i].getElementsByTagName("td");
+            let found = false;
+            for (let td of tdArray) {
+                if (td) {
+                    var txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
                 }
             }
+            tr[i].style.display = found ? "" : "none";
         }
-        tr[i].style.display = found ? "" : "none";
-        if (found) foundCount++;
     }
-
-    let alertBox = document.getElementById("noResultAlert");
-    if (!foundCount) {
-        if (!alertBox) {
-            let newAlert = document.createElement("p");
-            newAlert.id = "noResultAlert";
-            newAlert.className = "alert alert-warning";
-            newAlert.innerText = "Không tìm thấy kết quả.";
-            table.parentNode.insertBefore(newAlert, table);
-        }
-    } else {
-        if (alertBox) alertBox.remove();
-    }
-}
 </script>
+
 <style>
     .dataTables_wrapper th,
     .dataTables_wrapper td {
@@ -229,19 +211,20 @@ function searchHoaDon() {
 
     table {
         width: 100%;
-        table-layout: auto; /* Thay fixed thành auto */
+        table-layout: auto;
         border-collapse: collapse;
         border: none !important;
     }
+
     #customControls {
         display: flex;
         align-items: center;
         margin-bottom: 5px;
-        gap: 10px; /* Khoảng cách giữa các phần tử */
+        gap: 10px;
     }
 
     #dataTables_length select {
-        height: 40px; /* Đặt cùng chiều cao với nút Sort */
+        height: 40px;
         padding: 8px 16px;
         font-size: 16px;
         border-radius: 8px;
@@ -250,22 +233,22 @@ function searchHoaDon() {
         cursor: pointer;
     }
 
-    #sortButton {
+    .sort-btn {
         display: flex;
         align-items: center;
         gap: 8px;
-        background-color: #f3e8ff; /* Màu tím nhạt */
-        color: #7c3aed; /* Màu tím */
+        background-color: #f3e8ff;
+        color: #7c3aed;
         font-weight: bold;
         padding: 8px 16px;
         border-radius: 8px;
         border: none;
         cursor: pointer;
         transition: background 0.3s;
-        height: 40px; /* Cùng chiều cao với select */
+        height: 40px;
     }
 
-        #sortButton:hover {
+        .sort-btn:hover {
             background-color: #e9d5ff;
         }
 
@@ -274,18 +257,17 @@ function searchHoaDon() {
         height: 16px;
     }
 
-    /* Ẩn mũi tên sort trên tiêu đề bảng */
     .dataTables_wrapper th {
-        pointer-events: none; /* Không cho click vào cột */
+        pointer-events: none;
     }
 
         .dataTables_wrapper th::after,
         .dataTables_wrapper th::before {
-            display: none !important; /* Ẩn mũi tên */
+            display: none !important;
         }
 
     .category-header {
-        background-color: #ffff;
+        background-color: #fff;
         padding: 20px 30px;
         border-radius: 0 25px 25px 0;
         margin-bottom: 20px;
@@ -337,8 +319,8 @@ function searchHoaDon() {
     }
 
     table td {
-        vertical-align: middle !important; /* Căn giữa theo chiều dọc */
-        text-align: center; /* Căn giữa nội dung theo chiều ngang */
+        vertical-align: middle !important;
+        text-align: center;
     }
 
     .table td:last-child {
@@ -348,10 +330,8 @@ function searchHoaDon() {
         gap: 5px;
     }
 
-
-
     th:last-child, td:last-child {
-        min-width: 140px; /* Cột rộng tối thiểu 140px */
+        min-width: 140px;
         text-align: center;
     }
 
@@ -359,7 +339,7 @@ function searchHoaDon() {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 10px; /* Khoảng cách giữa nút */
+        gap: 10px;
         height: 100%;
     }
 
@@ -385,15 +365,72 @@ function searchHoaDon() {
         cursor: pointer;
         width: 120px;
         height: 40px;
+        background-color: #17a2b8;
+        color: white;
     }
 
-    .details-control {
+        .btn-info:hover {
+            background-color: #138496;
+        }
+
+    .custom-btn {
+        padding: 8px 16px;
+        border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
         cursor: pointer;
-        background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
-        width: 20px;
+        height: 38px;
+        margin-left: 5px;
     }
 
-    tr.shown td.details-control {
-        background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+    .btn-primary.custom-btn {
+        background-color: #007bff;
+        color: white;
+    }
+
+        .btn-primary.custom-btn:hover {
+            background-color: #0056b3;
+        }
+
+    .btn-success.custom-btn {
+        background-color: #28a745;
+        color: white;
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+    }
+
+        .btn-success.custom-btn:hover {
+            background-color: #218838;
+        }
+
+    .dataTables_paginate {
+        margin-top: 10px;
+        text-align: right;
+    }
+
+        .dataTables_paginate .paginate_button {
+            padding: 5px 10px;
+            margin: 0 2px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+            .dataTables_paginate .paginate_button.current {
+                background-color: #007bff;
+                color: white;
+                border: 1px solid #007bff;
+            }
+
+            .dataTables_paginate .paginate_button:hover {
+                background-color: #e9ecef;
+            }
+
+    /* Đảm bảo nút Xuất Excel không bị che bởi các phần tử khác */
+    .page-container {
+        position: relative;
+        padding-bottom: 50px; /* Tạo khoảng trống để nút Xuất Excel hiển thị */
     }
 </style>

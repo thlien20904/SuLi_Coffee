@@ -9,10 +9,7 @@
 
 <div class="billing-details">
     <div class="container">
-       
-
         <div class="row">
-            <!-- Form thông tin khách hàng và cập nhật -->
             <div class="col-md-6">
                 <form id="profile-form" method="post" action="@Url.Action("UpdateUser", "ThanhToan")" class="billing-form">
                     <div class="form-group">
@@ -48,25 +45,44 @@
                     <button type="submit" class="btn btn-primary billing-button">Cập nhật</button>
                 </form>
 
-                <!-- Form phương thức thanh toán và đặt hàng -->
                 <form action="@Url.Action("ThanhToan", "ThanhToan")" method="post" style="margin-top: 20px;" class="billing-form">
                     <div class="form-group">
                         <label>Địa chỉ giao hàng*</label>
-                        <input type="text" class="form-control" name="address" value="@Model.Address" required />
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <select name="address" id="delivery-address" class="form-control" required style="flex: 1;">
+                                <option value="" disabled selected>Chọn địa chỉ giao hàng</option>
+                                @foreach (var addr in ViewBag.DeliveryAddresses as List<WebBanHang.Models.DeliveryAddress>)
+                                {
+                                    <option value="@addr.AddressId" @(addr.IsDefault ? "selected" : "")>@addr.Address @(addr.IsDefault ? "(Mặc định)" : "")</option>
+                                }
+                                <option value="new">Thêm địa chỉ mới</option>
+                            </select>
+                            <button type="button" id="update-address-btn" class="btn btn-primary" style="padding: 8px 15px;">Cập nhật</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="new-address-group" style="display: none;">
+                        <label>Địa chỉ mới*</label>
+                        <input type="text" class="form-control" name="newAddress" id="new-address" placeholder="Nhập địa chỉ mới" />
+                        <span id="new-address-error" class="text-danger"></span>
                     </div>
 
                     <div class="form-group payment-methods">
                         <h4>Phương thức thanh toán*</h4>
-                        @if (ViewBag.PaymentMethods != null)
+                        @if (ViewBag.PaymentMethods != null && (ViewBag.PaymentMethods as List<WebBanHang.Models.PhuongThucThanhToan>).Count > 0)
                         {
-                            foreach (var pm in ViewBag.PaymentMethods)
+                            foreach (var pm in ViewBag.PaymentMethods as List<WebBanHang.Models.PhuongThucThanhToan>)
                             {
                                 <div class="form-check">
                                     <input type="radio" name="paymentMethodId" value="@pm.Id"
-                                           @(pm.Id == 1 ? "checked" : "") />
+                                           @(pm.Id == 1 ? "checked" : "") required />
                                     <label>@pm.TenPhuongThuc</label>
                                 </div>
                             }
+                        }
+                        else
+                        {
+                            <p class="text-danger">Không có phương thức thanh toán nào! Vui lòng liên hệ quản trị viên.</p>
                         }
                     </div>
 
@@ -79,7 +95,6 @@
                 }
             </div>
 
-            <!-- Slidebar chứa danh sách sản phẩm và thông tin tổng cộng -->
             <div class="col-md-6 sidebar-checkout">
                 <table class="table">
                     <thead>
@@ -95,7 +110,7 @@
                         @foreach (var item in cartItems)
                         {
                             <tr>
-                                <td><img src="@item.Food.ImageURL" width="50" alt="@item.Food.FoodName" /></td>
+                                <td><img src="@(string.IsNullOrEmpty(item.Food.ImageURL) ? Url.Content("~/images/no-image.png") : Url.Content(item.Food.ImageURL))" width="50" alt="@item.Food.FoodName" /></td>
                                 <td>@item.Food.FoodName @(item.Size != null ? $"({item.Size.SizeName})" : "")</td>
                                 <td>@((item.TotalPrice / item.SoLuong).ToString("N0")) đ</td>
                                 <td>@item.SoLuong</td>
@@ -122,7 +137,127 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Hàm validate một trường
+            // Xử lý dropdown địa chỉ giao hàng
+            const deliveryAddressSelect = document.getElementById('delivery-address');
+            const newAddressGroup = document.getElementById('new-address-group');
+            const newAddressInput = document.getElementById('new-address');
+            const newAddressError = document.getElementById('new-address-error');
+            const updateAddressBtn = document.getElementById('update-address-btn');
+            const form = newAddressInput.closest('form');
+
+            deliveryAddressSelect.addEventListener('change', function () {
+                if (this.value === 'new') {
+                    newAddressGroup.style.display = 'block';
+                    newAddressInput.setAttribute('required', 'required');
+                    updateAddressBtn.style.display = 'inline-block';
+                } else {
+                    newAddressGroup.style.display = 'none';
+                    newAddressInput.removeAttribute('required');
+                    newAddressInput.value = '';
+                    newAddressError.textContent = '';
+                    updateAddressBtn.style.display = 'inline-block';
+                }
+            });
+
+            // Validate địa chỉ mới khi người dùng nhập
+            newAddressInput.addEventListener('blur', function () {
+                if (deliveryAddressSelect.value === 'new' && !/\S+/.test(this.value.trim())) {
+                    newAddressError.textContent = 'Địa chỉ mới không được để trống!';
+                } else {
+                    newAddressError.textContent = '';
+                }
+            });
+
+            // Xử lý nút "Cập nhật" địa chỉ giao hàng
+            updateAddressBtn.addEventListener('click', function () {
+                if (deliveryAddressSelect.value !== 'new') {
+                    alert('Vui lòng chọn "Thêm địa chỉ mới" để cập nhật địa chỉ!');
+                    return;
+                }
+
+                const newAddress = newAddressInput.value.trim();
+                if (!/\S+/.test(newAddress)) {
+                    newAddressError.textContent = 'Địa chỉ mới không được để trống!';
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("AddDeliveryAddress", "ThanhToan")',
+                    type: 'POST',
+                    data: { newAddress: newAddress },
+                    success: function (response) {
+                        if (response.success) {
+                            alert(response.message);
+                            // Cập nhật dropdown với danh sách địa chỉ mới
+                            const addresses = response.addresses;
+                            deliveryAddressSelect.innerHTML = '<option value="" disabled selected>Chọn địa chỉ giao hàng</option>';
+                            addresses.forEach(addr => {
+                                const option = document.createElement('option');
+                                option.value = addr.AddressId;
+                                option.text = addr.Address + (addr.IsDefault ? ' (Mặc định)' : '');
+                                if (addr.Address === newAddress) {
+                                    option.selected = true;
+                                }
+                                deliveryAddressSelect.appendChild(option);
+                            });
+                            const newOption = document.createElement('option');
+                            newOption.value = 'new';
+                            newOption.text = 'Thêm địa chỉ mới';
+                            deliveryAddressSelect.appendChild(newOption);
+
+                            // Ẩn trường nhập địa chỉ mới
+                            newAddressGroup.style.display = 'none';
+                            newAddressInput.removeAttribute('required');
+                            newAddressInput.value = '';
+                            newAddressError.textContent = '';
+                        } else {
+                            alert(response.message);
+                        }
+                    },
+                    error: function () {
+                        alert('Có lỗi xảy ra khi thêm địa chỉ!');
+                    }
+                });
+            });
+
+            // Validate trước khi gửi form
+            form.addEventListener('submit', function (event) {
+                if (deliveryAddressSelect.value === 'new') {
+                    const newAddress = newAddressInput.value.trim();
+                    if (!/\S+/.test(newAddress)) {
+                        event.preventDefault();
+                        newAddressError.textContent = 'Địa chỉ mới không được để trống!';
+                        alert('Vui lòng nhập địa chỉ mới hoặc chọn một địa chỉ có sẵn!');
+                        return;
+                    }
+                }
+
+                // Xử lý thanh toán VNPay
+                const paymentMethodId = document.querySelector('input[name="paymentMethodId"]:checked').value;
+                if (paymentMethodId == '1') { // VNPay
+                    event.preventDefault();
+
+                    $.ajax({
+                        url: '@Url.Action("ThanhToan", "ThanhToan")',
+                        type: 'POST',
+                        data: $(this).serialize(),
+                        success: function (response) {
+                            if (response.Success) {
+                                if (response.Url) {
+                                    window.location.href = response.Url; // Chuyển hướng đến URL thanh toán VNPay hoặc trang thành công
+                                }
+                            } else {
+                                alert('Có lỗi xảy ra: ' + (response.Message || 'Không thể xử lý thanh toán.'));
+                            }
+                        },
+                        error: function () {
+                            alert('Có lỗi xảy ra khi gửi yêu cầu thanh toán!');
+                        }
+                    });
+                }
+            });
+
+            // Validate các trường khác (giữ nguyên)
             function validateField(input, errorElement, pattern, message) {
                 input.addEventListener('blur', function () {
                     if (!pattern.test(input.value.trim())) {
@@ -133,7 +268,6 @@
                 });
             }
 
-            // Validation phía client
             validateField(
                 document.getElementById('fullname'),
                 document.getElementById('fullname-error'),
@@ -144,7 +278,7 @@
             validateField(
                 document.getElementById('email'),
                 document.getElementById('email-error'),
-                /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Sửa lỗi cú pháp @@
                 "Email không hợp lệ."
             );
 
@@ -162,7 +296,6 @@
                 "Vui lòng nhập địa chỉ."
             );
 
-            // Xử lý form cập nhật thông tin
             document.getElementById('profile-form').addEventListener('submit', function (event) {
                 event.preventDefault();
 
@@ -172,7 +305,6 @@
                 let phone = document.getElementById('phone').value.trim();
                 let address = document.getElementById('address').value.trim();
 
-                // Kiểm tra lại validation trước khi gửi
                 let validations = [
                     {
                         value: fullName,
@@ -182,7 +314,7 @@
                     },
                     {
                         value: email,
-                        pattern: /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                        pattern: /^[a-zA-Z0-9._%+-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, // Sửa lỗi cú pháp @@
                         errorElement: document.getElementById('email-error'),
                         message: "Email không hợp lệ."
                     },
@@ -210,9 +342,6 @@
                     }
                 });
 
-                console.log("Trạng thái lỗi (hasError):", hasError);
-                console.log("Dữ liệu trước khi gửi:", { fullName, email, phone, address });
-
                 if (hasError) {
                     alert("Vui lòng nhập đúng thông tin trước khi cập nhật!");
                     return;
@@ -225,19 +354,15 @@
                     { field: "Address", value: address }
                 ];
 
-                console.log("Dữ liệu gửi đi:", updates);
-
                 let ajaxRequests = updates.map(update => {
                     return $.ajax({
                         url: '@Url.Action("UpdateUser", "ThanhToan")',
                         type: 'POST',
                         data: { id: id, field: update.field, value: update.value },
                         success: function (response) {
-                            console.log(`Phản hồi từ ${update.field}:`, response);
                             return response;
                         },
                         error: function (xhr, status, error) {
-                            console.error(`Lỗi khi gửi ${update.field}:`, error);
                             return { success: false, message: `Lỗi khi gửi ${update.field}: ${error}` };
                         }
                     });
@@ -256,7 +381,6 @@
                         alert("Cập nhật thất bại:\n" + errorMessages);
                     }
                 }).catch((error) => {
-                    console.error("Lỗi Promise:", error);
                     alert("Có lỗi xảy ra khi cập nhật!");
                 });
             });
@@ -264,7 +388,6 @@
     </script>
 }
 <style>
-    /* Container chính để căn giữa nội dung */
     .billing-details .container {
         display: flex;
         justify-content: center;
@@ -275,7 +398,6 @@
         padding: 20px;
     }
 
-    /* Wrapper cho form và slidebar */
     .billing-details .row {
         display: flex;
         justify-content: space-between;
@@ -285,7 +407,6 @@
         align-items: stretch;
     }
 
-    /* Chỉnh lại kích thước để form và sidebar luôn bằng nhau */
     .billing-details .col-md-6 {
         width: 48%;
         padding: 20px;
@@ -295,16 +416,6 @@
         justify-content: space-between;
     }
 
-    /* Phần form thanh toán (col-md-6) */
-    .billing-details .col-md-6 {
-        width: 48%;
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    /* Định dạng form cụ thể trong billing-details */
     .billing-details .billing-form {
         background: #f8f9fa;
         padding: 20px;
@@ -317,7 +428,6 @@
         justify-content: space-between;
     }
 
-    /* Định dạng input và select trong billing-details */
     .billing-details input,
     .billing-details select {
         width: 100%;
@@ -326,9 +436,9 @@
         margin-bottom: 10px;
         border-radius: 4px;
         border: 1px solid #ccc;
+        box-sizing: border-box;
     }
 
-    /* Phần slidebar (col-md-6 bên phải) */
     .billing-details .sidebar-checkout {
         width: 50%;
         margin-top: 20px;
@@ -343,7 +453,6 @@
         justify-content: space-between;
     }
 
-    /* Định dạng nút trong billing-details */
     .billing-details .billing-button {
         width: 100%;
         padding: 10px;
@@ -360,7 +469,6 @@
             background: #0056b3;
         }
 
-    /* Đảm bảo body có khoảng trống hợp lý */
     .billing-details body {
         padding-top: 100px;
         padding-bottom: 50px;
@@ -368,15 +476,17 @@
         font-family: Arial, sans-serif;
     }
 
-    /* Căn trái và làm thẳng hàng radio button */
     .billing-details .payment-methods {
         margin-top: 15px;
+        display: block !important; /* Đảm bảo không bị ẩn bởi CSS khác */
+        visibility: visible !important;
     }
 
     .billing-details .form-check {
         display: flex;
         align-items: center;
         gap: 10px;
+        margin-bottom: 10px;
     }
 
         .billing-details .form-check input[type="radio"] {

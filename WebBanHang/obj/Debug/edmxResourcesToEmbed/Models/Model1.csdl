@@ -155,6 +155,7 @@
     <NavigationProperty Name="PhuongThucThanhToan" Relationship="Self.FK__Orders__PaymentM__764C846B" FromRole="Orders" ToRole="PhuongThucThanhToan" />
     <NavigationProperty Name="OrderStatu" Relationship="Self.FK__Orders__StatusId__7740A8A4" FromRole="Orders" ToRole="OrderStatus" />
     <NavigationProperty Name="User" Relationship="Self.FK__Orders__UserId__75586032" FromRole="Orders" ToRole="Users" />
+    <Property Name="DeliveryAddress" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="OrderStatu">
     <Key>
@@ -236,6 +237,7 @@
     <Property Name="CreatedDate" Type="DateTime" Precision="3" />
     <NavigationProperty Name="GioHangs" Relationship="Self.FK__GioHang__Id__670A40DB" FromRole="Users" ToRole="GioHang" />
     <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__UserId__75586032" FromRole="Users" ToRole="Orders" />
+    <NavigationProperty Name="DeliveryAddresses" Relationship="WebAppDBModel.FK__DeliveryA__UserI__1B48FEF0" FromRole="User" ToRole="DeliveryAddress" />
   </EntityType>
   <EntityType Name="Warehouse">
     <Key>
@@ -626,5 +628,33 @@
       <End Role="Users" EntitySet="Users" />
       <End Role="Orders" EntitySet="Orders" />
     </AssociationSet>
+    <EntitySet Name="DeliveryAddresses" EntityType="WebAppDBModel.DeliveryAddress" />
+    <AssociationSet Name="FK__DeliveryA__UserI__1B48FEF0" Association="WebAppDBModel.FK__DeliveryA__UserI__1B48FEF0">
+      <End Role="User" EntitySet="Users" />
+      <End Role="DeliveryAddress" EntitySet="DeliveryAddresses" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="DeliveryAddress">
+    <Key>
+      <PropertyRef Name="AddressId" />
+    </Key>
+    <Property Name="AddressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="User" Relationship="WebAppDBModel.FK__DeliveryA__UserI__1B48FEF0" FromRole="DeliveryAddress" ToRole="User" />
+  </EntityType>
+  <Association Name="FK__DeliveryA__UserI__1B48FEF0">
+    <End Type="WebAppDBModel.User" Role="User" Multiplicity="1" />
+    <End Type="WebAppDBModel.DeliveryAddress" Role="DeliveryAddress" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DeliveryAddress">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

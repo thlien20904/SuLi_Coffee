@@ -128,6 +128,7 @@
     <EntitySetMapping Name="Orders">
       <EntityTypeMapping TypeName="WebAppDBModel.Order">
         <MappingFragment StoreEntitySet="Orders">
+          <ScalarProperty Name="DeliveryAddress" ColumnName="DeliveryAddress" />
           <ScalarProperty Name="OrderId" ColumnName="OrderId" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
@@ -221,6 +222,17 @@
           <ScalarProperty Name="IngredientId" ColumnName="IngredientId" />
           <ScalarProperty Name="SoLuong" ColumnName="SoLuong" />
           <ScalarProperty Name="DateUpdate" ColumnName="DateUpdate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DeliveryAddresses">
+      <EntityTypeMapping TypeName="WebAppDBModel.DeliveryAddress">
+        <MappingFragment StoreEntitySet="DeliveryAddresses">
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="AddressId" ColumnName="AddressId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -45,5 +45,6 @@ namespace WebBanHang.Models
         public virtual DbSet<Topping> Toppings { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Warehouse> Warehouses { get; set; }
+        public virtual DbSet<DeliveryAddress> DeliveryAddresses { get; set; }
     }
 }
