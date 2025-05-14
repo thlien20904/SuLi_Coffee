@@ -142,6 +142,15 @@
             };
         }
 
+        // Hàm cập nhật số lượng giỏ hàng trên biểu tượng
+        function updateCartCount(count) {
+            var cartCountElement = document.querySelector(".cart-count");
+            if (cartCountElement) {
+                cartCountElement.textContent = count > 0 ? count : "";
+                cartCountElement.style.display = count > 0 ? "inline-block" : "none";
+            }
+        }
+
         // Mua ngay: Thêm sản phẩm mới và chuyển thẳng đến trang thanh toán
         function muaNgay() {
             if (!validateSelection()) return;
@@ -221,6 +230,21 @@
                     });
                 });
             }
+
+            // Khởi tạo số lượng giỏ hàng khi trang tải
+            fetch('/GioHang/GetCartCount', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.cartCount !== undefined) {
+                    updateCartCount(data.cartCount);
+                }
+            })
+            .catch(error => {
+                console.error("Lỗi khi lấy số lượng giỏ hàng:", error);
+            });
         });
     </script>
 }

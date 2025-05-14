@@ -67,8 +67,28 @@ namespace WebBanHang.Controllers
 
                 decimal itemTotalPrice = (food.Price + sizePrice + toppingTotalPrice) * soLuong;
 
-                var gioHangItem = db.GioHangs.FirstOrDefault(g =>
-                    g.Id == userId && g.FoodId == foodId && g.SizeID == sizeId);
+                toppingIds = toppingIds?.OrderBy(t => t).ToList() ?? new List<int>();
+
+                var gioHangItems = db.GioHangs
+                    .Include(g => g.GioHang_Topping)
+                    .Where(g => g.Id == userId && g.FoodId == foodId && g.SizeID == sizeId)
+                    .ToList();
+
+                GioHang gioHangItem = null;
+
+                foreach (var item in gioHangItems)
+                {
+                    var existingToppingIds = item.GioHang_Topping
+                        .Select(gt => gt.ToppingID)
+                        .OrderBy(t => t)
+                        .ToList();
+
+                    if (existingToppingIds.SequenceEqual(toppingIds))
+                    {
+                        gioHangItem = item;
+                        break;
+                    }
+                }
 
                 if (gioHangItem != null)
                 {
@@ -106,7 +126,7 @@ namespace WebBanHang.Controllers
                 int tongSoLuong = db.GioHangs.Where(g => g.Id == userId).Sum(g => (int?)g.SoLuong).GetValueOrDefault();
                 Session["SoLuongGioHang"] = tongSoLuong;
 
-                return Json(new { success = true, soLuongGioHang = tongSoLuong });
+                return Json(new { success = true, cartCount = tongSoLuong });
             }
             catch (Exception ex)
             {
@@ -159,7 +179,7 @@ namespace WebBanHang.Controllers
         }
 
         [HttpPost]
-        public ActionResult CapNhatSoLuong(int foodId, int? sizeId, int soLuong)
+        public ActionResult CapNhatSoLuong(int foodId, int? sizeId, int soLuong, List<int> toppingIds)
         {
             try
             {
@@ -175,11 +195,30 @@ namespace WebBanHang.Controllers
                     sizeId = null;
                 }
 
-                var gioHangItem = db.GioHangs
+                toppingIds = toppingIds?.OrderBy(t => t).ToList() ?? new List<int>();
+
+                var gioHangItems = db.GioHangs
                     .Include(g => g.Food)
                     .Include(g => g.Size)
                     .Include(g => g.GioHang_Topping.Select(gt => gt.Topping))
-                    .FirstOrDefault(g => g.Id == userId && g.FoodId == foodId && g.SizeID == sizeId);
+                    .Where(g => g.Id == userId && g.FoodId == foodId && g.SizeID == sizeId)
+                    .ToList();
+
+                GioHang gioHangItem = null;
+
+                foreach (var item in gioHangItems)
+                {
+                    var existingToppingIds = item.GioHang_Topping
+                        .Select(gt => gt.ToppingID)
+                        .OrderBy(t => t)
+                        .ToList();
+
+                    if (existingToppingIds.SequenceEqual(toppingIds))
+                    {
+                        gioHangItem = item;
+                        break;
+                    }
+                }
 
                 if (gioHangItem == null)
                 {
@@ -219,7 +258,7 @@ namespace WebBanHang.Controllers
         }
 
         [HttpPost]
-        public ActionResult XoaKhoiGio(int foodId, int? sizeId)
+        public ActionResult XoaKhoiGio(int foodId, int? sizeId, List<int> toppingIds)
         {
             try
             {
@@ -235,9 +274,28 @@ namespace WebBanHang.Controllers
                     sizeId = null;
                 }
 
-                var gioHangItem = db.GioHangs
+                toppingIds = toppingIds?.OrderBy(t => t).ToList() ?? new List<int>();
+
+                var gioHangItems = db.GioHangs
                     .Include(g => g.GioHang_Topping)
-                    .FirstOrDefault(g => g.Id == userId && g.FoodId == foodId && g.SizeID == sizeId);
+                    .Where(g => g.Id == userId && g.FoodId == foodId && g.SizeID == sizeId)
+                    .ToList();
+
+                GioHang gioHangItem = null;
+
+                foreach (var item in gioHangItems)
+                {
+                    var existingToppingIds = item.GioHang_Topping
+                        .Select(gt => gt.ToppingID)
+                        .OrderBy(t => t)
+                        .ToList();
+
+                    if (existingToppingIds.SequenceEqual(toppingIds))
+                    {
+                        gioHangItem = item;
+                        break;
+                    }
+                }
 
                 if (gioHangItem != null)
                 {
@@ -258,6 +316,21 @@ namespace WebBanHang.Controllers
             {
                 return Json(new { success = false, message = "Lỗi hệ thống: " + ex.Message });
             }
+        }
+
+        [HttpGet]
+        public ActionResult GetCartCount()
+        {
+            if (Session["Id"] == null)
+            {
+                return Json(new { cartCount = 0 }, JsonRequestBehavior.AllowGet);
+            }
+
+            int userId = Convert.ToInt32(Session["Id"]);
+            int tongSoLuong = db.GioHangs.Where(g => g.Id == userId).Sum(g => (int?)g.SoLuong).GetValueOrDefault();
+            Session["SoLuongGioHang"] = tongSoLuong;
+
+            return Json(new { cartCount = tongSoLuong }, JsonRequestBehavior.AllowGet);
         }
     }
 }

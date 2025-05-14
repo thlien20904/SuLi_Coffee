@@ -124,6 +124,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
         }
 
             .nav .cart-item a {
@@ -136,6 +137,24 @@
                 font-size: 18px;
                 color: white;
             }
+
+        /* Hiển thị số lượng giỏ hàng */
+        .cart-count {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: #f5935b;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
 
         /* Header */
         .header {
@@ -310,10 +329,6 @@
     </style>
 </head>
 <body>
-    @{
-        var gioHang = Session["GioHang"] as List<WebBanHang.Models.GioHang> ?? new List<WebBanHang.Models.GioHang>();
-        var soLuongGioHang = gioHang.Sum(i => i.SoLuong);
-    }
     <header class="header d-flex align-items-center">
         <!-- Logo tách riêng -->
         <div class="logo" style="padding-left: 20px;">
@@ -372,7 +387,7 @@
                     <li class="cart-item">
                         <a href="@Url.Action("GioHang", "GioHang")">
                             <i class="fa fa-shopping-cart"></i>
-                            <span id="cart-icon"></span>
+                            <span id="cart-count" class="cart-count"></span>
                         </a>
                     </li>
                     <li class="dropdown mx-3 position-relative">
@@ -517,6 +532,32 @@
 
         // Ẩn nút lúc đầu
         $('#backToTop').hide();
+
+        // Hàm cập nhật số lượng giỏ hàng trên biểu tượng
+        function updateCartCount(count) {
+            var cartCountElement = document.getElementById("cart-count");
+            if (cartCountElement) {
+                cartCountElement.textContent = count > 0 ? count : "";
+                cartCountElement.style.display = count > 0 ? "flex" : "none";
+            }
+        }
+
+        // Tải số lượng giỏ hàng khi trang tải
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('/GioHang/GetCartCount', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.cartCount !== undefined) {
+                        updateCartCount(data.cartCount);
+                    }
+                })
+                .catch(error => {
+                    console.error("Lỗi khi lấy số lượng giỏ hàng:", error);
+                });
+        });
     </script>
 
     @RenderSection("scripts", required: false)

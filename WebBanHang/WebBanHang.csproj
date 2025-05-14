@@ -180,7 +180,7 @@
     <Compile Include="Areas\Admin\Controllers\NhanVienController.cs" />
     <Compile Include="Areas\Admin\Controllers\PhuongThucThanhToanController.cs" />
     <Compile Include="Areas\Admin\Controllers\SanPhamAdminController.cs" />
-    <Compile Include="Areas\Admin\Controllers\ThanhToanController.cs" />
+    <Compile Include="Areas\Admin\Controllers\AdminThanhToanController.cs" />
     <Compile Include="Controllers\ForgotController.cs" />
     <Compile Include="Controllers\GioHangController.cs" />
     <Compile Include="Controllers\GTController.cs" />

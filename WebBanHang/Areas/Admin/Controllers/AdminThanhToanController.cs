@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace WebBanHang.Areas.Admin.Controllers
 {
-    public class ThanhToanController : Controller
+    public class AdminThanhToanController : Controller
     {
         // GET: Admin/Thanhtoan
         public ActionResult ThanhToan()

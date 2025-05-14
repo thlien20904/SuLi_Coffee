@@ -35,7 +35,10 @@
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
+                    var toppingIds = item.GioHang_Topping.Select(gt => gt.Topping.ToppingID).ToList();
+                    var toppingIdsJson = Newtonsoft.Json.JsonConvert.SerializeObject(toppingIds);
+
+                    <tr data-toppingids='@toppingIdsJson'>
                         <td>
                             <input type="checkbox" class="select-item"
                                    data-giohangid="@item.GioHangID"
@@ -96,7 +99,6 @@
 
 @section scripts {
     <script>
-        // Hàm tính tổng tiền các mục được chọn
         function updateSelectedTotal() {
             var total = 0;
             document.querySelectorAll(".select-item:checked").forEach(checkbox => {
@@ -107,7 +109,6 @@
             totalPriceElement.innerHTML = "<strong>Tổng tiền: " + total.toLocaleString("vi-VN") + " ₫</strong>";
         }
 
-        // Xử lý checkbox "Chọn tất cả"
         document.getElementById("select-all").addEventListener("change", function () {
             var isChecked = this.checked;
             document.querySelectorAll(".select-item").forEach(checkbox => {
@@ -116,7 +117,6 @@
             updateSelectedTotal();
         });
 
-        // Xử lý checkbox từng mục
         document.querySelectorAll(".select-item").forEach(checkbox => {
             checkbox.addEventListener("change", function () {
                 var allCheckboxes = document.querySelectorAll(".select-item");
@@ -126,7 +126,6 @@
             });
         });
 
-        // Xử lý nút "Thanh toán"
         document.getElementById("btn-thanh-toan").addEventListener("click", function (e) {
             e.preventDefault();
             var selectedItems = [];
@@ -159,29 +158,42 @@
                 });
         });
 
-        // Khởi tạo tổng tiền khi tải trang (chọn tất cả mặc định)
         document.addEventListener("DOMContentLoaded", function () {
             document.querySelectorAll(".select-item").forEach(checkbox => {
                 checkbox.checked = true;
             });
             document.getElementById("select-all").checked = true;
             updateSelectedTotal();
+
+            fetch('/GioHang/GetCartCount', {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.cartCount !== undefined) {
+                    updateCartCount(data.cartCount);
+                }
+            })
+            .catch(error => {
+                console.error("Lỗi khi lấy số lượng giỏ hàng:", error);
+            });
         });
 
-        // Hàm cập nhật số lượng giỏ hàng trên biểu tượng
         function updateCartCount(count) {
             var cartCountElement = document.querySelector(".cart-count");
             if (cartCountElement) {
-                cartCountElement.textContent = count;
+                cartCountElement.textContent = count > 0 ? count : "";
+                cartCountElement.style.display = count > 0 ? "inline-block" : "none";
             }
         }
 
-        // Xóa sản phẩm khỏi giỏ hàng
         document.querySelectorAll(".btn-xoa").forEach(button => {
             button.addEventListener("click", function (e) {
                 e.preventDefault();
                 var productId = this.getAttribute("data-foodid");
                 var sizeId = this.getAttribute("data-sizeid");
+                var toppingIds = JSON.parse(this.closest("tr").getAttribute("data-toppingids"));
 
                 if (!productId || productId <= 0) {
                     alert("Lỗi: Không tìm thấy ID sản phẩm!");
@@ -196,7 +208,7 @@
                     fetch('/GioHang/XoaKhoiGio', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ foodId: parseInt(productId), sizeId: sizeId ? parseInt(sizeId) : null })
+                        body: JSON.stringify({ foodId: parseInt(productId), sizeId: sizeId ? parseInt(sizeId) : null, toppingIds: toppingIds })
                     })
                         .then(response => response.json())
                         .then(data => {
@@ -225,12 +237,12 @@
             });
         });
 
-        // Cập nhật số lượng sản phẩm
         document.querySelectorAll(".soLuongInput").forEach(input => {
             input.addEventListener("change", function () {
                 var foodId = this.getAttribute("data-foodid");
                 var sizeId = this.getAttribute("data-sizeid");
                 var soLuong = parseInt(this.value);
+                var toppingIds = JSON.parse(this.closest("tr").getAttribute("data-toppingids"));
                 var inputElement = this;
 
                 if (isNaN(soLuong) || soLuong < 1) {
@@ -254,7 +266,7 @@
                 fetch('/GioHang/CapNhatSoLuong', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ foodId: parseInt(foodId), sizeId: sizeId ? parseInt(sizeId) : null, soLuong: soLuong })
+                    body: JSON.stringify({ foodId: parseInt(foodId), sizeId: sizeId ? parseInt(sizeId) : null, soLuong: soLuong, toppingIds: toppingIds })
                 })
                     .then(response => {
                         if (!response.ok) {

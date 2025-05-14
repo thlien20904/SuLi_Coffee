@@ -231,14 +231,15 @@ namespace WebBanHang.Controllers
             }
 
             // Nếu không phải VNPay, tiếp tục xử lý bình thường
+            // Xử lý thanh toán không phải VNPay
             db.GioHangs.RemoveRange(gioHang);
             db.SaveChanges();
 
             Session["SoLuong"] = 0;
             Session["SelectedCartItems"] = null;
 
-            code = new { Success = true, Code = paymentMethodId as int?, Url = "/ThanhToan/ThanhCong" };
-            return Json(code);
+            // Chuyển hướng trực tiếp đến ThanhCong
+            return RedirectToAction("ThanhCong", "ThanhToan");
         }
         public ActionResult ThanhCong()
         {

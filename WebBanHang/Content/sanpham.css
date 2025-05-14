@@ -44,8 +44,6 @@
             font-weight: bold;
         }
 
-
-
 /* Tiêu đề trang */
 h2 {
     color: #000;
@@ -484,4 +482,77 @@ h2 {
 
 .btn-group {
     margin-top: 15px;
+}
+
+/* Pagination Styles */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pagination {
+    display: flex;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-link {
+    color: #d8804b;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    text-decoration: none;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.page-item.active .page-link {
+    background-color: #d8804b;
+    color: white;
+    border-color: #d8804b;
+}
+
+.page-link:hover {
+    background-color: #f06817;
+    color: white;
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+    border-color: #ddd;
+}
+.cart-icon {
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.cart-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #f5935b; /* Red background */
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none; /* Hidden by default */
 }

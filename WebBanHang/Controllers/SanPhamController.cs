@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using WebBanHang.Models;
@@ -10,7 +11,7 @@ namespace WebBanHang.Controllers
         private WebAppDBEntities4 db = new WebAppDBEntities4();
 
         // Hiển thị danh sách sản phẩm với tùy chọn tìm kiếm và lọc
-        public ActionResult SanPham(string searchString, int? categoryId)
+        public ActionResult SanPham(string searchString, int? categoryId, int? page)
         {
             var list = db.Foods.AsQueryable();
 
@@ -26,10 +27,22 @@ namespace WebBanHang.Controllers
                 list = list.Where(f => f.CategoryId == categoryId);
             }
 
+            int pageSize = 12;
+            int pageNumber = (page ?? 1);
+
+            // Sắp xếp trước khi phân trang để LINQ to Entities hỗ trợ Skip và Take
+            list = list.OrderBy(f => f.FoodId); // Sắp xếp theo FoodId (hoặc một trường khác nếu cần)
+
+            var paginatedList = list.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+            // Lấy tổng số trang
+            ViewBag.TotalPages = (int)Math.Ceiling((double)list.Count() / pageSize);
+            ViewBag.CurrentPage = pageNumber;
+
             // Lấy danh sách danh mục để hiển thị trên giao diện
             ViewBag.Categories = db.Categories.ToList();
 
-            return View(list.ToList());
+            return View(paginatedList);
         }
 
         // Hành động tìm kiếm nhanh
@@ -87,7 +100,6 @@ namespace WebBanHang.Controllers
                 // Gán dữ liệu vào ViewBag
                 ViewBag.SanPhamlienquan = relatedProducts;
 
-
                 // Lấy toàn bộ Size và Topping
                 var sizes = db.Sizes.ToList();
                 var toppings = db.Toppings.ToList();
@@ -97,8 +109,6 @@ namespace WebBanHang.Controllers
 
                 return View(food);
             }
-
-
         }
 
         protected override void Dispose(bool disposing)
